@@ -1,10 +1,15 @@
 import React from 'react' 
-import Navbar from '../Components/Navbar/Navbar'
+import Navbar from '../Components/Navbar/Navbar' 
+import Sidebar from '../Components/Siderbar/Sidebar'
 
 const Homepage = () => {
   return (
-    <> 
-      <Navbar/>
+    <>  
+    <div className='overflow-x-hidden'>
+       <Navbar/>  
+       <Sidebar/> 
+    </div>
+
     </>
   )
 }

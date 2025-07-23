@@ -9,8 +9,9 @@ function App() {
 
   return (
     <>
-      <div>  
+      <div className=''>  
         <Homepage/>
+       
       </div>
       
        

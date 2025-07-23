@@ -8,7 +8,7 @@ export default {
     extend: {
       colors: {
         primary: '#245E8A',
-        secondary: '#024266',
+        secondary:' #024266',
         'custom-gray': '#F0EFF2', 
       }, 
       fontFamily: {
