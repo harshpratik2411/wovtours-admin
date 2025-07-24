@@ -51,20 +51,42 @@ const Sidebar = () => {
                 <span className="text-xs bg-red-500 px-2 py-0.5 rounded-md">2</span>
               </li>
               <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
-                <MdOutlineProductionQuantityLimits className="text-xl" />
-                <span>Products</span>
-              </li>
-              <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
                 <MdShoppingBag className="text-xl" />
-                <span>Orders</span>
+                <span>Categories</span>
               </li>
               <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
                 <MdTrendingUp className="text-xl" />
-                <span>Sales</span>
+                <span>Tags</span>
               </li>
               <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
                 <MdRateReview className="text-xl" />
-                <span>Reviews</span>
+                <span>Difficulties</span>
+              </li>
+              
+              <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                <MdRateReview className="text-xl" />
+                <span>Activities</span>
+              </li>
+              <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                <MdRateReview className="text-xl" />
+                <span>Destinations</span>
+              </li>
+              <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                <MdRateReview className="text-xl" />
+                <span>Trip Type</span>
+              </li>
+              <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                <MdOutlineProductionQuantityLimits className="text-xl" />
+                <span>Trips</span>
+              </li>
+              <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                <MdOutlineProductionQuantityLimits className="text-xl" />
+                <span>Trip Enquiry</span>
+              </li>
+
+              <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                <MdRateReview className="text-xl" />
+                <span>Users</span>
               </li>
             </ul>
 

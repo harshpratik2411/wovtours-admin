@@ -86,11 +86,11 @@ const Hero = () => {
     return () => window.removeEventListener("resize", updateChartSize);
   }, []);
 
-  return (
-    <div className="p-2 space-y-8 lg:-mt-10  sm:ml-0 md:ml-[155px]">
+  return ( 
+    <div className=" lg:p-2  space-y-8  lg:-mt-10  sm:ml-0 md:ml-[155px]">
       {/* Top Stats */}
       <div
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 w-full  md:w-[71.5rem] gap-6"
+        className="grid grid-cols-2 lg:grid-cols-4 w-full  lg:w-[71.5rem] gap-4 lg:gap-6"
         data-aos="fade-up"
       >
         {stats.map((stat, idx) => {
@@ -101,12 +101,12 @@ const Hero = () => {
           return (
             <div
               key={idx}
-              className="bg-white p-6 rounded-xl shadow-sm space-y-3"
+              className="bg-white lg:p-6 pl-3 pr-3 pt-4 pb-4  rounded-xl shadow-sm space-y-3"
             >
-              <h3 className="text-sm text-gray-600 font-medium">
+              <h3 className="lg:text-lg text-xs text-gray-600 font-bold">
                 {stat.title}
               </h3>
-              <div className="text-2xl font-bold">{stat.amount}</div>
+              <div className="lg:text-2xl text-lg font-bold">{stat.amount}</div>
               <div
                 className={`text-sm ${
                   stat.change.includes("-") ? "text-red-500" : "text-green-500"
@@ -157,7 +157,7 @@ const Hero = () => {
         data-aos="fade-up"
       >
         {/* Line Chart */}
-        <div className="bg-white p-4 rounded-xl shadow-sm">
+        <div className="bg-white lg:p-4 pl-1 pr-6 pt-3 pb-3 rounded-xl shadow-sm">
           <h2 className="text-lg font-semibold mb-4">Sales Analytics</h2>
           <ResponsiveContainer width="100%" height={250}>
             <LineChart data={lineData}>

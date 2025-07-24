@@ -23,13 +23,13 @@ export default function TopNav() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="lg:ml-40 ml-4 lg:-mt-0 -mt-8 lg:mr-[-5.6rem] z-50 relative">
+    <div className="lg:ml-36  lg:-mt-0 -mt-8  pt-2 lg:mr-[-3.6rem] mr-[1rem] z-50 relative">
       <nav
         className="flex justify-between items-center py-4 relative z-40"
         data-aos="fade-down"
       >
         {/* Left section with menu button and title */}
-        <div className="flex -ml-10 items-center gap-3">
+        <div className="flex lg:-ml-10 ml-1 items-center gap-3">
           {/* Mobile Menu Button */}
           <button
             className="lg:hidden bg-primary text-white p-2 rounded-md shadow-md"
@@ -37,11 +37,11 @@ export default function TopNav() {
           >
             <MdMenu className="text-xl" />
           </button>
-          <h1 className="text-2xl lg:ml-16 font-medium font-rubik text-black">Dashboard</h1>
+          <h1 className="lg:text-2xl text-xl lg:ml-16 font-medium font-rubik text-black">Dashboard</h1>
         </div>
 
         {/* Right: Icons and Profile */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-5 lg:gap-6">
           <button className="text-gray-600 hover:text-black">
             <FiSearch className="w-5 h-5" />
           </button>
@@ -84,31 +84,53 @@ export default function TopNav() {
           </div>
 
           <h1 className="text-2xl  font-bold mb-10">Eormi</h1>
-          <ul className="space-y-5">
-            <li className="flex items-center justify-between">
-              <div className="flex items-center gap-3 text-white font-medium">
-                <MdDashboard className="text-xl" />
-                <span>Dashboard</span>
-              </div>
-              <span className="text-xs bg-red-500 px-2 py-0.5 rounded-md">2</span>
-            </li>
-            <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
-              <MdOutlineProductionQuantityLimits className="text-xl" />
-              <span>Products</span>
-            </li>
-            <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
-              <MdShoppingBag className="text-xl" />
-              <span>Orders</span>
-            </li>
-            <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
-              <MdTrendingUp className="text-xl" />
-              <span>Sales</span>
-            </li>
-            <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
-              <MdRateReview className="text-xl" />
-              <span>Reviews</span>
-            </li>
-          </ul>
+          <ul className="space-y-6">
+                        <li className="flex items-center justify-between">
+                          <div className="flex items-center gap-3 text-white font-medium">
+                            <MdDashboard className="text-xl" />
+                            <span>Dashboard</span>
+                          </div>
+                          <span className="text-xs bg-red-500 px-2 py-0.5 rounded-md">2</span>
+                        </li>
+                        <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                          <MdShoppingBag className="text-xl" />
+                          <span>Categories</span>
+                        </li>
+                        <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                          <MdTrendingUp className="text-xl" />
+                          <span>Tags</span>
+                        </li>
+                        <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                          <MdRateReview className="text-xl" />
+                          <span>Difficulties</span>
+                        </li>
+                        
+                        <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                          <MdRateReview className="text-xl" />
+                          <span>Activities</span>
+                        </li>
+                        <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                          <MdRateReview className="text-xl" />
+                          <span>Destinations</span>
+                        </li>
+                        <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                          <MdRateReview className="text-xl" />
+                          <span>Trip Type</span>
+                        </li>
+                        <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                          <MdOutlineProductionQuantityLimits className="text-xl" />
+                          <span>Trips</span>
+                        </li>
+                        <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                          <MdOutlineProductionQuantityLimits className="text-xl" />
+                          <span>Trip Enquiry</span>
+                        </li>
+          
+                        <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                          <MdRateReview className="text-xl" />
+                          <span>Users</span>
+                        </li>
+                      </ul>
 
           <hr className="my-8 border-white/20" />
 

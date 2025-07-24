@@ -1,8 +1,15 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem; /* Default: small screens */
   text-align: center;
+}
+
+/* For large screens (min-width: 1024px) */
+@media (min-width: 375px) {
+  #root {
+    padding: 1rem;
+  }
 }
 
 .logo {
