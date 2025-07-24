@@ -29,7 +29,7 @@ const Sidebar = () => {
         <MdMenu className="text-2xl" />
       </button> 
 
-      <div>
+      <div className='mt-10'>
         <div
           className={`
             fixed top-0 left-0 z-40 h-full bg-primary text-white font-rubik px-6 mt-0 lg:mt-6 py-8 flex flex-col justify-between rounded-xl

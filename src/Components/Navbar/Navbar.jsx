@@ -58,12 +58,13 @@
 // };
 
 // export default Navbar;
-import { useEffect } from 'react';
+import { useEffect } from 'react'; 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
  import { FiSearch } from 'react-icons/fi';
 import { IoMdNotificationsOutline } from 'react-icons/io';
-import { div } from 'motion/react-client';
+import { div } from 'motion/react-client'; 
+
 
 export default function TopNav() {
   useEffect(() => {
@@ -71,17 +72,17 @@ export default function TopNav() {
   }, []);
 
   return ( 
-    <div className='lg:ml-32 max-w-full'>
-    <div className="  bg-gray-400  z-50">
+   <div className="lg:ml-40 ml-4 lg:-mt-0 -mt-8 lg:mr-[-5.6rem] z-50">
       <nav
-        className="flex  justify-between items-center px-4 md:px-8 py-4"
+        className="flex  justify-between  items-center  py-4"
         data-aos="fade-down"
       >
-        {/* Left: Title */}
+        {/* Left: Title */} 
+       
         <h1 className="text-xl font-medium font-rubik text-black">Dashboard</h1>
 
         {/* Right: Icons and Profile */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center  gap-6">
           {/* Search Icon */}
           <button className="text-gray-600 hover:text-black">
             <FiSearch className="w-5 h-5" />
@@ -96,20 +97,19 @@ export default function TopNav() {
           </div>
 
           {/* Profile */}
-          <div className="flex items-center gap-2">
+          <div className="flex lg:-mr-0 -mr-6 items-center gap-2">
             <img
               src="https://randomuser.me/api/portraits/women/44.jpg"
               alt="Profile"
               className="w-8 h-8 rounded-full object-cover"
             />
-            <div className="hidden sm:block leading-tight">
+            {/* <div className="hidden sm:block leading-tight">
               <p className="text-sm font-medium font-rubik text-black">Gladys Kanyinda</p>
               <p className="text-xs text-gray-500 font-rubik">Admin</p>
-            </div>
+            </div> */}
           </div>
         </div>
       </nav>
-    </div>
     </div>
   );
 }
