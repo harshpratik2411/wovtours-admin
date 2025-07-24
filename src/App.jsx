@@ -1,21 +1,40 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css' 
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import './App.css'
+
+// Import all page components
 import Homepage from './Pages/Homepage'
+import Categories from './Pages/Categories'
+// import Tags from './Pages/Tags'
+// import Difficulties from './Pages/Difficulties'
+// import Activities from './Pages/Activities'
+// import Destinations from './Pages/Destinations'
+// import TripType from './Pages/TripType'
+// import Trips from './Pages/Trips'
+// import TripEnquiry from './Pages/TripEnquiry'
+// import Users from './Pages/Users'
+// import Settings from './Pages/Settings'
+// import Dashboard from './Pages/Dashboard' // Assuming you have a Dashboard page
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div  className='m-0'>  
-        <Homepage/>
-       
+    <BrowserRouter>
+      <div className="m-0">
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+          <Route path="/categories" element={<Categories />} />
+          {/* <Route path="/tags" element={<Tags />} />
+          <Route path="/difficulties" element={<Difficulties />} />
+          <Route path="/activities" element={<Activities />} />
+          <Route path="/destinations" element={<Destinations />} />
+          <Route path="/trip-type" element={<TripType />} />
+          <Route path="/trips" element={<Trips />} />
+          <Route path="/trip-enquiry" element={<TripEnquiry />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/settings" element={<Settings />} /> */}
+        </Routes>
       </div>
-      
-       
-    </>
+    </BrowserRouter>
   )
 }
 
