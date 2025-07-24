@@ -83,9 +83,9 @@ const Sidebar = () => {
             </div>
           </div>
 
-          <div className="bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl p-4 mt-8 text-center">
-            <p className="text-sm font-semibold">Improve Your Sales Efficiency</p>
-            <button className="mt-3 bg-white text-primary font-bold text-sm px-4 py-1 rounded-full shadow-md hover:bg-gray-100 transition">
+          <div className="bg-gradient-to-r from-cyan-500 mb-4 to-blue-500 h-52 rounded-xl p-4 mt-8 text-center">
+            <p className="text-md mt-10 font-semibold">Improve Your Sales Efficiency</p>
+            <button className="mt-10 bg-white text-primary font-rubik font-bold text-sm px-4 py-1 rounded-xl shadow-md hover:bg-custom-gray transition">
               Start Now
             </button>
           </div>
