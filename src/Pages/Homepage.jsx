@@ -6,12 +6,12 @@ import Hero from '../Components/Hero/Hero'
 const Homepage = () => {
   return (
     <>  
-    <div className='overflow-x-hidden'>
+    <div >
         <Navbar/>  
-       <Sidebar/>  
+        <Sidebar/> 
+         <Hero/> 
     </div> 
     
-        <Hero/>
    
 
     </>

@@ -27,9 +27,8 @@ const Sidebar = () => {
         onClick={() => setIsOpen(!isOpen)}
       >
         <MdMenu className="text-2xl" />
-      </button>
+      </button> 
 
-      {/* Sidebar for all screens */}
       <div>
         <div
           className={`
@@ -39,7 +38,8 @@ const Sidebar = () => {
             ${isOpen ? 'translate-x-0' : '-translate-x-full'}
             lg:translate-x-0 static lg:ml-3 -mt-2
           `}
-        >
+        > 
+       
           <div>
             <h1 className="text-2xl font-bold mb-10">Eormi</h1>
             <ul className="space-y-6">
@@ -91,6 +91,7 @@ const Sidebar = () => {
           </div>
         </div>
       </div>
+     
 
       {/* Overlay for mobile when sidebar is open */}
       {isOpen && (

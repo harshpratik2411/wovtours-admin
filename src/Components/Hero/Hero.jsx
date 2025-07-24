@@ -84,7 +84,7 @@ const Hero = () => {
   return (
     <div className="p-2 space-y-8 sm:ml-0 md:ml-[155px]">
       {/* Top Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 w-full md:w-[71.5rem] gap-6" data-aos="fade-up">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 w-full  md:w-[71.5rem] gap-6" data-aos="fade-up">
         {stats.map((stat, idx) => {
           const isUp = stat.graph === 'up';
           const graphColor = isUp ? '#38c172' : '#e3342f';
