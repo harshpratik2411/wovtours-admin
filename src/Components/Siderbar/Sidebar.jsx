@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import {
   MdDashboard,
+  MdOutlineCategory,
+  MdLabel,
+  MdTerrain,
+  MdHiking,
+  MdPublic,
+  MdTour,
   MdOutlineProductionQuantityLimits,
-  MdShoppingBag,
-  MdTrendingUp,
-  MdRateReview,
+  MdPeople,
   MdSettings,
   MdLogout,
-  MdMenu
+  MdMenu,
 } from 'react-icons/md';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -43,53 +47,68 @@ const Sidebar = () => {
           <div>
             <h1 className="text-2xl font-bold mb-10">Eormi</h1>
             <ul className="space-y-6">
-              <li className="flex items-center justify-between">
-                <div className="flex items-center gap-3 text-white font-medium">
-                  <MdDashboard className="text-xl" />
-                  <span>Dashboard</span>
-                </div>
-                <span className="text-xs bg-red-500 px-2 py-0.5 rounded-md">2</span>
-              </li>
-              <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
-                <MdShoppingBag className="text-xl" />
-                <span>Categories</span>
-              </li>
-              <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
-                <MdTrendingUp className="text-xl" />
-                <span>Tags</span>
-              </li>
-              <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
-                <MdRateReview className="text-xl" />
-                <span>Difficulties</span>
-              </li>
-              
-              <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
-                <MdRateReview className="text-xl" />
-                <span>Activities</span>
-              </li>
-              <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
-                <MdRateReview className="text-xl" />
-                <span>Destinations</span>
-              </li>
-              <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
-                <MdRateReview className="text-xl" />
-                <span>Trip Type</span>
-              </li>
-              <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
-                <MdOutlineProductionQuantityLimits className="text-xl" />
-                <span>Trips</span>
-              </li>
-              <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
-                <MdOutlineProductionQuantityLimits className="text-xl" />
-                <span>Trip Enquiry</span>
-              </li>
-
-              <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
-                <MdRateReview className="text-xl" />
-                <span>Users</span>
-              </li>
-            </ul>
-
+                        <li className="flex items-center justify-between">
+                          <a href="/dashboard" className="flex items-center gap-3 text-white font-medium">
+                            <MdDashboard className="text-xl" />
+                            <span>Dashboard</span>
+                          </a>
+                          <span className="text-xs bg-red-500 px-2 py-0.5 rounded-md">2</span>
+                        </li>
+                        <li>
+                          <a href="/categories" className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                            <MdOutlineCategory className="text-xl" />
+                            <span>Categories</span>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="/tags" className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                            <MdLabel className="text-xl" />
+                            <span>Tags</span>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="/difficulties" className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                            <MdTerrain className="text-xl" />
+                            <span>Difficulties</span>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="/activities" className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                            <MdHiking className="text-xl" />
+                            <span>Activities</span>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="/destinations" className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                            <MdPublic className="text-xl" />
+                            <span>Destinations</span>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="/trip-type" className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                            <MdTour className="text-xl" />
+                            <span>Trip Type</span>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="/trips" className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                            <MdOutlineProductionQuantityLimits className="text-xl" />
+                            <span>Trips</span>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="/trip-enquiry" className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                            <MdOutlineProductionQuantityLimits className="text-xl" />
+                            <span>Trip Enquiry</span>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="/users" className="flex items-center gap-3 text-white/80 hover:text-white transition">
+                            <MdPeople className="text-xl" />
+                            <span>Users</span>
+                          </a>
+                        </li>
+                      </ul>
             <hr className="my-8 border-white/20" />
 
             <div className="space-y-6">
