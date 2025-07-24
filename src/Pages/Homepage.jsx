@@ -8,7 +8,7 @@ const Homepage = () => {
     <>  
     <div >
         <Navbar/>  
-        <Sidebar/> 
+         <Sidebar/> 
          <Hero/> 
     </div> 
     

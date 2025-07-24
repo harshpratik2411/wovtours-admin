@@ -1,115 +1,145 @@
-// import { useEffect } from 'react';
-// import { FiSearch } from 'react-icons/fi';
-// import { IoMdNotificationsOutline } from 'react-icons/io';
-// import AOS from 'aos';
-// import 'aos/dist/aos.css'; 
-// import Sidebar from '../Siderbar/Sidebar';
-
-// const Navbar = () => {
-//   useEffect(() => {
-//     AOS.init({ duration: 600 });
-//   }, []);
-
-//   return (  
-//      <>
-//      <Sidebar/>
-//     <div
-//       className="max-w-full ml-40 lg:mt-0 -mt-8 flex flex-col sm:flex-row lg:justify-between lg:items-center px-4 sm:px-6 py-3 sm:space-y-0 space-y-4 rounded-lg bg-gray-500"
-//     >
-//       {/* Title - Visible only on large screens */}
-//       <h1 className="text-2xl ml-10 font-bold hidden lg:flex font-Rubik text-gray-800">
-//         Dashboard
-//       </h1>
-                
-//       {/* Right side: Icons and Profile */}
-//       <div className="flex flex-row  items-center space-x-6 w-full sm:w-auto min-w-0 overflow-hidden">
-//         {/* Search Icon */}
-//         <FiSearch className="text-xl text-gray-700 cursor-pointer" />
-
-//         {/* Notification Icon */}
-//         <div className="relative">
-//           <IoMdNotificationsOutline className="text-2xl text-gray-700 cursor-pointer" />
-//           <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
-//         </div>
-
-//         {/* Divider */}
-//         <h1 className="text-4xl font-thin hidden sm:block">|</h1>
-
-//         {/* Profile Info */}
-//         <div className="flex items-center  space-x-2 min-w-0 overflow-hidden">
-//           <img
-//             src="https://randomuser.me/api/portraits/women/44.jpg"
-//             alt="profile"
-//             className="w-10 h-10 mr-12  rounded-full object-cover shrink-0"
-//           />
-//           <div className="text-sm ">
-//             <p className="font-semibold font-Rubik text-gray-800 truncate whitespace-nowrap">
-//               Gladys 
-//             </p>
-//             <p className="text-xs font-Slab text-gray-500 truncate whitespace-nowrap">
-//               Admin
-//             </p>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   </>
-//   );
-// };
-
-// export default Navbar;
-import { useEffect } from 'react'; 
+import { useEffect, useState } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
- import { FiSearch } from 'react-icons/fi';
-import { IoMdNotificationsOutline } from 'react-icons/io';
-import { div } from 'motion/react-client'; 
 
+import { FiSearch } from 'react-icons/fi';
+import { IoMdNotificationsOutline } from 'react-icons/io';
+import {
+  MdDashboard,
+  MdOutlineProductionQuantityLimits,
+  MdShoppingBag,
+  MdTrendingUp,
+  MdRateReview,
+  MdSettings,
+  MdLogout,
+  MdMenu,
+} from 'react-icons/md';
 
 export default function TopNav() {
   useEffect(() => {
     AOS.init({ duration: 800 });
   }, []);
 
-  return ( 
-   <div className="lg:ml-40 ml-4 lg:-mt-0 -mt-8 lg:mr-[-5.6rem] z-50">
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="lg:ml-40 ml-4 lg:-mt-0 -mt-8 lg:mr-[-5.6rem] z-50 relative">
       <nav
-        className="flex  justify-between  items-center  py-4"
+        className="flex justify-between items-center py-4 relative z-40"
         data-aos="fade-down"
       >
-        {/* Left: Title */} 
-       
-        <h1 className="text-xl font-medium font-rubik text-black">Dashboard</h1>
+        {/* Left section with menu button and title */}
+        <div className="flex -ml-10 items-center gap-3">
+          {/* Mobile Menu Button */}
+          <button
+            className="lg:hidden bg-primary text-white p-2 rounded-md shadow-md"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <MdMenu className="text-xl" />
+          </button>
+          <h1 className="text-2xl lg:ml-16 font-medium font-rubik text-black">Dashboard</h1>
+        </div>
 
         {/* Right: Icons and Profile */}
-        <div className="flex items-center  gap-6">
-          {/* Search Icon */}
+        <div className="flex items-center gap-6">
           <button className="text-gray-600 hover:text-black">
             <FiSearch className="w-5 h-5" />
           </button>
-
-          {/* Notification Bell with badge */}
           <div className="relative mt-2">
             <button className="text-gray-600 hover:text-black">
               <IoMdNotificationsOutline className="w-6 h-6" />
             </button>
             <span className="absolute top-0 right-0 bg-red-500 w-2 h-2 rounded-full"></span>
           </div>
-
-          {/* Profile */}
           <div className="flex lg:-mr-0 -mr-6 items-center gap-2">
             <img
               src="https://randomuser.me/api/portraits/women/44.jpg"
               alt="Profile"
               className="w-8 h-8 rounded-full object-cover"
             />
-            {/* <div className="hidden sm:block leading-tight">
-              <p className="text-sm font-medium font-rubik text-black">Gladys Kanyinda</p>
-              <p className="text-xs text-gray-500 font-rubik">Admin</p>
-            </div> */}
           </div>
         </div>
       </nav>
+
+      {/* Sidebar */}
+      <div
+        className={`
+          fixed top-0  left-0 z-50 h-full bg-primary text-white font-rubik px-6 py-8 flex flex-col justify-between rounded-r-xl
+          transition-transform duration-300 ease-in-out
+          w-60
+          ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+          lg:hidden
+        `}
+      >
+        <div>
+          {/* Close Button (✕) */}
+          <div className="flex  justify-end mb-4">
+            <button
+              onClick={() => setIsOpen(false)}
+              className="text-white text-2xl"
+              aria-label="Close Menu"
+            >
+              &times;
+            </button>
+          </div>
+
+          <h1 className="text-2xl  font-bold mb-10">Eormi</h1>
+          <ul className="space-y-5">
+            <li className="flex items-center justify-between">
+              <div className="flex items-center gap-3 text-white font-medium">
+                <MdDashboard className="text-xl" />
+                <span>Dashboard</span>
+              </div>
+              <span className="text-xs bg-red-500 px-2 py-0.5 rounded-md">2</span>
+            </li>
+            <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
+              <MdOutlineProductionQuantityLimits className="text-xl" />
+              <span>Products</span>
+            </li>
+            <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
+              <MdShoppingBag className="text-xl" />
+              <span>Orders</span>
+            </li>
+            <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
+              <MdTrendingUp className="text-xl" />
+              <span>Sales</span>
+            </li>
+            <li className="flex items-center gap-3 text-white/80 hover:text-white transition">
+              <MdRateReview className="text-xl" />
+              <span>Reviews</span>
+            </li>
+          </ul>
+
+          <hr className="my-8 border-white/20" />
+
+          <div className="space-y-5">
+            <h2 className="text-xs font-robotoSlab  text-white/50 tracking-widest">OTHER</h2>
+            <div className="flex items-center gap-3 text-white/80 hover:text-white transition">
+              <MdSettings className="text-xl" />
+              <span>Settings</span>
+            </div>
+            <div className="flex items-center gap-3 text-white/80 hover:text-white transition">
+              <MdLogout className="text-xl" />
+              <span>Logout</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r  from-cyan-500 to-blue-500  rounded-xl  p-4 mt-4 text-center">
+          <p className="text-sm font-semibold">Improve Your Sales Efficiency</p>
+          <button className="mt-3 bg-white text-primary font-bold text-sm px-4 py-1 rounded-full shadow-md hover:bg-gray-100 transition">
+            Start Now
+          </button>
+        </div>
+      </div>
+
+      {/* Overlay */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
     </div>
   );
 }
