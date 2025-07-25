@@ -38,7 +38,7 @@ const UpdateTrip = () => {
     <>
       <Navbar />
       <Sidebar />
-      <div className="ml-96 max-w-3xl  mx-auto p-6 -mt-10 font-rubik">
+      <div className="lg:ml-96 max-w-3xl  mx-auto p-6 -mt-10 font-rubik">
 
           <div>
             <h2 className="text-2xl mt-4 font-slab font-semibold text-gray-800 mb-6">Update Trip</h2>
