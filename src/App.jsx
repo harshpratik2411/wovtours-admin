@@ -3,7 +3,9 @@ import './App.css'
 
 // Import all page components
 import Homepage from './Pages/Homepage'
-import Categories from './Pages/Categories'
+import Categories from './Pages/Category/Categories' 
+import ViewTrip from './Pages/Category/ViewTrip'
+import UpdateTrip from './Pages/Category/UpdateTrip'
 // import Tags from './Pages/Tags'
 // import Difficulties from './Pages/Difficulties'
 // import Activities from './Pages/Activities'
@@ -22,7 +24,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Homepage />} />
           {/* <Route path="/dashboard" element={<Dashboard />} /> */}
-          <Route path="/categories" element={<Categories />} />
+          <Route path="/categories" element={<Categories />} /> 
+          <Route path="/categories/view/:id" element={<ViewTrip />} />
+          <Route path="/categories/update/:id" element={<UpdateTrip />} />
           {/* <Route path="/tags" element={<Tags />} />
           <Route path="/difficulties" element={<Difficulties />} />
           <Route path="/activities" element={<Activities />} />
