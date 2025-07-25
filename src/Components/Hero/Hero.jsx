@@ -152,97 +152,108 @@ const Hero = () => {
       </div>
 
       {/* Analytics and Pie Chart */}
-      <div
-        className="grid grid-cols-1 md:grid-cols-2 w-full md:w-[71.5rem] gap-6"
-        data-aos="fade-up"
-      >
-        {/* Line Chart */}
-        <div className="bg-white lg:p-4 pl-1 pr-6 pt-3 pb-3 rounded-xl shadow-sm">
-          <h2 className="text-lg font-semibold mb-4">Sales Analytics</h2>
-          <ResponsiveContainer width="100%" height={250}>
-            <LineChart data={lineData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Line
-                type="monotone"
-                dataKey="value"
-                stroke="#ff7f50"
-                strokeWidth={3}
-                dot
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
+     <div
+      className="grid grid-cols-1 md:grid-cols-2 w-full md:w-[71.5rem] gap-6"
+      data-aos="fade-up"
+    >
+      {/* Line Chart */}
+      <div className="bg-white lg:p-4 pl-1 pr-6 pt-3 pb-3 rounded-xl shadow-sm">
+        <h2 className="text-lg font-semibold mb-4">Sales Analytics</h2>
+        <ResponsiveContainer width="100%" height={250}>
+          <LineChart data={lineData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" />
+            <YAxis />
+            <Tooltip />
+            <Line
+              type="monotone"
+              dataKey="value"
+              stroke="#ff7f50"
+              strokeWidth={3}
+              dot
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
 
-        {/* Pie Chart */}
-        <div className="bg-white p-4 rounded-xl shadow-sm">
-          <h2 className="text-lg font-semibold mb-4">Sales by Category</h2>
-          <div className="flex flex-col md:flex-row justify-between items-center w-full">
-            <ResponsiveContainer width={210} height={200} className="ml-4">
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  dataKey="value"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={chartSize.outerRadius}
-                  innerRadius={chartSize.innerRadius}
-                  fill="#8884d8"
-                >
-                  {pieData.map((_, index) => (
-                    <Cell key={index} fill={colors[index % colors.length]} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-            <div className="space-y-2 mt-4 md:mt-0 md:ml-4 text-left mr-8">
-              {[
-                {
-                  name: "Clothing",
-                  percent: 25,
-                  amount: "$3,020",
-                  count: 1348,
-                },
-                {
-                  name: "Lingerie & Nightwear",
-                  percent: 35,
-                  amount: "$2,280",
-                  count: 3459,
-                },
-                {
-                  name: "Body Fit",
-                  percent: 35,
-                  amount: "$2,280",
-                  count: 3459,
-                },
-                {
-                  name: "Sportswear",
-                  percent: 23,
-                  amount: "$2,820",
-                  count: 879,
-                },
-                {
-                  name: "Accessories",
-                  percent: 18,
-                  amount: "$1,224",
-                  count: 348,
-                },
-              ].map((item, idx) => (
-                <div key={idx} className="text-sm text-gray-700">
-                  <span className="font-medium text-black">{item.name}</span> (
-                  {item.percent}%)
+      {/* Pie Chart */}
+      <div className="bg-white p-4 rounded-xl shadow-sm">
+        <h2 className="text-lg font-semibold mb-4">Sales by Category</h2>
+        <div className="flex flex-col md:flex-row justify-between items-center w-full">
+          <ResponsiveContainer width={210} height={200} className="ml-4">
+            <PieChart>
+              <Pie
+                data={pieData}
+                dataKey="value"
+                cx="50%"
+                cy="50%"
+                outerRadius={chartSize.outerRadius}
+                innerRadius={chartSize.innerRadius}
+                fill="#8884d8"
+              >
+                {pieData.map((_, index) => (
+                  <Cell key={index} fill={colors[index % colors.length]} />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+
+          {/* Legend with only colored dots */}
+          <div className="space-y-2 mt-4 md:mt-0 md:ml-4 text-left mr-8">
+            {[
+              {
+                name: "Clothing",
+                percent: 25,
+                amount: "$3,020",
+                count: 1348,
+              },
+              {
+                name: "Lingerie & Nightwear",
+                percent: 35,
+                amount: "$2,280",
+                count: 3459,
+              },
+              {
+                name: "Body Fit",
+                percent: 35,
+                amount: "$2,280",
+                count: 3459,
+              },
+              {
+                name: "Sportswear",
+                percent: 23,
+                amount: "$2,820",
+                count: 879,
+              },
+              {
+                name: "Accessories",
+                percent: 18,
+                amount: "$1,224",
+                count: 348,
+              },
+            ].map((item, idx) => (
+              <div key={idx} className="text-sm text-gray-700 flex items-start gap-2">
+                {/* Colored Dot Only */}
+                <span
+                  className="w-2.5 h-2.5 mt-1 rounded-full inline-block"
+                  style={{ backgroundColor: colors[idx % colors.length] }}
+                ></span>
+
+                {/* Category Text */}
+                <div>
+                  <span className="font-medium text-black">{item.name}</span>{" "}
+                  ({item.percent}%)
                   <div className="text-xs text-gray-500">
                     {item.count} CATEGORY PRODUCTS —{" "}
                     <span className="text-black">{item.amount}</span>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };
