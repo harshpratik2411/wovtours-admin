@@ -6,8 +6,8 @@ import Homepage from './Pages/Homepage'
 import Categories from './Pages/Category/Categories' 
 import ViewTrip from './Pages/Category/ViewTrip'
 import UpdateTrip from './Pages/Category/UpdateTrip'
- import Tags from './Pages/Tags'
-// import Difficulties from './Pages/Difficulties'
+ import Tags from './Pages/Tags' 
+ import Add from './Pages/Category/Add'
 // import Activities from './Pages/Activities'
 // import Destinations from './Pages/Destinations'
 // import TripType from './Pages/TripType'
@@ -26,7 +26,9 @@ function App() {
           {/* <Route path="/dashboard" element={<Dashboard />} /> */}
           <Route path="/categories" element={<Categories />} /> 
           <Route path="/categories/view/:id" element={<ViewTrip />} />
-          <Route path="/categories/update/:id" element={<UpdateTrip />} />
+          <Route path="/categories/update/:id" element={<UpdateTrip />} /> 
+          <Route path="/categories/add" element={<Add />} />
+
            <Route path="/tags" element={<Tags />} />
           {/* <Route path="/difficulties" element={<Difficulties />} />
           <Route path="/activities" element={<Activities />} />
