@@ -51,7 +51,6 @@ const Categories = () => {
 
   const clearSearch = () => setSearchText('');
 
-  // pagination logic
   const filtered = Trips.filter(trip =>
     trip.name.toLowerCase().includes(searchText.toLowerCase())
   );
@@ -66,19 +65,25 @@ const Categories = () => {
         {/* Search + Sort + Add Row */}
         <div className="flex flex-wrap justify-between items-center mb-4 gap-2">
           <div className="flex items-center gap-2 flex-wrap relative">
-            <FiSearch className="text-gray-600" size={22} />
-            <input
-              type="text"
-              value={searchText}
-              onChange={e => setSearchText(e.target.value)}
-              placeholder="Search..."
-              className="border px-3 py-1 rounded text-sm focus:outline-none focus:ring"
-            />
-            {searchText && (
-              <button onClick={clearSearch} className="absolute right-2 text-gray-400 hover:text-gray-600">
-                <BsXCircle size={20} />
-              </button>
-            )}
+            <div className="relative">
+              <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600" size={18} />
+              <input
+                type="text"
+                value={searchText}
+                onChange={e => setSearchText(e.target.value)}
+                placeholder="Search..."
+                className="border pl-10 pr-8 py-1 rounded text-sm focus:outline-none focus:ring w-52"
+              />
+              {searchText && (
+                <button
+                  onClick={clearSearch}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  <BsXCircle size={18} />
+                </button>
+              )}
+            </div>
+
             <div className="relative">
               <button
                 onClick={toggleSort}
@@ -163,69 +168,46 @@ const Categories = () => {
         </div>
 
         {/* Mobile Cards */}
-        {/* Mobile Cards */}
-<div className="sm:hidden space-y-4">
-  {displayed.map(trip => (
-    <div key={trip.id} data-aos="fade-up" className="border rounded-lg shadow-sm bg-gray-50 relative overflow-hidden">
-      {/* Image */}
-      <div className="aspect-[4/3] w-full">
-        <img src={trip.image} alt={trip.name} className="w-full h-full object-cover" />
-      </div>
+        <div className="sm:hidden space-y-4">
+          {displayed.map(trip => (
+            <div key={trip.id} data-aos="fade-up" className="border rounded-lg shadow-sm bg-gray-50 relative overflow-hidden">
+              <div className="aspect-[4/3] w-full">
+                <img src={trip.image} alt={trip.name} className="w-full h-full object-cover" />
+              </div>
 
-      {/* Three-dot menu in top right corner */}
-      <div className="absolute top-2 right-2 z-10">
-        <button onClick={() => toggleMenu(trip.id)} className="text-gray-600 hover:text-black menu-toggle">
-          <BsThreeDotsVertical size={18} />
-        </button>
-        {activeMenu === trip.id && (
-          <div className="dropdown-menu absolute right-0 top-6 z-10 bg-white border rounded shadow w-32">
-            <button
-              onClick={() => navigate(`/categories/view/${trip.id}`)}
-              className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
-            >
-              <FaEye size={14} /> View
-            </button>
-            <button
-              onClick={() => navigate(`/categories/update/${trip.id}`)}
-              className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
-            >
-              <FaEdit size={14} /> Update
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* Text Content */}
-      <div className="p-4 space-y-1 text-sm text-gray-700">
-        <p className="font-medium text-gray-800 text-lg">{trip.name}</p>
-        <span className="text-gray-500 text-xs">{trip.id}</span>
-        <p><strong>Price:</strong> ₹{trip.price}</p>
-        <p>
-          <strong>Status:</strong>{' '}
-          <span className={`px-2 py-0.5 rounded-full text-xs font-medium inline-block ${getStatusClass(trip.status)}`}>
-            {trip.status}
-          </span>
-        </p>
-        <p><strong>Booked:</strong> {trip.booked}</p>
-      </div>
-   
-
-
-              {/* Three-dot menu */}
-              <div className="absolute top-2 right-2">
+              <div className="absolute top-2 right-2 z-10">
                 <button onClick={() => toggleMenu(trip.id)} className="text-gray-600 hover:text-black menu-toggle">
                   <BsThreeDotsVertical size={18} />
                 </button>
                 {activeMenu === trip.id && (
                   <div className="dropdown-menu absolute right-0 top-6 z-10 bg-white border rounded shadow w-32">
-                    <button onClick={() => navigate(`/categories/view/${trip.id}`)} className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700">
+                    <button
+                      onClick={() => navigate(`/categories/view/${trip.id}`)}
+                      className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
+                    >
                       <FaEye size={14} /> View
                     </button>
-                    <button onClick={() => navigate(`/categories/update/${trip.id}`)} className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700">
+                    <button
+                      onClick={() => navigate(`/categories/update/${trip.id}`)}
+                      className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
+                    >
                       <FaEdit size={14} /> Update
                     </button>
                   </div>
                 )}
+              </div>
+
+              <div className="p-4 space-y-1 text-sm text-gray-700">
+                <p className="font-medium text-gray-800 text-lg">{trip.name}</p>
+                <span className="text-gray-500 text-xs">{trip.id}</span>
+                <p><strong>Price:</strong> ₹{trip.price}</p>
+                <p>
+                  <strong>Status:</strong>{' '}
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium inline-block ${getStatusClass(trip.status)}`}>
+                    {trip.status}
+                  </span>
+                </p>
+                <p><strong>Booked:</strong> {trip.booked}</p>
               </div>
             </div>
           ))}
@@ -260,4 +242,3 @@ const Categories = () => {
 };
 
 export default Categories;
-   
