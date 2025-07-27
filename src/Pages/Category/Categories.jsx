@@ -7,7 +7,7 @@ import { FiSearch } from 'react-icons/fi';
 import Navbar from '../../Components/Navbar/Navbar';
 import Sidebar from '../../Components/Siderbar/Sidebar';
 import { useNavigate } from 'react-router-dom';
-import Trips from '../../Pages/Category/Trips';
+import CatUi from '../Category/CatUi'
 
 const Categories = () => {
   const [activeMenu, setActiveMenu] = useState(null);
@@ -51,7 +51,7 @@ const Categories = () => {
 
   const clearSearch = () => setSearchText('');
 
-  const filtered = Trips.filter(trip =>
+  const filtered = CatUi.filter(trip =>
     trip.name.toLowerCase().includes(searchText.toLowerCase())
   );
   const pages = Math.ceil(filtered.length / perPage);
@@ -93,7 +93,7 @@ const Categories = () => {
               </button>
               {sortMenuOpen && (
                 <div className="dropdown-menu absolute left-0 mt-1 bg-white border rounded shadow w-40 z-20">
-                  {['Name A-Z', 'Name Z-A', 'Date ASC', 'Date DESC', 'Popularity ASC', 'Popularity DESC'].map(opt => (
+                  {['Name A‑Z', 'Name Z‑A', 'Date ASC', 'Date DESC', 'Popularity ASC', 'Popularity DESC'].map(opt => (
                     <button
                       key={opt}
                       onClick={() => handleSort(opt)}
@@ -121,7 +121,6 @@ const Categories = () => {
             <thead className="text-gray-500 font-rubik uppercase border-b">
               <tr>
                 <th className="py-2">Trip Name</th>
-                <th className="py-2">Price</th>
                 <th className="py-2">Status</th>
                 <th className="py-2">Booked</th>
                 <th className="py-2"></th>
@@ -134,10 +133,8 @@ const Categories = () => {
                     <img src={trip.image} alt={trip.name} className="w-16 h-12 rounded object-cover" />
                     <div>
                       <p className="font-medium text-gray-800">{trip.name}</p>
-                      <span className="text-gray-500 text-xs">{trip.id}</span>
                     </div>
                   </td>
-                  <td className="py-4 text-gray-700">₹{trip.price}</td>
                   <td className="py-4">
                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(trip.status)}`}>
                       {trip.status}
@@ -199,10 +196,7 @@ const Categories = () => {
 
               <div className="p-4 space-y-1 text-sm text-gray-700">
                 <p className="font-medium text-gray-800 text-lg">{trip.name}</p>
-                <span className="text-gray-500 text-xs">{trip.id}</span>
-                <p><strong>Price:</strong> ₹{trip.price}</p>
-                <p>
-                  <strong>Status:</strong>{' '}
+                <p><strong>Status:</strong>{' '}
                   <span className={`px-2 py-0.5 rounded-full text-xs font-medium inline-block ${getStatusClass(trip.status)}`}>
                     {trip.status}
                   </span>

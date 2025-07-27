@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Navbar from '../../Components/Navbar/Navbar'
-import Sidebar from '../../Components/Siderbar/Sidebar'
-import Trips from '../../Pages/Category/Trips'
+import Sidebar from '../../Components/Siderbar/Sidebar' 
+import CatUi from '../Category/CatUi'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 
 const UpdateTrip = () => {
   const { id } = useParams()
-  const trip = Trips.find((t) => t.id === id)
+  const trip = CatUi.find((t) => t.id === id)
 
   useEffect(() => {
     AOS.init({ duration: 800, once: true })
@@ -56,7 +56,7 @@ const UpdateTrip = () => {
           <form onSubmit={handleSubmit} className="space-y-6 order-2 lg:order-1" data-aos="fade-up">
             {/* Trip Name */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Trip Name</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Title</label>
               <input
                 type="text"
                 name="name"

@@ -6,7 +6,7 @@ import {
 } from 'react-icons/fa'
 import Navbar from '../../Components/Navbar/Navbar'
 import Sidebar from '../../Components/Siderbar/Sidebar'
-import Trips from '../../Pages/Category/Trips'
+import Trips from './CatUi'
 
 const getStatusClass = (status) => {
   if (status === 'Available') return 'bg-blue-100 text-blue-600'
@@ -42,7 +42,7 @@ const ViewTrip = () => {
           {/* Header */}
           <div className="flex items-center gap-4 mb-8 border-primary border-b pb-4">
             <FaInfoCircle className="text-3xl text-black" />
-            <h2 className="text-3xl font-slab font-bold text-gray-800">
+            <h2 className="lg:text-3xl text-2xl font-slab font-bold text-gray-800">
               View Trip Details
             </h2>
           </div>
@@ -57,26 +57,23 @@ const ViewTrip = () => {
           </div>
 
           {/* Trip Info */}
-          <div className="grid lg:grid-cols-2 gap-8 text-gray-700 text-base lg:text-lg mb-10">
-            <div className="space-y-4">
+          <div className="grid lg:grid-cols-2  gap-8 text-gray-700 text-base lg:text-lg mb-10">
+            <div className="space-y-4 ">
               <div className="flex gap-3">
-                <span className="font-semibold w-32">Trip Name:</span>
-                <span>{trip.name}</span>
+                <span className="font-semibold lg:ml-0 ml-4 w-32">Trip Name:</span>
+                <span className='-ml-3'>{trip.name}</span>
               </div>
-              <div className="flex gap-3">
-                <span className="font-semibold w-32">Trip ID:</span>
-                <span>{trip.id}</span>
-              </div>
-              <div className="flex gap-3">
+              
+              <div className="flex lg:-ml-3 -ml-0 gap-3">
                 <span className="font-semibold w-32">Booked:</span>
-                <span>{trip.booked}</span>
+                <span className='-ml-5'>{trip.booked}</span>
               </div>
             </div>
 
             <div className="flex items-start lg:items-center gap-3">
-              <span className="font-semibold mt-1">Status:</span>
+              <span className="font-semibold lg:ml-0 ml-8 mt-1">Status:</span>
               <span
-                className={`px-4 py-2 rounded-full text-sm font-medium ${getStatusClass(
+                className={`px-4 py-2 lg:ml-0 ml-6 rounded-full text-sm font-medium ${getStatusClass(
                   trip.status
                 )}`}
               >
@@ -91,7 +88,7 @@ const ViewTrip = () => {
               <FaClipboardList className="text-lg text-gray-700" />
               <h3 className="text-xl font-semibold text-gray-800">Trip Description</h3>
             </div>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="text-gray-600 text-left leading-relaxed">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu
               metus condimentum, finibus eros nec, volutpat odio. Integer et nisi a
               sem gravida sollicitudin. Suspendisse potenti. Sed cursus nunc sit amet

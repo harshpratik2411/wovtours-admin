@@ -53,18 +53,8 @@ const Add = () => {
           <form onSubmit={handleSubmit} className="space-y-6 order-2 lg:order-1" data-aos="fade-up">
             {/* Title */}
             <div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Category Name</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Enter trip name"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
+          
+              
               <label className="block text-sm font-semibold text-gray-700 mb-1">Title</label>
               <input
                 type="text"
@@ -89,34 +79,7 @@ const Add = () => {
               />
             </div>
 
-            {/* Trip ID */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Trip ID</label>
-              <input
-                type="text"
-                name="tripId"
-                value={formData.tripId}
-                onChange={handleChange}
-                placeholder="Enter unique ID"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-
-            {/* Price */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Price (₹)</label>
-              <input
-                type="number"
-                name="price"
-                value={formData.price}
-                onChange={handleChange}
-                placeholder="Enter price"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-
+            
             {/* Status */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">Status</label>
