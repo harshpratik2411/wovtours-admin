@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-import { FiSearch } from 'react-icons/fi';
+import { FiSearch } from 'react-icons/fi'; 
+import { useNavigate  } from 'react-router-dom'; 
 import { IoMdNotificationsOutline } from 'react-icons/io';
 import {
   MdDashboard,
@@ -24,7 +25,8 @@ export default function TopNav() {
     AOS.init({ duration: 800 });
   }, []);
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); 
+  const navigate =useNavigate();
 
   return (
     <div className="lg:ml-36  lg:-mt-0 -mt-8  pt-2 lg:mr-[-3.6rem] mr-[1rem] z-50 relative">
@@ -55,8 +57,9 @@ export default function TopNav() {
             </button>
             <span className="absolute top-0 right-0 bg-red-500 w-2 h-2 rounded-full"></span>
           </div>
-          <div className="flex lg:-mr-0 -mr-6 items-center gap-2">
-            <img
+          <div className="flex lg:-mr-0 cursor-pointer -mr-6 items-center gap-2">
+            <img  
+             onClick={() => navigate('/')}
               src="https://randomuser.me/api/portraits/women/44.jpg"
               alt="Profile"
               className="w-8 h-8 rounded-full object-cover"

@@ -6,7 +6,8 @@ import Homepage from './Pages/Homepage'
 import Categories from './Pages/Category/Categories' 
 import ViewTrip from './Pages/Category/ViewTrip'
 import UpdateTrip from './Pages/Category/UpdateTrip'
- import Tags from './Pages/Tags' 
+ import Tags from './Pages/Tags'  
+ import Login from './Pages/Login' 
  import Add from './Pages/Category/Add'
 // import Activities from './Pages/Activities'
 // import Destinations from './Pages/Destinations'
@@ -22,7 +23,8 @@ function App() {
     <BrowserRouter>
       <div className="m-0">
         <Routes>
-          <Route path="/" element={<Homepage />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/homepage" element={<Homepage />} />
           {/* <Route path="/dashboard" element={<Dashboard />} /> */}
           <Route path="/categories" element={<Categories />} /> 
           <Route path="/categories/view/:id" element={<ViewTrip />} />
