@@ -14,15 +14,22 @@ import {
   MdMenu,
 } from 'react-icons/md';
 import AOS from 'aos';
-import 'aos/dist/aos.css';
+import 'aos/dist/aos.css';  
+import { useNavigate } from 'react-router-dom';
 
+   const handleLogout = () => {
+    localStorage.removeItem("isAuthenticated");
+    navigate("/login"); 
+   };
+  
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
-
+  
   useEffect(() => {
     AOS.init({ duration: 800 });
   }, []);
-
+  
+  const navigate = useNavigate();
   return (
     <>
       {/* Mobile Toggle Button */}
@@ -119,7 +126,12 @@ const Sidebar = () => {
               </div>
               <div className="flex items-center gap-3 text-white/80 hover:text-white transition">
                 <MdLogout className="text-xl" />
-                <span>Logout</span>
+                <button
+        onClick={handleLogout}
+        className="bg-primary text-white -ml-4 px-4 py-2 rounded"
+      >
+        Logout
+      </button>
               </div>
             </div>
           </div>
