@@ -87,10 +87,10 @@ const Hero = () => {
   }, []);
 
   return ( 
-    <div className=" lg:p-2  space-y-8  lg:-mt-10  sm:ml-0 md:ml-[155px]">
+    <div className=" lg:p-2 p-3 space-y-8  lg:-mt-9   lg:ml-[18rem]">
       {/* Top Stats */}
       <div
-        className="grid grid-cols-2 lg:grid-cols-4 w-full  lg:w-[71.5rem] gap-4 lg:gap-6"
+        className="grid grid-cols-2 lg:grid-cols-4 w-full  lg:w-[71.5rem] gap-3 lg:gap-6"
         data-aos="fade-up"
       >
         {stats.map((stat, idx) => {

@@ -29,7 +29,7 @@ export default function TopNav() {
   const navigate =useNavigate();
 
   return (
-    <div className="lg:ml-36  lg:-mt-0 -mt-8  pt-2 lg:mr-[-3.6rem] mr-[1rem] z-50 relative">
+    <div className="lg:ml-72 lg:-mt-0 -mt-5  pt-2 lg:mr-[1.8rem] mr-[2rem] z-50 relative">
       <nav
         className="flex justify-between items-center py-4 relative z-40"
         data-aos="fade-down"
@@ -59,7 +59,7 @@ export default function TopNav() {
           </div>
           <div className="flex lg:-mr-0 cursor-pointer -mr-6 items-center gap-2">
             <img  
-             onClick={() => navigate('/')}
+             onClick={() => navigate('/login')}
               src="https://randomuser.me/api/portraits/women/44.jpg"
               alt="Profile"
               className="w-8 h-8 rounded-full object-cover"
