@@ -61,7 +61,7 @@ const Categories = () => {
     <>
       <Navbar />
       <Sidebar />
-      <div className="bg-white p-6 lg:ml-40 rounded-xl shadow-md font-rubik w-full max-w-6xl mx-auto -mt-10">
+      <div className="bg-white p-6 lg:ml-72 rounded-xl shadow-md font-rubik w-full max-w-6xl mx-auto -mt-7">
         {/* Search + Sort + Add Row */}
         <div className="flex flex-wrap justify-between items-center mb-4 gap-2">
           <div className="flex items-center gap-2 flex-wrap relative">

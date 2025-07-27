@@ -29,7 +29,7 @@ export default function TopNav() {
   const navigate =useNavigate();
 
   return (
-    <div className="lg:ml-72 lg:-mt-0 -mt-5  pt-2 lg:mr-[1.8rem] mr-[2rem] z-50 relative">
+    <div className="lg:ml-72 lg:-mt-0 -mt-5  pt-2 lg:mr-[1.4rem] mr-[2rem] z-50 relative">
       <nav
         className="flex justify-between items-center py-4 relative z-40"
         data-aos="fade-down"
@@ -43,7 +43,7 @@ export default function TopNav() {
           >
             <MdMenu className="text-xl" />
           </button>
-          <h1 className="lg:text-2xl text-xl lg:ml-16 font-medium font-rubik text-black">Dashboard</h1>
+          <h1 className="lg:text-2xl text-xl lg:ml-9 font-medium font-rubik text-black">Dashboard</h1>
         </div>
 
         {/* Right: Icons and Profile */}

@@ -87,11 +87,11 @@ const Hero = () => {
   }, []);
 
   return ( 
-    <div className=" lg:p-2 p-3 space-y-8  lg:-mt-9   lg:ml-[18rem]">
+    <div className=" lg:p-2 p-3 space-y-8  lg:-mt-9   lg:ml-[17rem]">
       {/* Top Stats */}
       <div
-        className="grid grid-cols-2 lg:grid-cols-4 w-full  lg:w-[71.5rem] gap-3 lg:gap-6"
-        data-aos="fade-up"
+        className="grid grid-cols-2 lg:grid-cols-4 w-full  lg:w-[73rem] gap-3 lg:gap-6"
+       // data-aos="fade-up"
       >
         {stats.map((stat, idx) => {
           const isUp = stat.graph === "up";
@@ -153,7 +153,7 @@ const Hero = () => {
 
       {/* Analytics and Pie Chart */}
      <div
-      className="grid grid-cols-1 md:grid-cols-2 w-full md:w-[71.5rem] gap-6"
+      className="grid grid-cols-1 md:grid-cols-2 w-full md:w-[73rem] gap-6"
       data-aos="fade-up"
     >
       {/* Line Chart */}
