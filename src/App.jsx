@@ -1,20 +1,18 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import './App.css'
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./index.css";
 // Pages
-import Homepage from './Pages/Homepage'
-import Categories from './Pages/Category/Categories'
-import ViewTrip from './Pages/Category/ViewTrip'
-import UpdateTrip from './Pages/Category/UpdateTrip'
-import Tags from './Pages/Tags'
-import Login from './Pages/Login'
-import Add from './Pages/Category/Add'
-// import other pages when needed...
-import PrivateRoute from './Pages/PrivateRoute' 
+import Homepage from "./Pages/Homepage";
+import Categories from "./Pages/Category/Categories";
+import ViewTrip from "./Pages/Category/ViewTrip";
+import UpdateTrip from "./Pages/Category/UpdateTrip";
+import Tags from "./Pages/Tags";
+import Login from "./Pages/Login";
+import Add from "./Pages/Category/Add";
+import PrivateRoute from "./Pages/PrivateRoute";
 
 function App() {
   return (
-    <BrowserRouter>
+   
       <div className="m-0">
         <Routes>
           {/* Public route */}
@@ -71,8 +69,8 @@ function App() {
           />
         </Routes>
       </div>
-    </BrowserRouter>
-  )
+   
+  );
 }
 
-export default App
+export default App;
