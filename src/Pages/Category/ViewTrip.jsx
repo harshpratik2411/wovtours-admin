@@ -64,16 +64,16 @@ const ViewTrip = () => {
                 <span className='-ml-3'>{trip.name}</span>
               </div>
               
-              <div className="flex lg:-ml-3 -ml-0 gap-3">
-                <span className="font-semibold w-32">Booked:</span>
-                <span className='-ml-5'>{trip.booked}</span>
+              <div className="flex lg:-ml-6 -ml-0 gap-3">
+                <span className="font-semibold lg:ml-6 ml-5 w-32">Booked:</span>
+                <span className='lg:-ml-3 -ml-5'>{trip.booked}</span>
               </div>
             </div>
 
             <div className="flex items-start lg:items-center gap-3">
-              <span className="font-semibold lg:ml-0 ml-8 mt-1">Status:</span>
+              <span className="font-semibold lg:ml-0 ml-6 mt-1">Status:</span>
               <span
-                className={`px-4 py-2 lg:ml-0 ml-6 rounded-full text-sm font-medium ${getStatusClass(
+                className={`px-4 py-2 lg:ml-6 ml-12 rounded-full text-sm font-medium ${getStatusClass(
                   trip.status
                 )}`}
               >

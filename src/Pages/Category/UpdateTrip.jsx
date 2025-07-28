@@ -121,7 +121,7 @@ const UpdateTrip = () => {
               <img
                 src={formData.image}
                 alt="Trip Preview"
-                className="rounded-xl shadow-md w-full max-h-[500px] object-cover border border-gray-200"
+                className="rounded-xl shadow-md w-full h-auto object-contain border border-gray-200"
               />
             ) : (
               <div className="w-full h-[300px] flex items-center justify-center bg-gray-100 text-gray-400 rounded-xl border border-dashed">
