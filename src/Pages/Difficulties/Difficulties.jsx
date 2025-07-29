@@ -160,7 +160,7 @@ const Difficulties = () => {
                   <td className="py-2 px-2 lg:ml-0 ml-[2px] sm:px-0 text-gray-700">{difficulty.slug}</td> 
             
                  <td className="py-2 px-2 sm:px-0 text-gray-700">
-      <span className='ml-16'>{difficulty?.level || 'N/A'}</span>
+      <span className='lg:ml-16 font-semibold'>{difficulty?.level || 'N/A'}</span>
 </td>
 
  

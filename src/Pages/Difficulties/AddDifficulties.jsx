@@ -36,9 +36,9 @@ const AddDifficulty = () => {
       <Navbar />
       <Sidebar />
       <div className="lg:ml-60">
-        <div className="max-w-3xl mx-auto lg:p-6 p-2 -mt-12 font-rubik">
+        <div className="max-w-3xl mx-auto lg:p-6 p-2 -mt-16 font-rubik">
           <h2
-            className="lg:text-4xl text-3xl font-bold text-gray-800 mb-10 font-slab text-center"
+            className="lg:text-4xl mt-1 text-3xl font-bold text-gray-800 mb-10 font-slab text-center"
             data-aos="fade-up"
           >
             Add New Difficulty
@@ -98,6 +98,21 @@ const AddDifficulty = () => {
                 >
                   <option value="active">Active</option>
                   <option value="inactive">Inactive</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 ml-1 mb-1">Parent Difficulty</label>
+                <select
+                  name="status"
+                  value={formData.status}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="active">None</option>
+                  <option value="active">Easy</option>
+                  <option value="inactive">Medium</option>
+                  <option value="active">Hard</option>
+                  <option value="inactive">Extreme</option>
                 </select>
               </div>
 
