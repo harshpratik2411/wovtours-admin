@@ -12,6 +12,7 @@ const AddTag = () => {
     name: '',
     slug: '',
     description: '',
+     status: 'active',
   });
 
   useEffect(() => {
@@ -85,7 +86,19 @@ const AddTag = () => {
                   className="w-full border border-gray-300 rounded-lg px-4 py-5 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                 />
               </div>
-
+                 <div>
+              <label className="block text-sm font-semibold text-gray-700 ml-1 mb-1">Status</label>
+              <select
+                name="status"
+                value={formData.status}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+      
+              </select>
+            </div>
               {/* Submit Button */}
               <div className="pt-4">
                 <button
