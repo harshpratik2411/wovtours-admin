@@ -5,14 +5,14 @@ import Sidebar from '../../Components/Siderbar/Sidebar';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-const AddTag = () => {
+const AddDifficulty = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: '',
     slug: '',
     description: '',
-     status: 'active',
+    status: 'active',
   });
 
   useEffect(() => {
@@ -26,9 +26,9 @@ const AddTag = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('New tag added:', formData);
-    alert('New tag added (in-memory).');
-    navigate('/categories'); // or navigate to tags list page
+    console.log('New difficulty added:', formData);
+    alert('New difficulty added (in-memory).');
+    navigate('/categories'); // or navigate to difficulties list page
   };
 
   return (
@@ -41,14 +41,14 @@ const AddTag = () => {
             className="lg:text-4xl text-3xl font-bold text-gray-800 mb-10 font-slab text-center"
             data-aos="fade-up"
           >
-            Add New Tag
+            Add New Difficulty
           </h2>
 
           <div className="bg-white shadow-xl rounded-xl p-8" data-aos="fade-up">
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Title */}
+              {/* Name */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Tag Name</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Difficulty Name</label>
                 <input
                   type="text"
                   name="name"
@@ -86,26 +86,28 @@ const AddTag = () => {
                   className="w-full border border-gray-300 rounded-lg px-4 py-5 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                 />
               </div>
-                 <div>
-              <label className="block text-sm font-semibold text-gray-700 ml-1 mb-1">Status</label>
-              <select
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-      
-              </select>
-            </div>
+
+              {/* Status */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 ml-1 mb-1">Status</label>
+                <select
+                  name="status"
+                  value={formData.status}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
+              </div>
+
               {/* Submit Button */}
               <div className="pt-4">
                 <button
                   type="submit"
                   className="bg-gradient-to-r lg:-mt-4 -mt-10 bg-primary text-white w-full py-3 rounded-lg font-semibold hover:bg-primary/80 transition duration-200"
                 >
-                  Add Tag
+                  Add Difficulty
                 </button>
               </div>
             </form>
@@ -116,4 +118,4 @@ const AddTag = () => {
   );
 };
 
-export default AddTag;
+export default AddDifficulty;

@@ -117,7 +117,7 @@ const Difficulties = () => {
           </div>
 
           <button
-            onClick={() => navigate('/difficulties/add-difficulty')}
+            onClick={() => navigate('/difficulties/add-difficulties')}
             className="flex items-center gap-1 border text-sm text-gray-600 bg-white px-3 py-1 rounded hover:bg-gray-100 w-full sm:w-auto"
           >
             <FaPlus size={12} /> Add
@@ -133,6 +133,7 @@ const Difficulties = () => {
                 <th className="py-2">Status</th>
                 <th className="py-2">Description</th>
                 <th className="py-2">Slug</th>
+                <th className="py-2 ">Didfficulty Levels</th>
                 <th className="py-2"></th>
               </tr>
             </thead>
@@ -153,30 +154,34 @@ const Difficulties = () => {
                     </span>
                   </td>
 
-                  <td className="py-2 px-2 lg:ml-0 ml-[2px] -mr-40 lg:block sm:px-0 text-gray-700 whitespace-normal break-words max-w-xs">
+                  <td className="py-2 px-2 lg:ml-0 ml-[2px] -mr-40  lg:block sm:px-0 text-gray-700 whitespace-normal break-words max-w-xs">
                     {difficulty.desc}
-                  </td>
+                  </td> 
+                  <td className="py-2 px-2 lg:ml-0 ml-[2px] sm:px-0 text-gray-700">{difficulty.slug}</td> 
+            
+                 <td className="py-2 px-2 sm:px-0 text-gray-700">
+      <span className='ml-16'>{difficulty?.level || 'N/A'}</span>
+</td>
 
-                  <td className="py-2 px-2 lg:ml-0 ml-[2px=] sm:px-0 text-gray-700">{difficulty.slug}</td>
-
-                  <td className="py-2 px-2 sm:px-0 text-right sm:text-left">
+ 
+                  <td className="py-2 px-2  sm:px-0 text-right sm:text-left">
                     <div className="relative inline-block">
                       <button
                         onClick={() => toggleMenu(difficulty.id)}
                         className="text-gray-600 hover:text-black menu-toggle"
                       >
-                        <BsThreeDotsVertical size={18} />
+                        <BsThreeDotsVertical className='' size={18} />
                       </button>
                       {activeMenu === difficulty.id && (
                                         <div className="dropdown-menu absolute right-0 -top-20 z-10 bg-white border rounded shadow w-32">
                                           <button
-                                            onClick={() => navigate(`/categories/view/${difficulty.id}`)}
+                                            onClick={() => navigate(`/difficulties/view/${difficulty.id}`)}
                                             className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                                           >
                                             <FaEye size={14} /> View
                                           </button>
                                           <button
-                                            onClick={() => navigate(`/categories/update/${difficulty.id}`)}
+                                            onClick={() => navigate(`//update/${difficulty.id}`)}
                                             className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                                           >
                                             <FaEdit size={14} /> Update
@@ -200,7 +205,7 @@ const Difficulties = () => {
                 onClick={() => setCurrentPage(idx + 1)}
                 className={`px-3 py-1 rounded ${currentPage === idx + 1
                   ? 'bg-primary text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'           
                   }`}
               >
                 {idx + 1}
