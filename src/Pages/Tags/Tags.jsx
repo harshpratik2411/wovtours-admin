@@ -59,23 +59,29 @@ const Tags = () => {
     );
   };
 
+  const getStatusClass = (status) => {
+    if (status === 'Active') return 'bg-blue-100 text-blue-600';
+    if (status === 'InActive') return 'bg-yellow-100 text-yellow-600';
+    return 'bg-red-100 text-red-600';
+  };
+
   return (
     <>
       <Navbar />
       <Sidebar />
-      <div className="bg-white p-6 lg:ml-72 rounded-xl shadow-md font-rubik w-full max-w-6xl mx-auto -mt-7">
+      <div className="bg-white p-4 sm:p-6 lg:ml-72 rounded-xl shadow-md font-rubik w-full max-w-6xl mx-auto -mt-2">
 
         {/* Search, Sort, Add */}
-        <div className="flex flex-wrap justify-between items-center mb-4 gap-2">
-          <div className="flex items-center gap-2 flex-wrap relative">
-            <div className="relative">
+        <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-3 mb-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 relative w-full sm:w-auto">
+            <div className="relative w-full sm:w-auto">
               <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600" size={18} />
               <input
                 type="text"
                 value={searchText}
                 onChange={e => setSearchText(e.target.value)}
                 placeholder="Search..."
-                className="border pl-10 pr-8 py-1 rounded text-sm focus:outline-none focus:ring w-52"
+                className="border pl-10 pr-8 py-1 rounded text-sm focus:outline-none focus:ring w-full sm:w-52"
               />
               {searchText && (
                 <button
@@ -87,10 +93,10 @@ const Tags = () => {
               )}
             </div>
 
-            <div className="relative">
+            <div className="relative w-full sm:w-auto">
               <button
                 onClick={toggleSort}
-                className="sort-toggle flex items-center gap-1 border text-sm text-gray-600 bg-white px-3 py-1 rounded hover:bg-gray-100"
+                className="sort-toggle flex items-center gap-1 border text-sm text-gray-600 bg-white px-3 py-1 rounded hover:bg-gray-100 w-full sm:w-auto"
               >
                 Sort By
               </button>
@@ -112,18 +118,20 @@ const Tags = () => {
 
           <button
             onClick={() => navigate('/tags/add-tag')}
-            className="hidden sm:flex items-center gap-1 border text-sm text-gray-600 bg-white px-3 py-1 rounded hover:bg-gray-100"
+            className="flex items-center gap-1 border text-sm text-gray-600 bg-white px-3 py-1 rounded hover:bg-gray-100"
           >
             <FaPlus size={12} /> Add
           </button>
         </div>
 
         {/* Table View */}
-        <div className="overflow-x-auto hidden sm:table w-full">
-          <table className="w-full text-left text-sm">
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-left text-sm">
             <thead className="text-gray-500 font-rubik uppercase border-b">
               <tr>
                 <th className="py-2">Name</th>
+                <th className="py-2">Status</th>
+                <th className="py-2">Description</th>
                 <th className="py-2">Slug</th>
               </tr>
             </thead>
@@ -136,8 +144,13 @@ const Tags = () => {
                       <p className="font-medium text-gray-800">{tag.name}</p>
                     </div>
                   </td>
+                  <td className="py-4">
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(tag.status)}`}>
+                      {tag.status}
+                    </span>
+                  </td>
+                  <td className="py-4 pl-4 text-gray-700">{tag.desc}</td>
                   <td className="py-4 text-gray-700">{tag.slug}</td>
-                  <td className="py-4 text-gray-700">{tag.booked}</td>
                   <td className="py-4 text-right">
                     <div className="relative inline-block">
                       <button onClick={() => toggleMenu(tag.id)} className="text-gray-600 hover:text-black menu-toggle">
