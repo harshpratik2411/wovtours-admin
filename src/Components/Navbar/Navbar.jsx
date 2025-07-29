@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-
 import { FiSearch } from 'react-icons/fi'; 
 import { useNavigate  } from 'react-router-dom'; 
 import { IoMdNotificationsOutline } from 'react-icons/io';
