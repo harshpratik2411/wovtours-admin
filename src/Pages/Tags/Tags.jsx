@@ -158,10 +158,10 @@ const Tags = () => {
                                         </button>
                                         {activeMenu === tag.id && (
                                           <div className="dropdown-menu absolute right-0 lg:-top-20 -top-12 z-10 bg-white border rounded shadow w-32">
-                                            <button onClick={() => navigate(`/categories/view/${tag.id}`)} className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700">
+                                            <button onClick={() => navigate(`/tags/view/${tag.id}`)} className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700">
                                               <FaEye size={14} /> View
                                             </button>
-                                            <button onClick={() => navigate(`/categories/update/${tag.id}`)} className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700">
+                                            <button onClick={() => navigate(`/tags/update/${tag.id}`)} className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700">
                                               <FaEdit size={14} /> Update
                                             </button>
                                           </div>

@@ -73,10 +73,10 @@ function App() {
         />
         {/* ✅ Corrected Tag Routes */}
         <Route
-          path="/tags/view:id"
+          path="/tags/view/:id"
           element={
             <PrivateRoute>
-              <Tags />
+              <ViewTag />
             </PrivateRoute>
           }
         />
