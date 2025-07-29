@@ -7,11 +7,11 @@ import UpdateTrip from "./Pages/Category/UpdateTrip";
 import Login from "./Pages/Login";
 import Add from "./Pages/Category/Add";
 import PrivateRoute from "./Pages/PrivateRoute"; 
-
-import Tags from "./Pages/Tags/Tags"; 
-//import ViewTag from "./Pages/Tags/ViewTag"; // ✅ Import ViewTag
+import Tags from "./Pages/Tags/Tags";  
+import ViewTag from "./Pages/Tags/ViewTag";
 import UpdateTag from "./Pages/Tags/UpdateTag";
-import AddTag from "./Pages/Tags/AddTag";
+import AddTag from "./Pages/Tags/AddTag"; 
+
 
 function App() {
   return (
@@ -65,6 +65,15 @@ function App() {
         {/* ✅ Corrected Tag Routes */}
         <Route
           path="/tags"
+          element={
+            <PrivateRoute>
+              <Tags />
+            </PrivateRoute>
+          }
+        />
+        {/* ✅ Corrected Tag Routes */}
+        <Route
+          path="/tags/view:id"
           element={
             <PrivateRoute>
               <Tags />

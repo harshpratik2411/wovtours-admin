@@ -69,11 +69,11 @@ const Tags = () => {
     <>
       <Navbar />
       <Sidebar />
-      <div className="bg-white p-4 sm:p-6 lg:ml-72 rounded-xl shadow-md font-rubik w-full max-w-6xl mx-auto -mt-2">
+      <div className="bg-white p-4 sm:p-6 lg:ml-72  rounded-xl shadow-md font-rubik w-full max-w-6xl mx-auto -mt-2">
 
         {/* Search, Sort, Add */}
-        <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-3 mb-4">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 relative w-full sm:w-auto">
+        <div className="flex flex-col  sm:flex-row sm:justify-between items-start sm:items-center gap-3 mb-4">
+          <div className="flex flex-col sm:flex-row  items-start sm:items-center gap-2 relative w-full sm:w-auto">
             <div className="relative w-full sm:w-auto">
               <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600" size={18} />
               <input
@@ -129,7 +129,7 @@ const Tags = () => {
           <table className="min-w-full text-left text-sm">
             <thead className="text-gray-500 font-rubik uppercase border-b">
               <tr>
-                <th className="py-2">Name</th>
+                <th className="lg:py-2">Name</th>
                 <th className="py-2">Status</th>
                 <th className="py-2">Description</th>
                 <th className="py-2">Slug</th>
@@ -138,8 +138,8 @@ const Tags = () => {
             <tbody>
               {displayed.map(tag => (
                 <tr key={tag.id} data-aos="fade-up" className="border-b hover:bg-gray-50 relative">
-                  <td className="flex items-center gap-3 py-4">
-                    <input type="checkbox" className="form-checkbox text-primary" />
+                  <td className="flex items-center lgap-3  py-4">
+                
                     <div>
                       <p className="font-medium text-gray-800">{tag.name}</p>
                     </div>
@@ -149,25 +149,25 @@ const Tags = () => {
                       {tag.status}
                     </span>
                   </td>
-                  <td className="py-4 pl-4 text-gray-700">{tag.desc}</td>
+                  <td className="py-4 lg:pl-8 pl-4 text-gray-700">{tag.desc}</td>
                   <td className="py-4 text-gray-700">{tag.slug}</td>
-                  <td className="py-4 text-right">
-                    <div className="relative inline-block">
-                      <button onClick={() => toggleMenu(tag.id)} className="text-gray-600 hover:text-black menu-toggle">
-                        <BsThreeDotsVertical size={18} />
-                      </button>
-                      {activeMenu === tag.id && (
-                        <div className="dropdown-menu absolute right-0 lg:-top-20 z-10 bg-white border rounded shadow w-32">
-                          <button onClick={() => navigate(`/tags/view/${tag.id}`)} className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700">
-                            <FaEye size={14} /> View
-                          </button>
-                          <button onClick={() => navigate(`/tags/update/${tag.id}`)} className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700">
-                            <FaEdit size={14} /> Update
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </td>
+                   <td className="py-4 text-right">
+                                      <div className="relative lg:mt-4 inline-block">
+                                        <button onClick={() => toggleMenu(tag.id)} className="text-gray-600 mt-2 hover:text-black menu-toggle">
+                                          <BsThreeDotsVertical size={18} />
+                                        </button>
+                                        {activeMenu === tag.id && (
+                                          <div className="dropdown-menu absolute right-0 lg:-top-20 -top-12 z-10 bg-white border rounded shadow w-32">
+                                            <button onClick={() => navigate(`/categories/view/${tag.id}`)} className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700">
+                                              <FaEye size={14} /> View
+                                            </button>
+                                            <button onClick={() => navigate(`/categories/update/${tag.id}`)} className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700">
+                                              <FaEdit size={14} /> Update
+                                            </button>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </td>
                 </tr>
               ))}
             </tbody>
@@ -192,9 +192,9 @@ const Tags = () => {
 
       {/* Floating Add Button on Mobile */}
       <button
-        onClick={() => navigate('/categories/add')}
-        className="sm:hidden fixed bottom-8 right-6 bg-primary text-white p-4 rounded-full shadow-lg hover:bg-blue-700"
-        title="Add Trip"
+        onClick={() => navigate('/tags/add-tag')}
+        className="sm:hidden fixed bottom-3 right-6 bg-primary text-white p-4 rounded-full shadow-lg hover:bg-blue-700"
+        title="Add tag"
       >
         <FaPlus size={15} />
       </button>

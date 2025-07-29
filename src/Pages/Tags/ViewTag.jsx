@@ -6,7 +6,7 @@ import {
 } from 'react-icons/fa'
 import Navbar from '../../Components/Navbar/Navbar'
 import Sidebar from '../../Components/Siderbar/Sidebar'
-import Trips from './CatUi'
+import TagUi from '../../Pages/Tags/TagUi'
 
 const getStatusClass = (status) => {
   if (status === 'Available') return 'bg-blue-100 text-blue-600'
@@ -14,7 +14,7 @@ const getStatusClass = (status) => {
   return 'bg-red-100 text-red-600'
 }
 
-const ViewTrip = () => {
+const ViewTag = () => {
   const { id } = useParams()
   const trip = Trips.find((t) => t.id === id)
 
@@ -103,4 +103,4 @@ const ViewTrip = () => {
   )
 }
 
-export default ViewTrip
+export default ViewTag;
