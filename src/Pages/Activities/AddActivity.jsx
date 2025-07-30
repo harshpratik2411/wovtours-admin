@@ -11,9 +11,7 @@ const Add = () => {
   const [formData, setFormData] = useState({
     title: '',
     name: '',
-    tripId: '',
     tripdescription: '',
-    price: '',
     status: 'active',
     image: '',
   });
@@ -45,7 +43,7 @@ const Add = () => {
 
       <div className="lg:ml-72 max-w-7xl mx-auto lg:p-6 p-2 -mt-12 font-rubik">
         <h2 className="lg:text-4xl text-3xl font-bold text-gray-800 mb-10 font-slab text-center" data-aos="fade-up">
-          Add New Category
+          Add New Activity
         </h2>
 
         <div className="bg-white shadow-xl rounded-xl p-8 grid grid-cols-1 lg:grid-cols-2 gap-10">
@@ -53,13 +51,25 @@ const Add = () => {
           <form onSubmit={handleSubmit} className="space-y-6 order-2 lg:order-1" data-aos="fade-up">
             {/* Title */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Title</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Activity Name</label>
               <input
                 type="text"
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                placeholder="Enter title"
+                placeholder="Enter Activity"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Slug</label>
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                placeholder="Enter Slug"
                 className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
@@ -77,8 +87,21 @@ const Add = () => {
                 required
               />
             </div>
-
-            {/* Status */}
+  
+             <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Short Description</label>
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                placeholder="Enter Descrription"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+    
+            {/* Status */} 
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">Status</label>
               <select
@@ -99,7 +122,7 @@ const Add = () => {
                 type="submit"
                 className="bg-gradient-to-r bg-primary text-white w-full py-3 rounded-lg font-semibold hover:bg-primary/80 transition duration-200"
               >
-                Add Trip
+                Add Activity
               </button>
             </div>
           </form>
