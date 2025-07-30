@@ -23,7 +23,10 @@ import Destination from './Pages/Destinations/Destination'
 import AddDestination from  './Pages/Destinations/AddDestination'  
 import UpdateDestination from './Pages/Destinations/UpdateDestination'
 import ViewDestination from './Pages/Destinations/ViewDestination'
-
+import TripType from "./Pages/TripType/TripType";
+import AddTripType from './Pages/TripType/AddTripType'
+import UpdateTripType from './Pages/TripType/UpdateTripType'
+import ViewTripType from './Pages/TripType/ViewTripType' 
 
 function App() {
   return (
@@ -65,6 +68,13 @@ function App() {
           <Route path="/destinations/view/:id" element={<PrivateRoute><ViewDestination /></PrivateRoute>} />
           <Route path="/destinations/update/:id" element={<PrivateRoute><UpdateDestination /></PrivateRoute>} />
           <Route path="/destinations/add" element={<PrivateRoute><AddDestination /></PrivateRoute>} />
+       
+            {/* TripTypes */} 
+
+          <Route path="/trip-type" element={<PrivateRoute>< TripType /></PrivateRoute>} />
+          <Route path="/trip-type/view/:id" element={<PrivateRoute><ViewTripType /></PrivateRoute>} />
+          <Route path="/trip-type/update/:id" element={<PrivateRoute><UpdateTripType /></PrivateRoute>} />
+          <Route path="/trip-type/add" element={<PrivateRoute><AddTripType/></PrivateRoute>} />
         </Routes>
       
     </div>
