@@ -18,7 +18,12 @@ import Viewdifficulty from './Pages/Difficulties/ViewDifficulties';
 import Activities from  './Pages/Activities/Activity'
 import ViewActivity from './Pages/Activities/ViewActivity';
 import UpdateActivity from './Pages/Activities/UpdateActivity';
-import AddActivity from './Pages/Activities/AddActivity';
+import AddActivity from './Pages/Activities/AddActivity'; 
+import Destination from './Pages/Destinations/Destination'
+import AddDestination from  './Pages/Destinations/AddDestination'  
+import UpdateDestination from './Pages/Destinations/UpdateDestination'
+import ViewDestination from './Pages/Destinations/ViewDestination'
+
 
 function App() {
   return (
@@ -53,7 +58,13 @@ function App() {
           <Route path="/activities" element={<PrivateRoute><Activities /></PrivateRoute>} />
           <Route path="/activities/view/:id" element={<PrivateRoute><ViewActivity /></PrivateRoute>} />
           <Route path="/activities/update/:id" element={<PrivateRoute><UpdateActivity /></PrivateRoute>} />
-          <Route path="/activities/add" element={<PrivateRoute><AddActivity /></PrivateRoute>} />
+          <Route path="/activities/add" element={<PrivateRoute><AddActivity /></PrivateRoute>} />  
+
+            {/* Destinations */}
+          <Route path="/destinations" element={<PrivateRoute><Destination /></PrivateRoute>} />
+          <Route path="/destinations/view/:id" element={<PrivateRoute><ViewDestination /></PrivateRoute>} />
+          <Route path="/destinations/update/:id" element={<PrivateRoute><UpdateDestination /></PrivateRoute>} />
+          <Route path="/destinations/add" element={<PrivateRoute><AddDestination /></PrivateRoute>} />
         </Routes>
       
     </div>
