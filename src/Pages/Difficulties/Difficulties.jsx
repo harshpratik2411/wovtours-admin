@@ -181,7 +181,7 @@ const Difficulties = () => {
                                             <FaEye size={14} /> View
                                           </button>
                                           <button
-                                            onClick={() => navigate(`//update/${difficulty.id}`)}
+                                            onClick={() => navigate(`/difficulties/update/${difficulty.id}`)}
                                             className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                                           >
                                             <FaEdit size={14} /> Update

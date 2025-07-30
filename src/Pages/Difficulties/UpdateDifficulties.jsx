@@ -19,6 +19,7 @@ const UpdateTag = () => {
     slug: Tag?.slug || '',
     description: Tag?.description || '',
     status: Tag?.status || 'active',
+   
   })
 
   if (!Tag) {
@@ -44,19 +45,19 @@ const UpdateTag = () => {
       <Navbar />
       <Sidebar />
       <div className="lg:ml-60">
-        <div className="max-w-3xl mx-auto lg:p-6 p-2 -mt-12 font-rubik">
+        <div className="max-w-3xl mx-auto lg:p-6 p-2 lg:-mt-16 -mt-12 font-rubik">
           <h2
             className="lg:text-4xl text-3xl font-bold text-gray-800 mb-10 font-slab text-center"
             data-aos="fade-up"
           >
-            Update Tag
+            Update Difficutly
           </h2>
 
           <div className="bg-white shadow-xl rounded-xl p-8" data-aos="fade-up">
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Tag Name */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1"> Tag Name</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-1"> Difficulty Name</label>
                 <input
                   type="text"
                   name="name"
@@ -89,6 +90,21 @@ const UpdateTag = () => {
                 <option value="inactive">Inactive</option>
               </select>
             </div>
+                 <div>
+              <label className="block text-sm font-semibold  text-gray-700 mb-1">Parent Difficulty</label>
+              <select
+                name="status"
+                value={formData.status}
+                onChange={handleChange}
+                className="w-full border border-gray-300   rounded-lg px-4  py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="active"  >None</option>
+                <option value="inactive">Easy</option>
+                <option value="active"  >Medium</option>
+                <option value="inactive">Hard</option>
+                <option value="inactive">Extreme</option>
+              </select>
+            </div>
               {/* Description */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">Description</label>
@@ -105,14 +121,14 @@ const UpdateTag = () => {
               <div className="pt-4 flex items-center gap-4">
                 <button
                   type="submit"
-                  className="bg-gradient-to-r lg:-mt-4 bg-primary text-white w-full py-3 rounded-lg font-semibold hover:bg-primary/80 transition duration-200"
+                  className="bg-gradient-to-r lg:-mt-6 -mt-8 bg-primary text-white w-full py-3 rounded-lg font-semibold hover:bg-primary/80 transition duration-200"
                 >
                   Update
                 </button>
                 <button
                   type="button"
                   onClick={handleDelete}
-                  className="text-red-600 border lg:-mt-4 border-red-300 hover:bg-red-50 px-3 py-2 rounded-md text-sm font-medium transition duration-200"
+                  className="text-red-600 border lg:-mt-6 -mt-8 border-red-300 hover:bg-red-50 px-3 py-2 rounded-md text-sm font-medium transition duration-200"
                 >
                   Delete
                 </button>
