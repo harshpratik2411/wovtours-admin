@@ -21,7 +21,8 @@ const UpdateActivities = () => {
     description: Activities?.description || 'A great Activities to Loree beautiful places.',
     status: Activities?.status || 'active', 
     slug: Activities?.slug || "",
-    shortdesc: Activities?.shortdesc || "lorem dolar ipsum set morlar pom pom",
+    shortdesc: Activities?.shortdesc || "lorem dolar ipsum set morlar pom pom", 
+    featured : Activities?. featured || ""
   })
 
   if (!Activities) {
@@ -119,8 +120,24 @@ const UpdateActivities = () => {
                 <option value="inactive">Inactive</option>
               </select>
             </div>
-
-          
+ 
+            <div>
+              <label className="block -mb-[18px]  text-sm font-semibold text-gray-700 ">Featured</label>
+            
+             <span className="ml-20 ">
+                    <input
+                      id="my-checkbox"
+                      type="checkbox"
+                      class="appearance-none w-4 h-4 border border-gray-400 rounded-md cursor-pointer
+                      checked:bg-primary checked:border-indigo-600 checked:text-white
+                      focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      />
+                      </span>
+            
+            </div>
+ 
+               
+             
             <div className="pt-4 flex items-center gap-4">
                 <button
                   type="submit"

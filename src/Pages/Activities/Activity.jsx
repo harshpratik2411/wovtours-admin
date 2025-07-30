@@ -167,18 +167,11 @@ const Activities = () => {
                       {Activities.status} 
                     </span>
                   </td>
-                  <td className="py-4 ml-4 text-gray-700">{Activities.slug}</td>
+                  <td className="py-4 ml-4  text-gray-700">{Activities.slug}</td>
+                  <td className="py-4 ml-4  text-gray-700">{Activities.featured}</td>
                   <td className="py-4"> 
-                    <span className="ml-6">
-                    <input
-                      id="my-checkbox"
-                      type="checkbox"
-                      class="appearance-none w-4 h-4 border border-gray-400 rounded-md cursor-pointer
-                      checked:bg-primary checked:border-indigo-600 checked:text-white
-                      focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                      />
-                      </span>
-                  </td>
+                  </td> 
+            
                   <td className="py-4 text-right">
                     <div className="relative inline-block">
                       <button
@@ -269,18 +262,7 @@ const Activities = () => {
                 <p className="font-medium text-gray-800 text-sm"> <strong>Slug:</strong>{" "}
                   {Activities.slug}
 
-                        </p >   
-                           <span className="font-medium  text-sm  " >    <strong>Featured:</strong>{" "}
-                              <input 
-                              id="my-checkbox"
-                              type="checkbox"
-                              class="appearance-none mt-2 ml-4 w-4 h-4 -mb-1 border border-gray-400 rounded-md cursor-pointer
-                              checked:bg-primary checked:border-indigo-600 checked:text-white
-                              focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                              />  
-                           </span>
-
-                        <p> 
+                       
                   <strong>Status:</strong>{" "}
                   <span
                     className={`px-2 py-0.5 rounded-full text-sm font-medium inline-block ${getStatusClass(

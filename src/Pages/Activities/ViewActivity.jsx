@@ -70,14 +70,7 @@ const ViewActivities = () => {
               
               <div className="flex lg:-ml-6 -ml-0 gap-3">
                 <span className="font-semibold lg:ml-6 ml-5 w-32">Featured:</span>
-                <span className='mt-1'><input
-                      id="my-checkbox"
-                      type="checkbox"
-                      class="appearance-none w-4 h-4 border border-gray-400 rounded-md cursor-pointer
-                      checked:bg-primary checked:border-indigo-600 checked:text-white
-                      focus:ring-2 focus:ring-indigo-500  focus:ring-offset-2"
-                      />
-                      </span> 
+                   <span className='-ml-3'>{activities.featured}</span>
               </div>
             </div>
 

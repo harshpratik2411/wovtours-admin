@@ -9,7 +9,8 @@ const activities = [
     price: "1200.00",
     status: "Active",
     slug: "boating",
-    shortdesc: "lorem ipsum dolar set hui hui pom pom dom",
+    shortdesc: "lorem ipsum dolar set hui hui pom pom dom", 
+    featured: "True"
   },
   {
     id: "TRP192844",
@@ -19,6 +20,7 @@ const activities = [
     status: "InActive",
     slug: "city-tour",
     shortdesc: "lorem ipsum dolar set hui hui pom pom dom",
+     featured: "False"
   },
   {
     id: "TRP134897",
@@ -27,7 +29,8 @@ const activities = [
     price: "1200.00",
     status: "Active",
     slug: "ghat-walk",
-    shortdesc: "lorem ipsum dolar set hui hui pom pom dom",
+    shortdesc: "lorem ipsum dolar set hui hui pom pom dom", 
+     featured: "True"
   
   },
   {
@@ -37,7 +40,8 @@ const activities = [
     price: "550.00",
     status: "InActive",
     slug: "spiritual-retrets",
-    shortdesc: "lorem ipsum dolar set hui hui pom pom dom",
+    shortdesc: "lorem ipsum dolar set hui hui pom pom dom", 
+     featured: "True"
   },
   {
     id: "TRP134893",
@@ -46,7 +50,8 @@ const activities = [
     price: "1200.00",
     status: "Active",
     slug: "bali-adventure",
-    shortdesc: "lorem ipsum dolar set hui hui pom pom dom",
+    shortdesc: "lorem ipsum dolar set hui hui pom pom dom", 
+     featured: "False"
   },
   {
     id: "TRP192813",
@@ -55,7 +60,8 @@ const activities = [
     price: "850.00",
     status: "InActive",
     slug: "boating",
-    shortdesc: "lorem ipsum dolar set hui hui pom pom dom",
+    shortdesc: "lorem ipsum dolar set hui hui pom pom dom", 
+     featured: "true"
   },
   {
     id: "TRP134899",
@@ -64,7 +70,8 @@ const activities = [
     price: "1200.00",
     status: "Active",
     slug: "boating",
-    shortdesc: "lorem ipsum dolar set hui hui pom pom dom",
+    shortdesc: "lorem ipsum dolar set hui hui pom pom dom", 
+     featured: "true"
   },
   {
     id: "TRP192846",
@@ -73,7 +80,8 @@ const activities = [
     price: "850.00",
     status: "InActive",
     slug: "boating",
-    shortdesc: "lorem ipsum dolar set hui hui pom pom dom",
+    shortdesc: "lorem ipsum dolar set hui hui pom pom dom", 
+     featured: "true"
   },
   {
     id: "TRP134860",
@@ -82,7 +90,8 @@ const activities = [
     price: "1200.00",
     status: "Active",
     slug: "boating",
-    shortdesc: "lorem ipsum dolar set hui hui pom pom dom",
+    shortdesc: "lorem ipsum dolar set hui hui pom pom dom", 
+     featured: "true"
   },
   {
     id: "TRP192823",
@@ -91,7 +100,8 @@ const activities = [
     price: "850.00",
     status: "InActive",
     slug: "boating",
-    shortdesc: "lorem ipsum dolar set hui hui pom pom dom",
+    shortdesc: "lorem ipsum dolar set hui hui pom pom dom", 
+     featured: "true"
   },
 ];
 
