@@ -35,8 +35,13 @@ const Activities = () => {
   }, []);
 
   const getStatusClass = (status) => {
-    if (status === "Active") return "bg-blue-100 text-blue-600";
-    if (status === "InActive") return "bg-yellow-100 text-yellow-600";
+    if (status === "Active") return "bg-green-100 text-green-600";
+    if (status === "InActive") return "bg-red-100 text-red-600";
+    return "bg-red-100 text-red-600";
+  };
+  const getFeaturedClass = (status) => {
+    if (status === "True") return "bg-blue-100 text-blue-600";
+    if (status === "False") return "bg-yellow-100 text-yellow-600";
     return "bg-red-100 text-red-600";
   };
 
@@ -135,56 +140,66 @@ const Activities = () => {
                 <th className="py-2">Activities Name</th>
                 <th className="py-2">Status</th>
                 <th className="py-2">Slug</th>
-                <th className="py-2">Featured</th>
+                <th className="py-2  pr-3">Featured</th>
                 <th className="py-2"></th>
               </tr>
             </thead>
             <tbody>
-              {displayed.map((Activities) => (
+              {displayed.map((activities) => (
                 <tr
-                  key={Activities.id}
+                  key={activities.id}
                   data-aos="fade-up"
                   className="border-b hover:bg-gray-50 relative"
                 >
                   <td className="flex items-center gap-3 py-4">
                     <img
-                      src={Activities.image}
-                      alt={Activities.name}
+                      src={activities.image}
+                      alt={activities.name}
                       className="w-16 h-12 rounded object-cover"
                     />
                     <div>
                       <p className="font-medium text-gray-800">
-                        {Activities.name}
+                        {activities.name}
                       </p>
                     </div>
                   </td>
                   <td className="py-4">
                     <span
                       className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(
-                        Activities.status
+                        activities.status
                       )}`}
                     >
-                      {Activities.status} 
+                      {activities.status} 
                     </span>
                   </td>
-                  <td className="py-4 ml-4  text-gray-700">{Activities.slug}</td>
-                  <td className="py-4 ml-4  text-gray-700">{Activities.featured}</td>
+                  <td className="py-4 ml-4  text-gray-700">{activities.slug}</td> 
+                  
+                 <td className="py-4 pl-4">
+  <span
+    className={`px-3 py-1 rounded-full text-xs font-medium ${getFeaturedClass(
+      activities.featured
+    )}`}
+  >
+    {activities.featured}
+  </span>
+</td>
+
                   <td className="py-4"> 
                   </td> 
             
                   <td className="py-4 text-right">
                     <div className="relative inline-block">
                       <button
-                        onClick={() => toggleMenu(Activities.id)}
+                        onClick={() => toggleMenu(activities.id)}
                         className="text-gray-600 hover:text-black menu-toggle"
                       >
                         <BsThreeDotsVertical size={18} />
                       </button>
-                      {activeMenu === Activities.id && (
+                      {activeMenu === activities.id && (
                         <div className="dropdown-menu absolute right-0 lg:-top-20 z-10 bg-white border rounded shadow w-32">
                           <button
                             onClick={() =>
-                              navigate(`/activities/view/${Activities.id}`)
+                              navigate(`/activities/view/${activities.id}`)
                             }
                             className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                           >
@@ -192,7 +207,7 @@ const Activities = () => {
                           </button>
                           <button
                             onClick={() =>
-                              navigate(`/activities/update/${Activities.id}`)
+                              navigate(`/activities/update/${activities.id}`)
                             }
                             className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                           >
@@ -210,32 +225,32 @@ const Activities = () => {
 
         {/* Mobile Cards */}
         <div className="sm:hidden space-y-4">
-          {displayed.map((Activities) => (
+          {displayed.map((activities) => (
             <div
-              key={Activities.id}
+              key={activities.id}
               data-aos="fade-up"
               className="border rounded-lg shadow-sm bg-gray-50 relative overflow-hidden"
             >
               <div className="aspect-[4/3] w-full">
                 <img
-                  src={Activities.image}
-                  alt={Activities.name}
+                  src={activities.image}
+                  alt={activities.name}
                   className="w-full h-full object-cover"
                 />
               </div>
 
               <div className="absolute top-2 right-2 z-10">
                 <button
-                  onClick={() => toggleMenu(Activities.id)}
+                  onClick={() => toggleMenu(activities.id)}
                   className="text-gray-600 hover:text-black menu-toggle"
                 >
                   <BsThreeDotsVertical size={18} />
                 </button>
-                {activeMenu === Activities.id && (
+                {activeMenu === activities.id && (
                   <div className="dropdown-menu absolute right-0 top-6 z-10 bg-white border rounded shadow w-32">
                     <button
                       onClick={() =>
-                        navigate(`/activities/view/${Activities.id}`)
+                        navigate(`/activities/view/${activities.id}`)
                       }
                       className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                     >
@@ -243,7 +258,7 @@ const Activities = () => {
                     </button>
                     <button
                       onClick={() =>
-                        navigate(`/activities/update/${Activities.id}`)
+                        navigate(`/activities/update/${activities.id}`)
                       }
                       className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                     >
@@ -255,21 +270,21 @@ const Activities = () => {
 
               <div className="p-4 space-y-1 text-sm text-gray-700">
                 <p className="font-semibold  text-gray-800 text-lg">
-                  {Activities.name}
+                  {activities.name}
                 </p> 
             
                
                 <p className="font-medium text-gray-800 text-sm"> <strong>Slug:</strong>{" "}
-                  {Activities.slug}
+                  {activities.slug}
 
                        
                   <strong>Status:</strong>{" "}
                   <span
                     className={`px-2 py-0.5 rounded-full text-sm font-medium inline-block ${getStatusClass(
-                        Activities.status
+                        activities.status
                     )}`}
                   >
-                    {Activities.status}
+                    {activities.status}
                   </span>
                 </p>
                 <p>
