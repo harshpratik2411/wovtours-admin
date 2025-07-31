@@ -27,7 +27,8 @@ import TripType from "./Pages/TripType/TripType";
 import AddTripType from './Pages/TripType/AddTripType'
 import UpdateTripType from './Pages/TripType/UpdateTripType'
 import ViewTripType from './Pages/TripType/ViewTripType'  
-import Users from './Pages/Users/Users'
+import Users from './Pages/Users/Users' 
+import Bookings from './Pages/Bookings/Bookings'
 
 function App() {
   return (
@@ -78,7 +79,9 @@ function App() {
           <Route path="/trip-type/add" element={<PrivateRoute><AddTripType/></PrivateRoute>} />  
 
           {/* Users */}
-          <Route path="/users" element={<PrivateRoute><Users/></PrivateRoute>} />
+          <Route path="/users" element={<PrivateRoute><Users/></PrivateRoute>} /> 
+          {/* Bookings */}
+          <Route path="/bookings" element={<PrivateRoute><Bookings/></PrivateRoute>} />
         </Routes>
       
     </div>

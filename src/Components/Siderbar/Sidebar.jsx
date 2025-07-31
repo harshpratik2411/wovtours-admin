@@ -12,7 +12,8 @@ import {
   MdSettings,
   MdLogout,
   MdMenu,
-} from 'react-icons/md';
+} from 'react-icons/md'; 
+import { BsBookmarkCheckFill } from "react-icons/bs";
 import AOS from 'aos';
 import 'aos/dist/aos.css';  
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -110,6 +111,12 @@ const Sidebar = () => {
                 <a href="/trip-enquiry" className={`flex items-center gap-3 ${isActive('/trip-enquiry') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
                   <MdOutlineProductionQuantityLimits className="text-xl" />
                   <span>Trip Enquiry</span>
+                </a>
+              </li>
+              <li>
+                <a href="/bookings" className={`flex items-center gap-3 ${isActive('/trip-enquiry') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                  <BsBookmarkCheckFill className="text-xl" />
+                  <span>Bookings</span>
                 </a>
               </li>
               <li>
