@@ -49,7 +49,7 @@ const Sidebar = () => {
           className={`
             fixed top-0 left-0 z-40 h-full bg-primary text-white font-rubik px-6 mt-0 lg:mt-6 py-8 flex flex-col justify-between rounded-xl
             transition-transform duration-300 ease-in-out
-            w-60 
+            w-60 overflow-y-auto max-h-screen
             ${isOpen ? 'translate-x-0' : '-translate-x-full'}
             lg:translate-x-0 static lg:ml-3 -mt-2
           `}
