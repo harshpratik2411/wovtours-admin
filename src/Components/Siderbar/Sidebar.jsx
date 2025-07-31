@@ -15,13 +15,8 @@ import {
 } from 'react-icons/md';
 import AOS from 'aos';
 import 'aos/dist/aos.css';  
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-   const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated");
-    navigate("/login"); 
-   };
-  
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   
@@ -30,6 +25,15 @@ const Sidebar = () => {
   }, []);
   
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleLogout = () => {
+    localStorage.removeItem("isAuthenticated");
+    navigate("/login"); 
+  };
+
+  const isActive = (path) => location.pathname === path;
+
   return (
     <>
       {/* Mobile Toggle Button */}
@@ -50,72 +54,71 @@ const Sidebar = () => {
             lg:translate-x-0 static lg:ml-3 -mt-2
           `}
         > 
-       
           <div>
             <h1 className="text-2xl font-bold mb-10">Eormi</h1>
             <ul className="space-y-6">
-                        <li className="flex items-center justify-between">
-                          <a href="/dashboard" className="flex items-center gap-3 text-white font-medium">
-                            <MdDashboard className="text-xl" />
-                            <span>Dashboard</span>
-                          </a>
-                          <span className="text-xs bg-red-500 px-2 py-0.5 rounded-md">2</span>
-                        </li>
-                        <li>
-                          <a href="/categories" className="flex items-center gap-3 text-white/80 hover:text-white transition">
-                            <MdOutlineCategory className="text-xl" />
-                            <span>Categories</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="/tags" className="flex items-center gap-3 text-white/80 hover:text-white transition">
-                            <MdLabel className="text-xl" />
-                            <span>Tags</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="/difficulties" className="flex items-center gap-3 text-white/80 hover:text-white transition">
-                            <MdTerrain className="text-xl" />
-                            <span>Difficulties</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="/activities" className="flex items-center gap-3 text-white/80 hover:text-white transition">
-                            <MdHiking className="text-xl" />
-                            <span>Activities</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="/destinations" className="flex items-center gap-3 text-white/80 hover:text-white transition">
-                            <MdPublic className="text-xl" />
-                            <span>Destinations</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="/trip-type" className="flex items-center gap-3 text-white/80 hover:text-white transition">
-                            <MdTour className="text-xl" />
-                            <span>Trip Type</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="/trips" className="flex items-center gap-3 text-white/80 hover:text-white transition">
-                            <MdOutlineProductionQuantityLimits className="text-xl" />
-                            <span>Trips</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="/trip-enquiry" className="flex items-center gap-3 text-white/80 hover:text-white transition">
-                            <MdOutlineProductionQuantityLimits className="text-xl" />
-                            <span>Trip Enquiry</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="/users" className="flex items-center gap-3 text-white/80 hover:text-white transition">
-                            <MdPeople className="text-xl" />
-                            <span>Users</span>
-                          </a>
-                        </li>
-                      </ul>
+              <li className="flex items-center justify-between">
+                <a href="/" className={`flex items-center gap-3 font-medium ${isActive('/') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                  <MdDashboard className="text-xl" />
+                  <span>Dashboard</span>
+                </a>
+                <span className="text-xs bg-red-500 px-2 py-0.5 rounded-md">2</span>
+              </li>
+              <li>
+                <a href="/categories" className={`flex items-center gap-3 ${isActive('/categories') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                  <MdOutlineCategory className="text-xl" />
+                  <span>Categories</span>
+                </a>
+              </li>
+              <li>
+                <a href="/tags" className={`flex items-center gap-3 ${isActive('/tags') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                  <MdLabel className="text-xl" />
+                  <span>Tags</span>
+                </a>
+              </li>
+              <li>
+                <a href="/difficulties" className={`flex items-center gap-3 ${isActive('/difficulties') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                  <MdTerrain className="text-xl" />
+                  <span>Difficulties</span>
+                </a>
+              </li>
+              <li>
+                <a href="/activities" className={`flex items-center gap-3 ${isActive('/activities') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                  <MdHiking className="text-xl" />
+                  <span>Activities</span>
+                </a>
+              </li>
+              <li>
+                <a href="/destinations" className={`flex items-center gap-3 ${isActive('/destinations') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                  <MdPublic className="text-xl" />
+                  <span>Destinations</span>
+                </a>
+              </li>
+              <li>
+                <a href="/trip-type" className={`flex items-center gap-3 ${isActive('/trip-type') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                  <MdTour className="text-xl" />
+                  <span>Trip Type</span>
+                </a>
+              </li>
+              <li>
+                <a href="/trips" className={`flex items-center gap-3 ${isActive('/trips') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                  <MdOutlineProductionQuantityLimits className="text-xl" />
+                  <span>Trips</span>
+                </a>
+              </li>
+              <li>
+                <a href="/trip-enquiry" className={`flex items-center gap-3 ${isActive('/trip-enquiry') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                  <MdOutlineProductionQuantityLimits className="text-xl" />
+                  <span>Trip Enquiry</span>
+                </a>
+              </li>
+              <li>
+                <a href="/users" className={`flex items-center gap-3 ${isActive('/users') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                  <MdPeople className="text-xl" />
+                  <span>Users</span>
+                </a>
+              </li>
+            </ul>
             <hr className="my-8 border-white/20" />
 
             <div className="space-y-6">
@@ -127,11 +130,11 @@ const Sidebar = () => {
               <div className="flex items-center gap-3 text-white/80 hover:text-white transition">
                 <MdLogout className="text-xl" />
                 <button
-        onClick={handleLogout}
-        className="bg-primary text-white -ml-4 px-4 py-2 rounded"
-      >
-        Logout
-      </button>
+                  onClick={handleLogout}
+                  className="bg-primary text-white -ml-4 px-4 py-2 rounded"
+                >
+                  Logout
+                </button>
               </div>
             </div>
           </div>
@@ -144,7 +147,6 @@ const Sidebar = () => {
           </div>
         </div>
       </div>
-     
 
       {/* Overlay for mobile when sidebar is open */}
       {isOpen && (
