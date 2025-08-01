@@ -152,16 +152,16 @@ const Destinations = () => {
                   data-aos="fade-up"
                   className="border-b hover:bg-gray-50 relative"
                 >
-                  <td className="flex items-center gap-3 py-4">
-                    <img
-                      src={destinations.image}
-                      alt={destinations.name}
-                      className="w-16 h-12 rounded object-cover"
-                    />
-                    <div>
-                      <p className="font-medium text-gray-800">
+                   <td className="py-4">
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={destinations.image}
+                        alt={destinations.name}
+                        className="w-16 h-12 rounded object-cover"
+                      />
+                      <span className="font-medium text-gray-800">
                         {destinations.name}
-                      </p>
+                      </span>
                     </div>
                   </td>
                   <td className="py-4">

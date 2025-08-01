@@ -23,7 +23,7 @@ const bookingData = [
     status: "Pending",
     amount: 1800,
   },
-  {
+  { 
     id: 3,
     name: "Charlie Brown",
     bookingDate: "2025-07-15",
