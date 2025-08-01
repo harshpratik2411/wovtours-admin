@@ -43,9 +43,37 @@ const bookingData = [
     status: "Confirmed",
     amount: 2100,
   },
+  {
+    id: 5,
+    name: "Diana Prince",
+    bookingDate: "2025-07-10",
+    tripDate: "2025-08-03",
+    tripName: "Safari Adventure",
+    travellers: 3,
+    status: "Confirmed",
+    amount: 2100,
+  },
+  {
+    id: 6,
+    name: "Diana Prince",
+    bookingDate: "2025-07-10",
+    tripDate: "2025-08-03",
+    tripName: "Safari Adventure",
+    travellers: 3,
+    status: "Confirmed",
+    amount: 2100,
+  },
 ];
 
 const Booking = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const perPage = 4;
+  const pages = Math.ceil(bookingData.length / perPage);
+  const displayed = bookingData.slice(
+    (currentPage - 1) * perPage,
+    currentPage * perPage
+  );
+
   return (
     <>
       <Navbar />
@@ -69,7 +97,7 @@ const Booking = () => {
               </tr>
             </thead>
             <tbody>
-              {bookingData.map((booking) => (
+              {displayed.map((booking) => (
                 <tr key={booking.id} className="border-b hover:bg-gray-50">
                   <td className="py-4 font-medium text-gray-800 flex items-center gap-3">
                     <img
@@ -112,7 +140,7 @@ const Booking = () => {
 
         {/* Mobile Cards */}
         <div className="sm:hidden space-y-5">
-          {bookingData.map((booking) => (
+          {displayed.map((booking) => (
             <div
               key={booking.id}
               className="bg-white shadow-md rounded-xl p-4 border border-gray-200 mx-auto w-[90%]"
@@ -146,7 +174,7 @@ const Booking = () => {
                   {new Date(booking.tripDate).toLocaleDateString()}
                 </p>
                 <p>
-                  <span className="font-medium">Travellers:</span>.
+                  <span className="font-medium">Travellers:</span>
                   {booking.travellers}
                 </p>
               </div>
@@ -168,6 +196,23 @@ const Booking = () => {
                 </span>
               </div>
             </div>
+          ))}
+        </div>
+
+        {/* Pagination */}
+        <div className="flex justify-center mt-6 gap-2">
+          {Array.from({ length: pages }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`px-3 py-1 rounded-md text-sm font-medium ${
+                currentPage === i + 1
+                  ? "bg-primary text-white"
+                  : "bg-gray-200 text-gray-700"
+              }`}
+            >
+              {i + 1}
+            </button>
           ))}
         </div>
       </div>
