@@ -28,7 +28,8 @@ import AddTripType from './Pages/TripType/AddTripType'
 import UpdateTripType from './Pages/TripType/UpdateTripType'
 import ViewTripType from './Pages/TripType/ViewTripType'  
 import Users from './Pages/Users/Users' 
-import Bookings from './Pages/Bookings/Bookings'
+import Bookings from './Pages/Bookings/Bookings' 
+import Settings from "./Pages/Settings/Settings";
 
 function App() {
   return (
@@ -81,7 +82,9 @@ function App() {
           {/* Users */}
           <Route path="/users" element={<PrivateRoute><Users/></PrivateRoute>} /> 
           {/* Bookings */}
-          <Route path="/bookings" element={<PrivateRoute><Bookings/></PrivateRoute>} />
+          <Route path="/bookings" element={<PrivateRoute><Bookings/></PrivateRoute>} /> 
+          <Route path="/settings" element={<PrivateRoute><Settings/></PrivateRoute>} /> 
+
         </Routes>
       
     </div>

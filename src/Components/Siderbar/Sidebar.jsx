@@ -130,9 +130,15 @@ const Sidebar = () => {
 
             <div className="space-y-6">
               <h2 className="text-xs font-robotoSlab text-white/50 tracking-widest">OTHER</h2>
-              <div className="flex items-center gap-3 text-white/80 hover:text-white transition">
-                <MdSettings className="text-xl" />
-                <span>Settings</span>
+              <div className="flex items-center gap-3 text-white/80 hover:text-white transition"> 
+              <ul>
+                <li>
+                <a href="/settings" className={`flex items-center gap-3 ${isActive('/settings') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                  <MdSettings className="text-xl" />
+                  <span>Settings</span>
+                </a>
+              </li>
+              </ul>
               </div>
               <div className="flex items-center gap-3 text-white/80 hover:text-white transition">
                 <MdLogout className="text-xl" />
