@@ -68,7 +68,8 @@ const Tags = () => {
   return (
     <>
       <Navbar />
-      <Sidebar />
+      <Sidebar />  
+        <h1 className='text-3xl font-bold -mt-10 text-center lg:ml-32 mb-10'>Tags</h1>
       <div className="bg-white p-4 sm:p-6 lg:ml-72  rounded-xl shadow-md font-rubik w-full max-w-6xl mx-auto -mt-2">
 
         {/* Search, Sort, Add */}

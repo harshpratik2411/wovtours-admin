@@ -67,7 +67,8 @@ const Activities = () => {
   return (
     <>
       <Navbar />
-      <Sidebar />
+      <Sidebar /> 
+        <h1 className='text-3xl font-bold -mt-10 text-center lg:ml-32 mb-10'>Activities</h1>
       <div className="bg-white p-6 lg:ml-72 rounded-xl shadow-md font-rubik w-full max-w-6xl mx-auto -mt-7">
         {/* Search + Sort + Add Row */}
         <div className="flex flex-wrap justify-between items-center mb-4 gap-2">
