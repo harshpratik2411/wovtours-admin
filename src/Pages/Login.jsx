@@ -4,6 +4,8 @@ import { FaUser, FaLock } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import login from "../assets/login/login.jpg";
 import logo from "../assets/logo/logo.webp";
+import AuthService from "../Pages/AuthService";
+import APIService from "./APIServices";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -35,13 +37,20 @@ const Login = () => {
     }
   }, [location, isAuthenticated, navigate]);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (username === "admin" && password === "admin123") {
-      localStorage.setItem("isAuthenticated", "true");
+
+    try {
+      await AuthService.login(username, password);
       navigate("/");
-    } else {
-      alert("Invalid username or password");
+    } catch (error) {
+      console.log("Error = ",error);
+      
+      if (APIService.isUnauthenticated(error.status)) {
+        alert(error.response.data.detail);
+      } else if (APIService.isError(error.status)===true) {
+        alert(error.response.data.detail);
+      }
     }
   };
 
@@ -49,7 +58,6 @@ const Login = () => {
     <div className="min-h-screen flex items-center lg:p-52 p-2 justify-center bg-primary font-Rubik">
       <div className="flex flex-col lg:flex-row  lg:h-[43rem]  lg:-mt-36  w-full max-w-6xl bg-custom-gray rounded-xl shadow-lg overflow-hidden">
         {/* Left Image */}
-
         <div className=" lg:block lg:w-1/2">
           <img
             src={login}
@@ -62,12 +70,19 @@ const Login = () => {
         {/* Right Form */}
         <div className="w-full lg:w-1/2 flex  items-center justify-center p-8 bg-custom-gray">
           <div className="w-full max-w-md">
-            <img src={logo} alt="logo" className="w-30 h-16 lg:ml-28 ml-8 mb-8 -mt-8" />
+            <img
+              src={logo}
+              alt="logo"
+              className="w-30 h-16 lg:ml-28 ml-8 mb-8 -mt-8"
+            />
             <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
               Admin Login
             </h2>
 
-            <form onSubmit={handleLogin} className="space-y-5 lg:ml-14 ml-5 mr-5 lg:mr-14">
+            <form
+              onSubmit={handleLogin}
+              className="space-y-5 lg:ml-14 ml-5 mr-5 lg:mr-14"
+            >
               {/* Username Field */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -112,7 +127,6 @@ const Login = () => {
               </div>
 
               {/* Login Button */}
-
               <button
                 type="submit"
                 className="w-full bg-primary text-white font-semibold py-2.5 rounded-lg shadow hover:bg-primary/80 active:scale-95 transition duration-200"
