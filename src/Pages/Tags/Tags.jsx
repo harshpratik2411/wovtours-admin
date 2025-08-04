@@ -15,15 +15,20 @@ const Tags = () => {
   const [searchText, setSearchText] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [tagList, setTagList] = useState([]);
+  const [ordering, setOrdering] = useState('');
   const perPage = 5;
   const navigate = useNavigate();
+
+  const fetchTags = (search = '', order = '') => {
+    TagServices.getAll(search, order).then(data => {
+      setTagList(data);
+    });
+  };
 
   useEffect(() => {
     AOS.init({ duration: 800 });
 
-    TagServices.getAll('', '').then(data => {
-      setTagList(data);
-    });
+    fetchTags('', '');
 
     const handleClickOutside = (event) => {
       if (
@@ -39,19 +44,29 @@ const Tags = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      fetchTags(searchText, ordering);
+    }, 400);
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchText, ordering]);
+
   const toggleMenu = (id) => setActiveMenu(activeMenu === id ? null : id);
   const toggleSort = () => setSortMenuOpen(!sortMenuOpen);
   const handleSort = (option) => {
-    console.log('Sort by', option);
+    const map = {
+      'Title A‑Z': 'title',
+      'Title Z‑A': '-title',
+      'Created At ASC': 'created_at',
+      'Created At DESC': '-created_at'
+    };
+    setOrdering(map[option]);
     setSortMenuOpen(false);
   };
 
   const clearSearch = () => setSearchText('');
 
-  const filtered = tagList.filter(tag =>
-    tag.name.toLowerCase().includes(searchText.toLowerCase())
-  );
-
+  const filtered = tagList;
   const pages = Math.ceil(filtered.length / perPage);
   const displayed = filtered.slice((currentPage - 1) * perPage, currentPage * perPage);
 
@@ -107,7 +122,7 @@ const Tags = () => {
               </button>
               {sortMenuOpen && (
                 <div className="dropdown-menu absolute left-0 mt-1 bg-white border rounded shadow w-40 z-20">
-                  {['Name A‑Z', 'Name Z‑A', 'Date ASC', 'Date DESC', 'Popularity ASC', 'Popularity DESC'].map(opt => (
+                  {['Title A‑Z', 'Title Z‑A', 'Created At ASC', 'Created At DESC'].map(opt => (
                     <button
                       key={opt}
                       onClick={() => handleSort(opt)}

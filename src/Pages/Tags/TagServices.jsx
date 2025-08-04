@@ -1,13 +1,11 @@
-
 import APIService from "../APIServices";
 
 class TagServices {
-  static async getAll(searh,orderBy) {
-    const url = APIService.baseUrl + `api/admin/tags/?search=${searh}&orderBy${orderBy}`;
+  static async getAll(search, orderBy) {
+    const url = APIService.baseUrl + `api/admin/tags/?search=${encodeURIComponent(search)}&ordering=${encodeURIComponent(orderBy,)}`;
     try {
       const response = await fetch(url, {
         method: 'GET',
-        
       });
 
       if (!response.ok) {
@@ -15,26 +13,80 @@ class TagServices {
       }
 
       const data = await response.json();
-
-      // Map API results to your format
       return data.results.map(tag => ({
         id: tag.id,
         name: tag.title,
         desc: tag.description,
         status: tag.status === "Inactive" ? "InActive" : tag.status,
         slug: tag.title.toLowerCase().replace(/\s+/g, '-'),
-        booked: 0,
       }));
     } catch (error) {
-    console.error("Failed to fetch tags:", error);
+      console.error("Failed to fetch tags:", error);
       return [];
     }
   }
 
-  static get(id) {}
-   static add(data) {}
-   static update(data) {}
-   static delete(id) {}
+  static async get(id) {
+    // const url = APIService.baseUrl + `api/admin/tags/${id}/`;
+    // try {
+    //   const response = await fetch(url);
+    //   if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    //   return await response.json();
+    // } catch (error) {
+    //   console.error(`Failed to get tag with id ${id}:`, error);
+    //   return null;
+    // }
+  }
+
+  static async add(data) {
+    // const url = APIService.baseUrl + `api/admin/tags/`;
+    // try {
+    //   const response = await fetch(url, {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(data),
+    //   });
+    //   if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    //   return await response.json();
+    // } catch (error) {
+    //   console.error("Failed to add tag:", error);
+    //   return null;
+    // }
+  }
+
+  static async update(id, data) {
+    // const url = APIService.baseUrl + `api/admin/tags/${id}/`;
+    // try {
+    //   const response = await fetch(url, {
+    //     method: 'PUT',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(data),
+    //   });
+    //   if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    //   return await response.json();
+    // } catch (error) {
+    //   console.error(`Failed to update tag with id ${id}:`, error);
+    //   return null;
+    // }
+  }
+
+  static async delete(id) {
+//     const url = APIService.baseUrl + `api/admin/tags/${id}/`;
+//     try {
+//       const response = await fetch(url, {
+//         method: 'DELETE',
+//       });
+//       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+//       return true;
+//     } catch (error) {
+//       console.error(`Failed to delete tag with id ${id}:`, error);
+//       return false;
+//     }
+  }
 }
 
 export default TagServices;
