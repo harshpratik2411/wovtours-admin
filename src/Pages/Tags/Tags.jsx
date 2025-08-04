@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import TagServices from "../../Pages/Tags/TagServices";
 import DateFormatter from "../../Services/DateFormatter";
 import FilterOptions from "../../Services/FilterOptions";
+import StatusClassMap from "../../Services/StatusClassMap";
 
 const Tags = () => {
   const [activeMenu, setActiveMenu] = useState(null);
@@ -65,11 +66,7 @@ const Tags = () => {
     search = "";
     apiCall();
   };
-  const getStatusClass = (status) => {
-    if (status === "Active") return "bg-blue-100 text-blue-600";
-    if (status === "InActive") return "bg-yellow-100 text-yellow-600";
-    return "bg-red-100 text-red-600";
-  };
+  const getStatusClass = (status) => StatusClassMap.getClass(status);
 
   return (
     <>
@@ -122,6 +119,9 @@ const Tags = () => {
                     FilterOptions.nameDesc,
                     FilterOptions.dateAsc,
                     FilterOptions.dateDesc,
+                    FilterOptions.statusActive,
+                    FilterOptions.statusInactive,
+                  
                   ].map((opt) => (
                     <button
                       key={opt}
