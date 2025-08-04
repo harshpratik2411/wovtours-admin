@@ -11,8 +11,13 @@ class LocalStorage {
     return localStorage.getItem(key);
   }
 
+  static getAccesToken(key) {
+    return "Bearer " + localStorage.getItem(this.accesToken);
+  }
+
+
   static remove(key) {
     localStorage.removeItem(key);
   }
 }
-export default LocalStorage
+export default LocalStorage;

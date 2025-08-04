@@ -1,11 +1,16 @@
 import APIService from "../APIServices";
+import LocalStorage from "../LocalStorage";
 
 class TagServices {
   static async getAll(search, orderBy) {
-    const url = APIService.baseUrl + `api/admin/tags/?search=${encodeURIComponent(search)}&ordering=${encodeURIComponent(orderBy,)}`;
+    const url =
+      APIService.baseUrl +
+      `api/admin/tags/?search=${encodeURIComponent(
+        search
+      )}&ordering=${encodeURIComponent(orderBy)}`;
     try {
       const response = await fetch(url, {
-        method: 'GET',
+        method: "GET",
       });
 
       if (!response.ok) {
@@ -13,12 +18,13 @@ class TagServices {
       }
 
       const data = await response.json();
-      return data.results.map(tag => ({
+      return data.results.map((tag) => ({
         id: tag.id,
         name: tag.title,
         desc: tag.description,
-        status: tag.status === "Inactive" ? "InActive" : tag.status,
-        slug: tag.title.toLowerCase().replace(/\s+/g, '-'),
+        status: tag.status,
+        created_at: tag.created_at,
+        updated_at: tag.updated_at,
       }));
     } catch (error) {
       console.error("Failed to fetch tags:", error);
@@ -30,7 +36,8 @@ class TagServices {
     const url = APIService.baseUrl + `api/admin/tags/${id}/`;
     try {
       const response = await fetch(url);
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
 
       const tag = await response.json();
 
@@ -38,8 +45,9 @@ class TagServices {
         id: tag.id,
         name: tag.title,
         desc: tag.description,
-        status: tag.status === "Inactive" ? "InActive" : tag.status,
-        slug: tag.title.toLowerCase().replace(/\s+/g, '-'),
+        status: tag.status,
+        created_at: tag.created_at,
+        updated_at: tag.updated_at,
       };
     } catch (error) {
       console.error(`Failed to get tag with id ${id}:`, error);
@@ -66,21 +74,23 @@ class TagServices {
   }
 
   static async update(id, data) {
-    // const url = APIService.baseUrl + `api/admin/tags/${id}/`;
-    // try {
-    //   const response = await fetch(url, {
-    //     method: 'PUT',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(data),
-    //   });
-    //   if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    //   return await response.json();
-    // } catch (error) {
-    //   console.error(`Failed to update tag with id ${id}:`, error);
-    //   return null;
-    // }
+    const url = APIService.baseUrl + `api/admin/tags/${id}/`;
+    try {
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: LocalStorage.getAccesToken(),
+        },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error(`Failed to update tag with id ${id}:`, error);
+      return null;
+    }
   }
 
   static async delete(id) {

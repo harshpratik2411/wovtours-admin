@@ -4,6 +4,7 @@ import { FaInfoCircle, FaClipboardList } from 'react-icons/fa';
 import Navbar from '../../Components/Navbar/Navbar';
 import Sidebar from '../../Components/Siderbar/Sidebar';
 import TagServices from '../../Pages/Tags/TagServices';
+import DateFormatter from '../../Services/DateFormatter';
 
 const getStatusClass = (status) => {
   if (status === 'Available') return 'bg-blue-100 text-blue-600';
@@ -68,24 +69,34 @@ const ViewTag = () => {
             </h2>
           </div>
 
-          {/* Tag Info */}
-          <div className="grid lg:grid-cols-2 gap-8 text-gray-700 text-base lg:text-lg mb-10">
-            <div className="space-y-4">
-              <div className="flex gap-3">
-                <span className="font-semibold w-32">Tag Name:</span>
+          {/* Tag Info in two-column layout */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-gray-700 text-base lg:text-lg mb-10">
+            {/* Left Side: Tag Name + Status */}
+            <div className="space-y-6">
+              <div>
+                <span className="font-semibold block mb-1">Tag Name:</span>
                 <span>{tag.name}</span>
               </div>
-              <div className="flex gap-3">
-                <span className="font-semibold ml-1 w-32">Booked:</span>
-                <span>{tag.slug}</span>
+
+              <div>
+                <span className="font-semibold block mb-1">Status:</span>
+                <span className={`px-4 py-2 -ml-1 rounded-full text-sm font-medium inline-block ${getStatusClass(tag.status)}`}>
+                  {tag.status}
+                </span>
               </div>
             </div>
 
-            <div className="flex items-start lg:items-center gap-3">
-              <span className="font-semibold lg:ml-0 ml-1 mt-1">Status:</span>
-              <span className={`px-4 py-2 rounded-full text-sm font-medium ${getStatusClass(tag.status)}`}>
-                {tag.status}
-              </span>
+            {/* Right Side: Created At + Updated At */}
+            <div className="space-y-6">
+              <div>
+                <span className="font-semibold block mb-1">Created At:</span>
+                <span>{DateFormatter.formatDate(tag.created_at)}</span>
+              </div>
+
+              <div>
+                <span className="font-semibold block mb-1">Updated At:</span>
+                <span>{DateFormatter.formatDate(tag.updated_at)}</span>
+              </div>
             </div>
           </div>
 

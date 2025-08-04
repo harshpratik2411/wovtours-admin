@@ -1,43 +1,88 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import Navbar from '../../Components/Navbar/Navbar'
 import Sidebar from '../../Components/Siderbar/Sidebar'
-import TagUi from '../../Pages/Tags/TagUi'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
+import TagServices from '../../Pages/Tags/TagServices'
 
 const UpdateTag = () => {
   const { id } = useParams()
-  const Tag = TagUi.find((t) => t.id === id)
+  const navigate = useNavigate()
+
+  const [formData, setFormData] = useState({
+    name: '',
+    slug: '',
+    description: '',
+    status: 'Active',
+  })
+
+  const [loading, setLoading] = useState(true)
+  const [notFound, setNotFound] = useState(false)
 
   useEffect(() => {
     AOS.init({ duration: 800, once: true })
-  }, [])
 
-  const [formData, setFormData] = useState({
-    name: Tag?.name || '',
-    slug: Tag?.slug || '',
-    description: Tag?.description || '',
-    status: Tag?.status || 'active',
-  })
+    const fetchTag = async () => {
+      const tag = await TagServices.get(id)
+      if (!tag) {
+        setNotFound(true)
+        setLoading(false)
+        return
+      }
 
-  if (!Tag) {
-    return <p className="text-center mt-20 text-red-500">Tag not found.</p>
-  }
+      setFormData({
+        name: tag.name || '',
+        slug: tag.slug || '',
+        description: tag.desc || '',
+        status: tag.status || 'Inactive',
+      })
+      setLoading(false)
+    }
+
+    fetchTag()
+  }, [id])
 
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData({ ...formData, [name]: value })
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    alert('Tag updated (in-memory).')
+  
+  const handleSubmit = async (e) => {
+  e.preventDefault()
+  const updateData = {
+    title: formData.name,
+    description: formData.description,
+    status: formData.status,
   }
 
-  const handleDelete = () => {
-    alert(`Tag "${Tag.name}" deleted (in-memory).`)
+  const updated = await TagServices.update(id, updateData)
+  if (updated) {
+    alert('Tag updated successfully.')
+    navigate('/tags') 
+  } else {
+    alert('Failed to update tag.')
   }
+}
+
+  
+
+  const handleDelete = async () => {
+    const confirmed = window.confirm('Are you sure you want to delete this tag?')
+    if (!confirmed) return
+
+    const success = await TagServices.delete(id)
+    if (success) {
+      alert('Tag deleted successfully.')
+      navigate('/admin/tags')
+    } else {
+      alert('Failed to delete tag.')
+    }
+  }
+
+  if (loading) return <p className="text-center mt-20">Loading...</p>
+  if (notFound) return <p className="text-center mt-20 text-red-500">Tag not found.</p>
 
   return (
     <>
@@ -56,7 +101,7 @@ const UpdateTag = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Tag Name */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1"> Tag Name</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Tag Name</label>
                 <input
                   type="text"
                   name="name"
@@ -66,29 +111,21 @@ const UpdateTag = () => {
                 />
               </div>
 
-              {/* Slug */}
+
+              {/* Status */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Slug</label>
-                <input
-                  type="text"
-                  name="slug"
-                  value={formData.slug}
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Status</label>
+                <select
+                  name="status"
+                  value={formData.status}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                >
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
               </div>
-                 <div>
-              <label className="block text-sm font-semibold  text-gray-700 mb-1">Status</label>
-              <select
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-                className="w-full border border-gray-300   rounded-lg px-4  py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="active"  >Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
-            </div>
+
               {/* Description */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">Description</label>
