@@ -10,6 +10,7 @@ import Sidebar from "../../Components/Siderbar/Sidebar";
 import { useNavigate } from "react-router-dom";
 import TagServices from "../../Pages/Tags/TagServices";
 import DateFormatter from "../../Services/DateFormatter";
+import FilterOptions from "../../Services/FilterOptions";
 
 const Tags = () => {
   const [activeMenu, setActiveMenu] = useState(null);
@@ -19,13 +20,20 @@ const Tags = () => {
   const [tagList, setTagList] = useState([]);
   const perPage = 5;
   const navigate = useNavigate();
+  var search = "",
+    orderBy = "";
+  var page = 1;
+
+  function apiCall() {
+    TagServices.getAll(search, orderBy, page).then((data) => {
+      setTagList(data);
+    });
+  }
 
   useEffect(() => {
     AOS.init({ duration: 800 });
 
-    TagServices.getAll("", "").then((data) => {
-      setTagList(data);
-    });
+    apiCall();
 
     const handleClickOutside = (event) => {
       if (
@@ -44,32 +52,19 @@ const Tags = () => {
   const toggleMenu = (id) => setActiveMenu(activeMenu === id ? null : id);
   const toggleSort = () => setSortMenuOpen(!sortMenuOpen);
   const handleSort = (option) => {
+    orderBy = FilterOptions.filterMap[option];
     console.log("Sort by", option);
+    console.log("Sort by", orderBy);
+
     setSortMenuOpen(false);
+    apiCall();
   };
 
-  const clearSearch = () => setSearchText("");
-
-  const filtered = tagList.filter((tag) =>
-    tag.name.toLowerCase().includes(searchText.toLowerCase())
-  );
-
-  const pages = Math.ceil(filtered.length / perPage);
-  const displayed = filtered.slice(
-    (currentPage - 1) * perPage,
-    currentPage * perPage
-  );
-
-  const updateBooked = (id, delta) => {
-    setTagList((prev) =>
-      prev.map((tag) =>
-        tag.id === id
-          ? { ...tag, booked: Math.max(0, tag.booked + delta) }
-          : tag
-      )
-    );
+  const clearSearch = () => {
+    setSearchText("");
+    search = "";
+    apiCall();
   };
-
   const getStatusClass = (status) => {
     if (status === "Active") return "bg-blue-100 text-blue-600";
     if (status === "InActive") return "bg-yellow-100 text-yellow-600";
@@ -95,7 +90,11 @@ const Tags = () => {
               <input
                 type="text"
                 value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
+                onChange={(e) => {
+                  search = e.target.value;
+                  setSearchText(e.target.value);
+                  apiCall();
+                }}
                 placeholder="Search..."
                 className="border pl-10 pr-8 py-1 rounded text-sm focus:outline-none focus:ring w-full sm:w-52"
               />
@@ -119,12 +118,10 @@ const Tags = () => {
               {sortMenuOpen && (
                 <div className="dropdown-menu absolute left-0 mt-1 bg-white border rounded shadow w-40 z-20">
                   {[
-                    "Name A‑Z",
-                    "Name Z‑A",
-                    "Date ASC",
-                    "Date DESC",
-                    "Popularity ASC",
-                    "Popularity DESC",
+                    FilterOptions.nameAsc,
+                    FilterOptions.nameDesc,
+                    FilterOptions.dateAsc,
+                    FilterOptions.dateDesc,
                   ].map((opt) => (
                     <button
                       key={opt}
@@ -161,7 +158,7 @@ const Tags = () => {
               </tr>
             </thead>
             <tbody>
-              {displayed.map((tag) => (
+              {tagList.map((tag) => (
                 <tr
                   key={tag.id}
                   data-aos="fade-up"
@@ -220,7 +217,7 @@ const Tags = () => {
 
         {/* Mobile View */}
         <div className="block sm:hidden space-y-5">
-          {displayed.map((tag) => (
+          {tagList.map((tag) => (
             <div
               key={tag.id}
               className="bg-gray-50 px-5 py-4 rounded-xl shadow-md border"
@@ -280,7 +277,7 @@ const Tags = () => {
         </div>
 
         {/* Pagination */}
-        {pages > 1 && (
+        {/* {pages > 1 && (
           <div className="mt-6 flex justify-center items-center space-x-2">
             {[...Array(pages)].map((_, idx) => (
               <button
@@ -296,7 +293,7 @@ const Tags = () => {
               </button>
             ))}
           </div>
-        )}
+        )} */}
       </div>
 
       {/* Floating Add Button on Mobile */}

@@ -2,12 +2,10 @@ import APIService from "../APIServices";
 import LocalStorage from "../LocalStorage";
 
 class TagServices {
-  static async getAll(search, orderBy) {
+  static async getAll(search, orderBy, page) {
     const url =
       APIService.baseUrl +
-      `api/admin/tags/?search=${encodeURIComponent(
-        search
-      )}&ordering=${encodeURIComponent(orderBy)}`;
+      `api/admin/tags/?search=${search}&ordering=${orderBy}&page=${page}`;
     try {
       const response = await fetch(url, {
         method: "GET",
