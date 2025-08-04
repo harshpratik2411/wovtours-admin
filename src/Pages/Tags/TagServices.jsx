@@ -27,15 +27,24 @@ class TagServices {
   }
 
   static async get(id) {
-    // const url = APIService.baseUrl + `api/admin/tags/${id}/`;
-    // try {
-    //   const response = await fetch(url);
-    //   if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    //   return await response.json();
-    // } catch (error) {
-    //   console.error(`Failed to get tag with id ${id}:`, error);
-    //   return null;
-    // }
+    const url = APIService.baseUrl + `api/admin/tags/${id}/`;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+      const tag = await response.json();
+
+      return {
+        id: tag.id,
+        name: tag.title,
+        desc: tag.description,
+        status: tag.status === "Inactive" ? "InActive" : tag.status,
+        slug: tag.title.toLowerCase().replace(/\s+/g, '-'),
+      };
+    } catch (error) {
+      console.error(`Failed to get tag with id ${id}:`, error);
+      return null;
+    }
   }
 
   static async add(data) {
@@ -75,17 +84,17 @@ class TagServices {
   }
 
   static async delete(id) {
-//     const url = APIService.baseUrl + `api/admin/tags/${id}/`;
-//     try {
-//       const response = await fetch(url, {
-//         method: 'DELETE',
-//       });
-//       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-//       return true;
-//     } catch (error) {
-//       console.error(`Failed to delete tag with id ${id}:`, error);
-//       return false;
-//     }
+    // const url = APIService.baseUrl + `api/admin/tags/${id}/`;
+    // try {
+    //   const response = await fetch(url, {
+    //     method: 'DELETE',
+    //   });
+    //   if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    //   return true;
+    // } catch (error) {
+    //   console.error(`Failed to delete tag with id ${id}:`, error);
+    //   return false;
+    // }
   }
 }
 
