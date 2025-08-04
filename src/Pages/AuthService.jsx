@@ -1,12 +1,11 @@
 // src/services/AuthService.js
 import axios from "axios";
 import LocalStorage from "../Pages/LocalStorage";
-
-const API_URL = "https://api-stage.wovtours.com/auth/jwt";
+import APIService from "./APIServices";
 
 const AuthService = {
   login: async (username, password) => {
-    const response = await axios.post(`${API_URL}/create/`, {
+    const response = await axios.post(`${APIService.baseUrl}auth/jwt/create/`, {
       username,
       password,
     });
@@ -22,6 +21,9 @@ const AuthService = {
 
     return response.data;
   },
+  // refresh(){
+  //   `${APIService.baseUrl}auth/jwt/refresh/`
+  // }
 
   logout: () => {
     localStorage.removeItem(LocalStorage.accesToken);

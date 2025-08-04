@@ -7,19 +7,23 @@ import { FiSearch } from 'react-icons/fi';
 import Navbar from '../../Components/Navbar/Navbar';
 import Sidebar from '../../Components/Siderbar/Sidebar';
 import { useNavigate } from 'react-router-dom';
-import TagUi from '../Tags/TagUi'; // should include: { id, name, slug, booked }
+import TagServices from '../../Pages/Tags/TagServices';
 
 const Tags = () => {
   const [activeMenu, setActiveMenu] = useState(null);
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [tagList, setTagList] = useState(TagUi);
+  const [tagList, setTagList] = useState([]);
   const perPage = 5;
   const navigate = useNavigate();
 
   useEffect(() => {
     AOS.init({ duration: 800 });
+
+    TagServices.getAll('', '').then(data => {
+      setTagList(data);
+    });
 
     const handleClickOutside = (event) => {
       if (
@@ -68,13 +72,13 @@ const Tags = () => {
   return (
     <>
       <Navbar />
-      <Sidebar />  
-        <h1 className='text-3xl font-bold -mt-10 text-center lg:ml-32 mb-10'>Tags</h1>
-      <div className="bg-white p-4 sm:p-6 lg:ml-72  rounded-xl shadow-md font-rubik w-full max-w-6xl mx-auto -mt-2">
+      <Sidebar />
+      <h1 className='text-3xl font-bold -mt-10 text-center lg:ml-32 mb-10'>Tags</h1>
+      <div className="bg-white p-4 sm:p-6 lg:ml-72 rounded-xl shadow-md font-rubik w-full max-w-6xl mx-auto -mt-2">
 
         {/* Search, Sort, Add */}
-        <div className="flex flex-col  sm:flex-row sm:justify-between items-start sm:items-center gap-3 mb-4">
-          <div className="flex flex-col sm:flex-row  items-start sm:items-center gap-2 relative w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-3 mb-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 relative w-full sm:w-auto">
             <div className="relative w-full sm:w-auto">
               <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600" size={18} />
               <input
@@ -125,54 +129,99 @@ const Tags = () => {
           </button>
         </div>
 
-        {/* Table View */}
-        <div className="overflow-x-auto">
+        {/* Table View for sm and above */}
+        <div className="overflow-x-auto hidden sm:block">
           <table className="min-w-full text-left text-sm">
             <thead className="text-gray-500 font-rubik uppercase border-b">
               <tr>
                 <th className="lg:py-2">Name</th>
                 <th className="py-2">Status</th>
-                <th className="py-2">Description</th>
+                <th className="py-2 ">Description</th>
                 <th className="py-2">Slug</th>
+                <th className="py-2 text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
               {displayed.map(tag => (
                 <tr key={tag.id} data-aos="fade-up" className="border-b hover:bg-gray-50 relative">
-                  <td className="flex items-center lgap-3  py-4">
-                
-                    <div>
+                  <td className="flex items-center gap-3 py-4">
+                    <div className='mt-3'>
                       <p className="font-medium text-gray-800">{tag.name}</p>
                     </div>
                   </td>
                   <td className="py-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(tag.status)}`}>
+                    <span className={`px-3 py-1 lg:-ml-2 rounded-full text-xs font-medium ${getStatusClass(tag.status)}`}>
                       {tag.status}
                     </span>
                   </td>
-                  <td className="py-4 lg:pl-8 pl-4 text-gray-700">{tag.desc}</td>
+                  <td className="py-4 lg:pl-1 pl-4 text-gray-700">{tag.desc}</td>
                   <td className="py-4 text-gray-700">{tag.slug}</td>
-                   <td className="py-4 text-right">
-                                      <div className="relative lg:mt-4 inline-block">
-                                        <button onClick={() => toggleMenu(tag.id)} className="text-gray-600 mt-2 hover:text-black menu-toggle">
-                                          <BsThreeDotsVertical size={18} />
-                                        </button>
-                                        {activeMenu === tag.id && (
-                                          <div className="dropdown-menu absolute right-0 lg:-top-20 -top-12 z-10 bg-white border rounded shadow w-32">
-                                            <button onClick={() => navigate(`/tags/view/${tag.id}`)} className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700">
-                                              <FaEye size={14} /> View
-                                            </button>
-                                            <button onClick={() => navigate(`/tags/update/${tag.id}`)} className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700">
-                                              <FaEdit size={14} /> Update
-                                            </button>
-                                          </div>
-                                        )}
-                                      </div>
-                                    </td>
+                  <td className="py-4 text-right">
+                    <div className="relative lg:mt-4 inline-block">
+                      <button onClick={() => toggleMenu(tag.id)} className="text-gray-600 mt-2 hover:text-black menu-toggle">
+                        <BsThreeDotsVertical size={18} />
+                      </button>
+                      {activeMenu === tag.id && (
+                        <div className="dropdown-menu absolute right-0 lg:-top-20 -top-12 z-10 bg-white border rounded shadow w-32">
+                          <button onClick={() => navigate(`/tags/view/${tag.id}`)} className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700">
+                            <FaEye size={14} /> View
+                          </button>
+                          <button onClick={() => navigate(`/tags/update/${tag.id}`)} className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700">
+                            <FaEdit size={14} /> Update
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile View */}
+        <div className="block sm:hidden space-y-5">
+          {displayed.map(tag => (
+            <div
+              key={tag.id}
+              className="bg-gray-50 px-5 py-4 rounded-xl shadow-md border"
+              data-aos="fade-up"
+            >
+              <div className="flex justify-between items-start">
+                <div>
+                  <h2 className="text-lg font-semibold ml-1 text-gray-800 mb-2">{tag.name}</h2>
+                  <p className={`text-xs inline-block px-2 py-1 rounded ${getStatusClass(tag.status)}`}>
+                    {tag.status}
+                  </p>
+                </div>
+                <button onClick={() => toggleMenu(tag.id)} className="text-gray-600 menu-toggle">
+                  <BsThreeDotsVertical size={20} />
+                </button>
+              </div>
+              <div className="mt-4 ml-1 space-y-2">
+                <p className="text-sm text-gray-700 "><span className="font-bold">Description:</span> 
+               <span className='ml-3'>
+                 {tag.desc} 
+               </span>
+                  </p>
+                <p className="text-sm text-gray-700"><span className="font-bold">Slug:</span>
+                 <span className='ml-16'>
+                 {tag.slug}
+                 </span>
+                 </p>
+              </div>
+              {activeMenu === tag.id && (
+                <div className="mt-3 dropdown-menu bg-white border rounded shadow w-full z-10">
+                  <button onClick={() => navigate(`/tags/view/${tag.id}`)} className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700">
+                    <FaEye size={14} /> View
+                  </button>
+                  <button onClick={() => navigate(`/tags/update/${tag.id}`)} className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700">
+                    <FaEdit size={14} /> Update
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
         </div>
 
         {/* Pagination */}
