@@ -2,10 +2,10 @@ import APIService from "../APIServices";
 import LocalStorage from "../LocalStorage";
 
 class TagServices {
-  static async getAll(search, orderBy, page) {
+  static async getAll(search, orderBy, page,status) {
     const url =
       APIService.baseUrl +
-      `api/admin/tags/?search=${search}&ordering=${orderBy}&page=${page}`;
+      `api/admin/tags/?search=${search}&ordering=${orderBy}&page=${page}&status=${status}`;
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -53,23 +53,32 @@ class TagServices {
     }
   }
 
-  static async add(data) {
-    // const url = APIService.baseUrl + `api/admin/tags/`;
-    // try {
-    //   const response = await fetch(url, {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(data),
-    //   });
-    //   if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    //   return await response.json();
-    // } catch (error) {
-    //   console.error("Failed to add tag:", error);
-    //   return null;
-    // }
+ static async add(data) {
+  const url = APIService.baseUrl + 'api/admin/tags/';
+  console.log("Data = ",data);
+  
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: LocalStorage.getAccesToken(), 
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to add tag:', error);
+    if(APIService.isUnauthenticated(error.status))
+    {
+      await APIService.refreshToken();
+      this.add(data);
+    }
+    return null;
   }
+}
 
   static async update(id, data) {
     const url = APIService.baseUrl + `api/admin/tags/${id}/`;

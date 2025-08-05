@@ -22,11 +22,12 @@ const Tags = () => {
   const perPage = 5;
   const navigate = useNavigate();
   var search = "",
-    orderBy = "";
+    orderBy = "",
+    status="";//Active/Inactive
   var page = 1;
 
   function apiCall() {
-    TagServices.getAll(search, orderBy, page).then((data) => {
+    TagServices.getAll(search, orderBy, page,status).then((data) => {
       setTagList(data);
     });
   }
