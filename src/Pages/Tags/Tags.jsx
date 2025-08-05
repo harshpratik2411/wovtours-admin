@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import "aos/dist/aos.css";
 import { BsThreeDotsVertical, BsXCircle } from "react-icons/bs";
 import { FaEye, FaEdit, FaPlus } from "react-icons/fa";
-import { FiSearch } from "react-icons/fi";
+import { FiSearch, FiFilter } from "react-icons/fi";
 import Navbar from "../../Components/Navbar/Navbar";
 import Sidebar from "../../Components/Siderbar/Sidebar";
 import { useNavigate } from "react-router-dom";
@@ -12,22 +12,27 @@ import TagServices from "../../Pages/Tags/TagServices";
 import DateFormatter from "../../Services/DateFormatter";
 import FilterOptions from "../../Services/FilterOptions";
 import StatusClassMap from "../../Services/StatusClassMap";
-
+   
 const Tags = () => {
   const [activeMenu, setActiveMenu] = useState(null);
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [tagList, setTagList] = useState([]);
-  const perPage = 5;
-  const navigate = useNavigate();
-  var search = "",
-    orderBy = "",
-    status="";
-  var page = 1;
+  const [status, setStatus] = useState(""); // "Active" | "Inactive" | ""
+  const [orderBy, setOrderBy] = useState("");
 
-  function apiCall() {
-    TagServices.getAll(search, orderBy, page,status).then((data) => {
+  const navigate = useNavigate();
+
+  function apiCall(
+    search = searchText,
+    order = orderBy,
+    page = currentPage,
+    currentStatus = status
+  ) {
+    TagServices.getAll(search, order, page, currentStatus).then((data) => { 
+     console.log("API returned tagList:", data);
+    console.log("Rendered count:", data.length);
       setTagList(data);
     });
   }
@@ -53,20 +58,19 @@ const Tags = () => {
 
   const toggleMenu = (id) => setActiveMenu(activeMenu === id ? null : id);
   const toggleSort = () => setSortMenuOpen(!sortMenuOpen);
-  const handleSort = (option) => {
-    orderBy = FilterOptions.filterMap[option];
-    console.log("Sort by", option);
-    console.log("Sort by", orderBy);
 
+  const handleSort = (option) => {
+    const newOrder = FilterOptions.filterMap[option];
+    setOrderBy(newOrder);
     setSortMenuOpen(false);
-    apiCall();
+    apiCall(searchText, newOrder, currentPage, status);
   };
 
   const clearSearch = () => {
     setSearchText("");
-    search = "";
-    apiCall();
+    apiCall("", orderBy, currentPage, status);
   };
+
   const getStatusClass = (status) => StatusClassMap.getClass(status);
 
   return (
@@ -75,11 +79,12 @@ const Tags = () => {
       <Sidebar />
       <h1 className="text-3xl font-bold -mt-10 text-center lg:ml-32 mb-10">
         Tags
-      </h1>
-      <div className="bg-white p-4 sm:p-6 lg:ml-72 rounded-xl shadow-md font-rubik w-full max-w-6xl mx-auto -mt-2">
-        {/* Search, Sort, Add */}
+      </h1>  
+      <div className="bg-white   p-4 sm:p-6 lg:ml-72 rounded-xl shadow-md font-rubik w-full max-w-6xl mx-auto -mt-2 mb-12">
+        {/* Search, Sort, Filter, Add */}
         <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-3 mb-4">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 relative w-full sm:w-auto">
+            {/* Search Input */}
             <div className="relative w-full sm:w-auto">
               <FiSearch
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600"
@@ -89,9 +94,9 @@ const Tags = () => {
                 type="text"
                 value={searchText}
                 onChange={(e) => {
-                  search = e.target.value;
-                  setSearchText(e.target.value);
-                  apiCall();
+                  const val = e.target.value;
+                  setSearchText(val);
+                  apiCall(val, orderBy, currentPage, status);
                 }}
                 placeholder="Search..."
                 className="border pl-10 pr-8 py-1 rounded text-sm focus:outline-none focus:ring w-full sm:w-52"
@@ -106,6 +111,7 @@ const Tags = () => {
               )}
             </div>
 
+            {/* Sort Dropdown */}
             <div className="relative w-full sm:w-auto">
               <button
                 onClick={toggleSort}
@@ -120,9 +126,6 @@ const Tags = () => {
                     FilterOptions.nameDesc,
                     FilterOptions.dateAsc,
                     FilterOptions.dateDesc,
-                    FilterOptions.statusActive,
-                    FilterOptions.statusInactive,
-                  
                   ].map((opt) => (
                     <button
                       key={opt}
@@ -135,11 +138,29 @@ const Tags = () => {
                 </div>
               )}
             </div>
+
+            {/* Status Filter */}
+            <div className="relative w-full sm:w-auto">
+              <select
+                value={status}
+                onChange={(e) => {
+                  const newStatus = e.target.value;
+                  setStatus(newStatus);
+                  apiCall(searchText, orderBy, currentPage, newStatus);
+                }}
+                className="border text-sm text-gray-600 bg-white px-3 py-1 rounded w-full sm:w-auto focus:outline-none"
+              >
+                <option value="">All Status</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
           </div>
 
+          {/* Add Button */}
           <button
             onClick={() => navigate("/tags/add-tag")}
-            className="flex items-center gap-1 border text-sm text-gray-600 bg-white px-3 py-1 rounded hover:bg-gray-100"
+            className="flex items-center gap-1 border text-sm text-gray-600 bg-white px-2 py-2 rounded hover:bg-gray-100"
           >
             <FaPlus size={12} /> Add
           </button>
@@ -159,123 +180,133 @@ const Tags = () => {
               </tr>
             </thead>
             <tbody>
-              {tagList.map((tag) => (
-                <tr
-                  key={tag.id}
-                  data-aos="fade-up"
-                  className="border-b hover:bg-gray-50 relative"
+  {tagList.length > 0 ? (
+    tagList.map((tag) => (
+      <tr key={tag.id} className="border-b  hover:bg-gray-50">
+        <td className="py-6">
+          <p className="font-medium text-gray-800">{tag.name}</p>
+        </td>
+        <td className="py-4 text-gray-700">{tag.desc}</td>
+        <td className="py-4">
+          <span
+            className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(tag.status)}`}
+          >
+            {tag.status}
+          </span>
+        </td>
+        <td className="py-4 text-gray-700">
+          {DateFormatter.formatDate(tag.created_at)}
+        </td>
+        <td className="py-4 text-gray-700">
+          {DateFormatter.formatDate(tag.updated_at)}
+        </td>
+        <td className="py-4 text-right">
+          <div className="relative inline-block">
+            <button
+              onClick={() => toggleMenu(tag.id)}
+              className="text-gray-600 hover:text-black menu-toggle"
+            >
+              <BsThreeDotsVertical size={18} />
+            </button>
+            {activeMenu === tag.id && (
+              <div className="dropdown-menu absolute right-0 -top-[4rem] z-10 bg-white border rounded shadow w-32">
+                <button
+                  onClick={() => navigate(`/tags/view/${tag.id}`)}
+                  className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                 >
-                  <td className="py-4">
-                    <p className="font-medium text-gray-800">{tag.name}</p>
-                  </td>
-                  <td className="py-4 text-gray-700">{tag.desc}</td>
-                  <td className="py-4">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(
-                        tag.status
-                      )}`}
-                    >
-                      {tag.status}
-                    </span>
-                  </td>
-                  <td className="py-4 text-gray-700">
-                    {DateFormatter.formatDate(tag.created_at)}
-                  </td>
-                  <td className="py-4 text-gray-700">
-                    {DateFormatter.formatDate(tag.updated_at)}
-                  </td>
-                  <td className="py-4 text-right">
-                    <div className="relative inline-block">
-                      <button
-                        onClick={() => toggleMenu(tag.id)}
-                        className="text-gray-600 hover:text-black menu-toggle"
-                      >
-                        <BsThreeDotsVertical size={18} />
-                      </button>
-                      {activeMenu === tag.id && (
-                        <div className="dropdown-menu absolute right-0 -top-[4rem]  z-10 bg-white border rounded shadow w-32">
-                          <button
-                            onClick={() => navigate(`/tags/view/${tag.id}`)}
-                            className="flex items-center gap-2 px-3  py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
-                          >
-                            <FaEye size={14} /> View
-                          </button>
-                          <button
-                            onClick={() => navigate(`/tags/update/${tag.id}`)}
-                            className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
-                          >
-                            <FaEdit size={14} /> Update
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+                  <FaEye size={14} /> View
+                </button>
+                <button
+                  onClick={() => navigate(`/tags/update/${tag.id}`)}
+                  className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
+                >
+                  <FaEdit size={14} /> Update
+                </button>
+              </div>
+            )}
+          </div>
+        </td>            
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan="6" className="text-center  text-3xl py-40 font-semibold text-gray-600">
+        No data found
+      </td>
+    </tr>
+  )}
+</tbody>
+
           </table>
         </div>
 
-        {/* Mobile View */}
-        <div className="block sm:hidden space-y-5">
-          {tagList.map((tag) => (
-            <div
-              key={tag.id}
-              className="bg-gray-50 px-5 py-4 rounded-xl shadow-md border"
-              data-aos="fade-up"
+       {/* Mobile View */}
+<div className="block sm:hidden space-y-5   flex-col items-center justify-center">
+  {tagList.length > 0 ? (
+    tagList.map((tag) => (
+      <div
+        key={tag.id}
+        className="bg-gray-50 px-5 py-4 rounded-xl shadow-md border w-full"
+        data-aos="fade-up"
+      >
+        <div className="flex justify-between items-start">
+          <div>
+            <h2 className="text-lg font-semibold ml-1 text-gray-800 mb-2">
+              {tag.name}
+            </h2>
+            <p
+              className={`text-xs inline-block px-2 py-1 rounded ${getStatusClass(
+                tag.status
+              )}`}
             >
-              <div className="flex justify-between items-start">
-                <div>
-                  <h2 className="text-lg font-semibold ml-1 text-gray-800 mb-2">
-                    {tag.name}
-                  </h2>
-                  <p
-                    className={`text-xs inline-block px-2 py-1 rounded ${getStatusClass(
-                      tag.status
-                    )}`}
-                  >
-                    {tag.status}
-                  </p>
-                </div>
-                <button
-                  onClick={() => toggleMenu(tag.id)}
-                  className="text-gray-600 menu-toggle"
-                >
-                  <BsThreeDotsVertical size={20} />
-                </button>
-              </div>
-              <div className="mt-4 ml-1 space-y-2 text-sm text-gray-700">
-                <p>
-                  <span className="font-bold">Description:</span> {tag.desc}
-                </p>
-                <p>
-                  <span className="font-bold">Created At:</span>{" "}
-                  {DateFormatter.formatDate(tag.created_at)}
-                </p>
-                <p>
-                  <span className="font-bold">Updated At:</span>{" "}
-                  {DateFormatter.formatDate(tag.updated_at)}
-                </p>
-              </div>
-              {activeMenu === tag.id && (
-                <div className="mt-3 dropdown-menu bg-white border rounded shadow w-full z-10">
-                  <button
-                    onClick={() => navigate(`/tags/view/${tag.id}`)}
-                    className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
-                  >
-                    <FaEye size={14} /> View
-                  </button>
-                  <button
-                    onClick={() => navigate(`/tags/update/${tag.id}`)}
-                    className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
-                  >
-                    <FaEdit size={14} /> Update
-                  </button>
-                </div>
-              )}
-            </div>
-          ))}
+              {tag.status}
+            </p>
+          </div>
+          <button
+            onClick={() => toggleMenu(tag.id)}
+            className="text-gray-600 menu-toggle"
+          >
+            <BsThreeDotsVertical size={20} />
+          </button>
         </div>
+        <div className="mt-4 ml-1 space-y-2 text-sm text-gray-700">
+          <p>
+            <span className="font-bold">Description:</span> {tag.desc}
+          </p>
+          <p>
+            <span className="font-bold">Created At:</span>{" "}
+            {DateFormatter.formatDate(tag.created_at)}
+          </p>
+          <p>
+            <span className="font-bold">Updated At:</span>{" "}
+            {DateFormatter.formatDate(tag.updated_at)}
+          </p>
+        </div>
+        {activeMenu === tag.id && (
+          <div className="mt-3 dropdown-menu bg-white border rounded shadow w-full z-10">
+            <button
+              onClick={() => navigate(`/tags/view/${tag.id}`)}
+              className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
+            >
+              <FaEye size={14} /> View
+            </button>
+            <button
+              onClick={() => navigate(`/tags/update/${tag.id}`)}
+              className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
+            >
+              <FaEdit size={14} /> Update
+            </button>
+          </div>
+        )}
+      </div>
+    ))
+  ) : (
+    <div className="text-center font-semibold text-gray-600 py-10">
+      No data found
+    </div>
+  )}
+</div>
+
 
         {/* Pagination */}
         {/* {pages > 1 && (
@@ -309,4 +340,4 @@ const Tags = () => {
   );
 };
 
-export default Tags;
+export default Tags; 

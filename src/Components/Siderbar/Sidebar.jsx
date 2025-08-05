@@ -56,7 +56,7 @@ const Sidebar = () => {
           `}
         > 
           <div>
-            <h1 className="text-2xl font-bold mb-10">Eormi</h1>
+            <h1 className="text-2xl font-bold mb-10">Wov Tours</h1>
             <ul className="space-y-6">
               <li className="flex items-center justify-between">
                 <a href="/" className={`flex items-center gap-3 font-medium ${isActive('/') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>

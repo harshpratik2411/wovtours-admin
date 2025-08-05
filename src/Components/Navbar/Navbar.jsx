@@ -89,7 +89,7 @@ export default function TopNav() {
             </button>
           </div>
 
-          <h1 className="text-2xl  font-bold mb-10">Eormi</h1>
+          <h1 className="text-2xl  font-bold mb-10">Wov Tours</h1>
           <ul className="space-y-6">
             <li className="flex items-center justify-between">
               <a href="/dashboard" className="flex items-center gap-3 text-white font-medium">

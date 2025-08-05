@@ -71,6 +71,10 @@ class TagServices {
         await APIService.refreshToken();
         this.add(data);
       }
+      if (APIService.isError(response.status)) {
+        //todo:
+        alert(response.json()["error"]);
+      }
 
       return await response.json();
     } catch (error) {
