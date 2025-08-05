@@ -20,7 +20,9 @@ const Tags = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [tagList, setTagList] = useState([]);
   const [status, setStatus] = useState(""); // "Active" | "Inactive" | ""
-  const [orderBy, setOrderBy] = useState("");
+  const [orderBy, setOrderBy] = useState(""); 
+  const [selectedSortLabel, setSelectedSortLabel] = useState("Sort By");
+
 
   const navigate = useNavigate();
 
@@ -59,7 +61,8 @@ const Tags = () => {
 
   const handleSort = (option) => {
     const newOrder = FilterOptions.filterMap[option];
-    setOrderBy(newOrder);
+    setOrderBy(newOrder); 
+    setSelectedSortLabel(option);
     setSortMenuOpen(false);
     apiCall(searchText, newOrder, currentPage, status);
   };
@@ -115,7 +118,8 @@ const Tags = () => {
                 onClick={toggleSort}
                 className="sort-toggle flex items-center gap-1 border text-sm text-gray-600 bg-white px-3 py-1 rounded hover:bg-gray-100 w-full sm:w-auto"
               >
-                Sort By
+               
+                {selectedSortLabel}
               </button>
               {sortMenuOpen && (
                 <div className="dropdown-menu absolute left-0 mt-1 bg-white border rounded shadow w-40 z-20">
