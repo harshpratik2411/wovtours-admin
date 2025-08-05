@@ -4,11 +4,13 @@ import Navbar from '../../Components/Navbar/Navbar'
 import Sidebar from '../../Components/Siderbar/Sidebar'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
-import TagServices from '../../Pages/Tags/TagServices'
+import TagServices from '../../Pages/Tags/TagServices' 
+import { useAlert } from '../../Context/AlertContext/AlertContext';
 
 const UpdateTag = () => {
   const { id } = useParams()
-  const navigate = useNavigate()
+  const navigate = useNavigate() 
+   const { showAlert } = useAlert();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -57,10 +59,10 @@ const UpdateTag = () => {
 
   const updated = await TagServices.update(id, updateData)
   if (updated) {
-    alert('Tag updated successfully.')
+    showAlert('Tag updated successfully.')
     navigate('/tags') 
   } else {
-    alert('Failed to update tag.')
+    showAlert('Failed to update tag.')
   }
 }
 
@@ -72,10 +74,10 @@ const UpdateTag = () => {
 
     const success = await TagServices.delete(id)
     if (success) {
-      alert('Tag deleted successfully.')
+      showAlert('Tag deleted successfully.')
       navigate('/tags')
     } else {
-      alert('Failed to delete tag.')
+      showAlert('Failed to delete tag.')
     }
   }
 

@@ -5,10 +5,12 @@ import Sidebar from '../../Components/Siderbar/Sidebar';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import APIService from '../APIServices'; 
-import TagServices from './TagServices'; 
+import TagServices from './TagServices';  
+import { useAlert } from '../../Context/AlertContext/AlertContext';
 
 const AddTag = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
+   const { showAlert } = useAlert();
 
   const [formData, setFormData] = useState({
     title: '',
@@ -35,18 +37,27 @@ const AddTag = () => {
       console.log('Submitting tag:', formData);
       const result = await TagServices.add(formData);
       if (result) {
-        alert('Tag added successfully!');
+        showAlert(
+          'Tag added successfully!',
+          'success'
+        );
         navigate('/tags');
       } else {
-        alert('Failed to add tag.');
+        showAlert(
+          'Failed to add tag.',
+          'error'
+        );
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      alert('An error occurred. Please try again.');
+      showAlert(
+        'An error occurred.',
+        'error'
+      ); 
+
     } finally {
-      setLoading(false);
-    }
-  };
+      setLoading(false); 
+    }};
 
   return (
     <>
