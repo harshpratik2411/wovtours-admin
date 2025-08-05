@@ -6,6 +6,9 @@ class APIService {
   static isUnauthenticated(status) {
     return status === 401;
   }
+  static isDeleted(status) {
+    return status === 204;
+  }
   static isError(status) {
     // console.log("status >= 300 = ",status >= 300);
 

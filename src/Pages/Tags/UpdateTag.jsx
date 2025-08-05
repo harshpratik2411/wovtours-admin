@@ -12,7 +12,6 @@ const UpdateTag = () => {
 
   const [formData, setFormData] = useState({
     name: '',
-    slug: '',
     description: '',
     status: 'Active',
   })
@@ -33,7 +32,6 @@ const UpdateTag = () => {
 
       setFormData({
         name: tag.name || '',
-        slug: tag.slug || '',
         description: tag.desc || '',
         status: tag.status || 'Inactive',
       })
@@ -75,7 +73,7 @@ const UpdateTag = () => {
     const success = await TagServices.delete(id)
     if (success) {
       alert('Tag deleted successfully.')
-      navigate('/admin/tags')
+      navigate('/tags')
     } else {
       alert('Failed to delete tag.')
     }

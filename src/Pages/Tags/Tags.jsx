@@ -23,7 +23,7 @@ const Tags = () => {
   const navigate = useNavigate();
   var search = "",
     orderBy = "",
-    status="";//Active/Inactive
+    status="";
   var page = 1;
 
   function apiCall() {

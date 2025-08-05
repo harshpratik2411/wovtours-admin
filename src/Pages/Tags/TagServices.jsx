@@ -67,16 +67,15 @@ class TagServices {
         },
         body: JSON.stringify(data),
       });
-
-      if (!response.ok)
-        throw new Error(`HTTP error! status: ${response.status}`);
-      return await response.json();
-    } catch (error) {
-      console.error("Failed to add tag:", error);
-      if (APIService.isUnauthenticated(error.status)) {
+      if (APIService.isUnauthenticated(response.status)) {
         await APIService.refreshToken();
         this.add(data);
       }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Failed to add tag:", error);
+
       return null;
     }
   }
@@ -96,7 +95,7 @@ class TagServices {
         body: JSON.stringify(data),
       });
       console.log("Response = ", response.status);
-      
+
       if (APIService.isUnauthenticated(response.status)) {
         await APIService.refreshToken();
         this.update(id, data);
@@ -110,17 +109,27 @@ class TagServices {
   }
 
   static async delete(id) {
-    // const url = APIService.baseUrl + `api/admin/tags/${id}/`;
-    // try {
-    //   const response = await fetch(url, {
-    //     method: 'DELETE',
-    //   });
-    //   if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    //   return true;
-    // } catch (error) {
-    //   console.error(`Failed to delete tag with id ${id}:`, error);
-    //   return false;
-    // }
+    const url = APIService.baseUrl + `api/admin/tags/${id}/`;
+    try {
+      let response = await fetch(url, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: LocalStorage.getAccesToken(),
+        },
+      });
+      console.log("Response = ", response.status);
+
+      if (APIService.isUnauthenticated(response.status)) {
+        await APIService.refreshToken();
+        this.delete(id);
+      } else if (APIService.isDeleted(response.status)) {
+        return true;
+      }
+    } catch (error) {
+      console.error(`Failed to delete tag with id ${id}:`, error);
+      return false;
+    }
   }
 }
 
