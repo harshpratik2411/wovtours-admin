@@ -31,8 +31,6 @@ const Tags = () => {
     currentStatus = status
   ) {
     TagServices.getAll(search, order, page, currentStatus).then((data) => { 
-     console.log("API returned tagList:", data);
-    console.log("Rendered count:", data.length);
       setTagList(data);
     });
   }
