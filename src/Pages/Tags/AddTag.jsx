@@ -85,7 +85,8 @@ const AddTag = () => {
                   rows="4"
                   value={formData.description}
                   onChange={handleChange}
-                  placeholder="Enter description"
+                  placeholder="Enter description" 
+                  required
                   className="w-full border border-gray-300 rounded-lg px-4 py-5 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                 />
               </div>
