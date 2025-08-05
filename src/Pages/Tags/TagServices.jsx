@@ -1,8 +1,9 @@
 import APIService from "../APIServices";
 import LocalStorage from "../LocalStorage";
+import AuthService from "../AuthService";
 
 class TagServices {
-  static async getAll(search, orderBy, page,status) {
+  static async getAll(search, orderBy, page, status) {
     const url =
       APIService.baseUrl +
       `api/admin/tags/?search=${search}&ordering=${orderBy}&page=${page}&status=${status}`;
@@ -53,37 +54,40 @@ class TagServices {
     }
   }
 
- static async add(data) {
-  const url = APIService.baseUrl + 'api/admin/tags/';
-  console.log("Data = ",data);
-  
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: LocalStorage.getAccesToken(), 
-      },
-      body: JSON.stringify(data),
-    });
+  static async add(data) {
+    const url = APIService.baseUrl + "api/admin/tags/";
+    console.log("Data = ", data);
 
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    return await response.json();
-  } catch (error) {
-    console.error('Failed to add tag:', error);
-    if(APIService.isUnauthenticated(error.status))
-    {
-      await APIService.refreshToken();
-      this.add(data);
-    }
-    return null;
-  }
-}
-
-  static async update(id, data) {
-    const url = APIService.baseUrl + `api/admin/tags/${id}/`;
     try {
       const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: LocalStorage.getAccesToken(),
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error("Failed to add tag:", error);
+      if (APIService.isUnauthenticated(error.status)) {
+        await APIService.refreshToken();
+        this.add(data);
+      }
+      return null;
+    }
+  }
+
+  static async update(id, data) {
+    console.log("Update API called");
+
+    const url = APIService.baseUrl + `api/admin/tags/${id}/`;
+
+    try {
+      let response = await fetch(url, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -91,8 +95,13 @@ class TagServices {
         },
         body: JSON.stringify(data),
       });
-      if (!response.ok)
-        throw new Error(`HTTP error! status: ${response.status}`);
+      console.log("Response = ", response.status);
+      
+      if (APIService.isUnauthenticated(response.status)) {
+        await APIService.refreshToken();
+        this.update(id, data);
+      }
+
       return await response.json();
     } catch (error) {
       console.error(`Failed to update tag with id ${id}:`, error);

@@ -4,7 +4,7 @@ class LocalStorage {
   static isAuthenticated = "isAuthenticated";
 
   static set(key, value) {
-    localStorage.setItem(key, JSON.stringify(value));
+    localStorage.setItem(key, value);
   }
 
   static get(key) {
@@ -14,7 +14,6 @@ class LocalStorage {
   static getAccesToken(key) {
     return "Bearer " + localStorage.getItem(this.accesToken);
   }
-
 
   static remove(key) {
     localStorage.removeItem(key);

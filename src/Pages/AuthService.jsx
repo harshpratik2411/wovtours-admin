@@ -17,23 +17,48 @@ const AuthService = {
 
     localStorage.setItem(LocalStorage.accesToken, access);
     localStorage.setItem("refreshToken", refresh);
-    localStorage.setItem("isAuthenticated", "true");
+    localStorage.setItem("isAuthenticated", true);
 
     return response.data;
   },
-  // refresh(){
-  //   `${APIService.baseUrl}auth/jwt/refresh/`
-  // }
+  refresh: async () => {
+    const refreshToken = localStorage.getItem(LocalStorage.refreshToken);
+
+    if (!refreshToken) {
+      console.error("No refresh token found.");
+      return null;
+    }
+
+    try {
+      const response = await axios.post(`${APIService.baseUrl}auth/jwt/refresh/`, {
+        refresh: refreshToken,
+      });
+
+      const { access } = response.data;
+
+      // Store the new access token
+      localStorage.setItem(LocalStorage.accesToken, access);
+    } catch (error) {
+      console.error("Failed to refresh token", error);
+      AuthService.logout(); 
+      return null;
+    }
+  },
+
 
   logout: () => {
     localStorage.removeItem(LocalStorage.accesToken);
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem(LocalStorage.refreshToken);
+    localStorage.removeItem(LocalStorage.isAuthenticated);
   },
 
   getAccessToken: () => localStorage.getItem(LocalStorage.accesToken),
-  getRefreshToken: () => localStorage.getItem("refreshToken"),
-  isAuthenticated: () => localStorage.getItem("isAuthenticated") === "true",
+  getRefreshToken: () => localStorage.getItem(LocalStorage.refreshToken),
+  isAuthenticated: () => localStorage.getItem(LocalStorage.isAuthenticated) === true,
 };
 
-export default AuthService;
+export default AuthService; 
+
+ 
+ 
+ 

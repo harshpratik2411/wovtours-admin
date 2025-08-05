@@ -1,3 +1,5 @@
+import LocalStorage from "./LocalStorage";
+
 class APIService {
   static baseUrl = "https://api-stage.wovtours.com/";
 
@@ -6,7 +8,7 @@ class APIService {
   }
   static isError(status) {
     // console.log("status >= 300 = ",status >= 300);
-    
+
     return status >= 300;
   }
 
@@ -14,13 +16,28 @@ class APIService {
     return status <= 300;
   }
 
-  static refreshToken() {
-    this.baseUrl + "auth/jwt/refresh/";
-    //body
-    //     {
-    //     "refresh":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc1NDI4NTQ1MCwiaWF0IjoxNzU0MTk5MDUwLCJqdGkiOiJiNTEyNzAyZWI4MGM0NzY5OTY0M2I0MzA5MmJjNGQ0YyIsInVzZXJfaWQiOjF9.Wt4fawlcZT92s998iF6RXKSoUnjiBixHGRGhfzIz6fY"
-    // }
-    //
+  static async refreshToken() {
+    
+    const url = this.baseUrl + "auth/jwt/refresh/";
+    console.log("URL = ",url);
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: LocalStorage.getAccesToken(),
+      },
+      body: JSON.stringify({
+        refresh: LocalStorage.get(LocalStorage.refreshToken),
+      }),
+    });
+    console.log("response.status = ",response.status);
+    if (APIService.isSuccess(response.status)) {
+      const auth = await response.json();
+      console.log("auth = ",auth);
+      
+
+      LocalStorage.set(LocalStorage.accesToken, auth.access);
+    }
   }
 }
-export default APIService
+export default APIService;
