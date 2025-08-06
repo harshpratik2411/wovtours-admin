@@ -3,10 +3,10 @@ import LocalStorage from "../LocalStorage";
 import AuthService from "../AuthService";
 
 class DifficultiesServices {
-  static async getAll(search, orderBy, page, status) {
+  static async getAll(search, orderBy, page, status,level) {
     const url =
       APIService.baseUrl +
-      `api/admin/difficulty/?search=${search}&ordering=${orderBy}&page=${page}&status=${status}`;
+      `api/admin/difficulty/?search=${search}&ordering=${orderBy}&page=${page}&status=${status}&level=${level}`;
 
     try {
       const response = await fetch(url);

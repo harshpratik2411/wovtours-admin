@@ -11,7 +11,8 @@ import { useNavigate } from "react-router-dom";
 import DateFormatter from "../../Services/DateFormatter";
 import FilterOptions from "../../Services/FilterOptions";
 import StatusClassMap from "../../Services/StatusClassMap";
-import DifficultiesServices from "./DifficultiesServices"; 
+import DifficultiesServices from "./DifficultiesServices";  
+
 
 
 
@@ -26,6 +27,7 @@ const Difficulties = () => {
   const [selectedSortLabel, setSelectedSortLabel] = useState("Sort By");
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1); 
+  const [level, setLevel] = useState("");
 
   const navigate = useNavigate();
  
@@ -35,11 +37,13 @@ const Difficulties = () => {
     search = searchText,
     order = orderBy,
     page = currentPage,
-    currentStatus = status
+    currentStatus = status ,
+     currentLevel = level,
+
   ) {
     setLoading(true);
 
-    DifficultiesServices.getAll(search, order, page, currentStatus)
+    DifficultiesServices.getAll(search, order, page, currentStatus,currentLevel)
       .then((response) => {
        // console.log("🟩 Response from DifficultiesServices:", response);
 
@@ -83,7 +87,7 @@ const Difficulties = () => {
     setOrderBy(newOrder);
     setSelectedSortLabel(option);
     setSortMenuOpen(false);
-    apiCall(searchText, newOrder, currentPage, status);
+    apiCall(searchText, newOrder, currentPage, status,level);
   };
 
   const clearSearch = () => {
@@ -184,6 +188,31 @@ const Difficulties = () => {
   <option value="Inactive">Inactive</option>
 </select>
           </div>
+{/* Level Filter */}
+<select
+  value={level}
+  onChange={async (e) => {
+    const newLevel = e.target.value;
+    const newPage = 1;
+
+    const result = await apiCall(searchText, orderBy, newPage, status, newLevel);
+
+    if (!result || result.length === 0) {
+      setCurrentPage(1);
+    } else {
+      setCurrentPage(newPage);
+    }
+
+    setLevel(newLevel);
+  }}
+  className="border -ml-[32rem] text-sm text-gray-600 bg-white px-3 py-1 rounded w-full sm:w-auto focus:outline-none"
+>
+  <option value="">All Levels</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+</select>
 
           {/* Add Button */}
           <button

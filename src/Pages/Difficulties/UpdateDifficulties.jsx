@@ -107,7 +107,7 @@ const UpdateDifficulties = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Tag Name */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Tag Name</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Difficulty Name</label>
                 <input
                   type="text"
                   name="name" 
