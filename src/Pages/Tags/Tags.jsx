@@ -21,7 +21,9 @@ const Tags = () => {
   const [tagList, setTagList] = useState([]);
   const [status, setStatus] = useState(""); // "Active" | "Inactive" | ""
   const [orderBy, setOrderBy] = useState(""); 
-  const [selectedSortLabel, setSelectedSortLabel] = useState("Sort By");
+  const [selectedSortLabel, setSelectedSortLabel] = useState("Sort By"); 
+  const [loading, setLoading] = useState(true);
+
 
 
   const navigate = useNavigate();
@@ -32,11 +34,15 @@ const Tags = () => {
     page = currentPage,
     currentStatus = status
   ) {
-    TagServices.getAll(search, order, page, currentStatus).then((data) => { 
-      setTagList(data);
-    });
-  }
-
+    setLoading(true);
+  TagServices.getAll(search, order, page, currentStatus).then((data) => {
+    setTagList(data);
+    setLoading(false);
+  }).catch(() => {
+    setTagList([]);
+    setLoading(false);
+  });
+}
   useEffect(() => {
     AOS.init({ duration: 800 });
 
@@ -181,9 +187,16 @@ const Tags = () => {
                 <th className="py-2 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody>
-  {tagList.length > 0 ? (
-    tagList.map((tag) => (
+            <tbody> 
+
+ {loading ? (
+    <tr>
+      <td colSpan="6" className="text-center text-lg py-20 text-gray-500">
+        Loading...
+      </td>
+    </tr>
+  ) : tagList.length > 0 ? (
+    tagList.map((tag) => ( 
       <tr key={tag.id} className="border-b  hover:bg-gray-50">
         <td className="py-6">
           <p className="font-medium text-gray-800">{tag.name}</p>
