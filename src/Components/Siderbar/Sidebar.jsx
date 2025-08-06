@@ -12,7 +12,8 @@ import {
   MdSettings,
   MdLogout,
   MdMenu,
-} from 'react-icons/md'; 
+} from 'react-icons/md';  
+import { HiOutlineDocumentCurrencyRupee } from "react-icons/hi2";
 import { BsBookmarkCheckFill } from "react-icons/bs";
 import AOS from 'aos';
 import 'aos/dist/aos.css';  
@@ -87,6 +88,12 @@ const Sidebar = () => {
                 <a href="/activities" className={`flex items-center gap-3 ${isActive('/activities') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
                   <MdHiking className="text-xl" />
                   <span>Activities</span>
+                </a>
+              </li>
+              <li>
+                <a href="/pricing-category" className={`flex items-center gap-3 ${isActive('/pricing category') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                  <HiOutlineDocumentCurrencyRupee className="text-xl" />
+                  <span>Pricing Category</span>
                 </a>
               </li>
               <li>

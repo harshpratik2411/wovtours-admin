@@ -30,7 +30,12 @@ import ViewTripType from './Pages/TripType/ViewTripType'
 import Users from './Pages/Users/Users' 
 import Bookings from './Pages/Bookings/Bookings' 
 import Settings from "./Pages/Settings/Settings"; 
-import TripEnquiry from "./Pages/TripEnquiry/TripEnquiry";
+import TripEnquiry from "./Pages/TripEnquiry/TripEnquiry";  
+import PricingCat from "./Pages/PricingCategory/PricingCat";
+import AddPricingCat from "./Pages/PricingCategory/AddPricingCat";
+import UpdatePricingCat from "./Pages/PricingCategory/UpdatePricingCat";
+import ViewPricingCat from "./Pages/PricingCategory/ViewPricingCat";
+
 
 function App() {
   return (
@@ -88,6 +93,13 @@ function App() {
           <Route path="/settings" element={<PrivateRoute><Settings/></PrivateRoute>} />   
           {/* TripEnquiry */}
           <Route path="/trip-enquiry" element={<PrivateRoute><TripEnquiry/></PrivateRoute>} />  
+ 
+    
+           <Route path="/pricing-category" element={<PrivateRoute>< PricingCat /></PrivateRoute>} />
+          <Route path="/pricing-category/view/:id" element={<PrivateRoute><ViewPricingCat /></PrivateRoute>} />
+          <Route path="/pricing-category/update/:id" element={<PrivateRoute><UpdatePricingCat /></PrivateRoute>} />
+          <Route path="/pricing-category/add" element={<PrivateRoute><AddPricingCat/></PrivateRoute>} />  
+
 
         </Routes>
       
