@@ -7,39 +7,53 @@ class TagServices {
     const url =
       APIService.baseUrl +
       `api/admin/tags/?search=${search}&ordering=${orderBy}&page=${page}&status=${status}`;
+
     try {
-      const response = await fetch(url, {
-        method: "GET",
-      });
+      const response = await fetch(url);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
-      return data.results.map((tag) => ({
-        id: tag.id,
-        name: tag.title,
-        desc: tag.description,
-        status: tag.status,
-        created_at: tag.created_at,
-        updated_at: tag.updated_at,
-      }));
+      console.log("🟦 API RAW RESPONSE:", data);
+
+      // ✅ Return full object, not just array
+      return {
+        tags: data.results.map((tag) => ({
+          id: tag.id,
+          name: tag.title,
+          desc: tag.description,
+          status: tag.status,
+          created_at: tag.created_at,
+          updated_at: tag.updated_at,
+        })),
+        totalCount: data.count,
+        totalPages: Math.ceil(data.count / 10), // adjust if page size is different
+        currentPage: page,
+      };
     } catch (error) {
       console.error("Failed to fetch tags:", error);
-      return [];
+      return {
+        tags: [],
+        totalCount: 0,
+        totalPages: 1,
+        currentPage: 1,
+      };
     }
   }
 
   static async get(id) {
     const url = APIService.baseUrl + `api/admin/tags/${id}/`;
+    console.log("URL called", url);
+
     try {
       const response = await fetch(url);
       if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
 
       const tag = await response.json();
-
+      
       return {
         id: tag.id,
         name: tag.title,
@@ -49,8 +63,13 @@ class TagServices {
         updated_at: tag.updated_at,
       };
     } catch (error) {
-      console.error(`Failed to get tag with id ${id}:`, error);
-      return null;
+      console.error("Failed to fetch tags:", error);
+      return {
+        tags: [],
+        totalCount: 0,
+        totalPages: 1,
+        currentPage: 1,
+      };
     }
   }
 
