@@ -7,7 +7,10 @@ import 'aos/dist/aos.css';
 import APIService from '../APIServices'; 
 import TagServices from './TagServices';  
 import { useAlert } from '../../Context/AlertContext/AlertContext';
-
+ 
+  function CharacterLimitInput() {
+ const [value, setValue] = useState('');  
+  }  
 const AddTag = () => {
   const navigate = useNavigate(); 
    const { showAlert } = useAlert();
@@ -79,13 +82,15 @@ const AddTag = () => {
                 <label className="block text-sm font-semibold text-gray-700 mb-1">Tag Title</label>
                 <input
                   type="text"
-                  name="title"
+                  name="title" 
+                   maxLength={50} 
                   value={formData.title}
                   onChange={handleChange}
                   placeholder="Enter title"
                   className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
-                />
+                  /> 
+                 
               </div>
 
               {/* Description */}
@@ -94,8 +99,10 @@ const AddTag = () => {
                 <textarea
                   name="description"
                   rows="4"
-                  value={formData.description}
-                  onChange={handleChange}
+                  value={formData.description} 
+                   maxLength={255} 
+                  onChange={handleChange} 
+                  
                   placeholder="Enter description" 
                   required
                   className="w-full border border-gray-300 rounded-lg px-4 py-5 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"

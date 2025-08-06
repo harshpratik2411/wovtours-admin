@@ -5,7 +5,11 @@ import Sidebar from '../../Components/Siderbar/Sidebar'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 import TagServices from '../../Pages/Tags/TagServices' 
-import { useAlert } from '../../Context/AlertContext/AlertContext';
+import { useAlert } from '../../Context/AlertContext/AlertContext'; 
+
+ function CharacterLimitInput () {
+   const [value ,setValue] = useState('')
+ }
 
 const UpdateTag = () => {
   const { id } = useParams()
@@ -59,10 +63,10 @@ const UpdateTag = () => {
 
   const updated = await TagServices.update(id, updateData)
   if (updated) {
-    showAlert('Tag updated successfully.')
+    showAlert('Tag updated successfully.','success')
     navigate('/tags') 
   } else {
-    showAlert('Failed to update tag.')
+    showAlert('Failed to update tag.','success')
   }
 }
 
@@ -73,11 +77,11 @@ const UpdateTag = () => {
     if (!confirmed) return
 
     const success = await TagServices.delete(id)
-    if (success) {
+    if (success) { 
       showAlert('Tag deleted successfully.')
       navigate('/tags')
     } else {
-      showAlert('Failed to delete tag.')
+      showAlert('Failed to delete tag.',"error")
     }
   }
 
@@ -104,7 +108,8 @@ const UpdateTag = () => {
                 <label className="block text-sm font-semibold text-gray-700 mb-1">Tag Name</label>
                 <input
                   type="text"
-                  name="name"
+                  name="name" 
+                  maxLength={50}
                   value={formData.name}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
@@ -120,7 +125,8 @@ const UpdateTag = () => {
                 <textarea
                   name="description"
                   rows="4"
-                  value={formData.description}
+                  value={formData.description} 
+                  maxLength={250}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded-lg px-4 py-5 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" 
                   required

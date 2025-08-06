@@ -11,7 +11,9 @@ import { useNavigate } from "react-router-dom";
 import TagServices from "../../Pages/Tags/TagServices";
 import DateFormatter from "../../Services/DateFormatter";
 import FilterOptions from "../../Services/FilterOptions";
-import StatusClassMap from "../../Services/StatusClassMap";
+import StatusClassMap from "../../Services/StatusClassMap"; 
+
+
 
 const Tags = () => {
   const [activeMenu, setActiveMenu] = useState(null);
@@ -23,9 +25,11 @@ const Tags = () => {
   const [orderBy, setOrderBy] = useState("");
   const [selectedSortLabel, setSelectedSortLabel] = useState("Sort By");
   const [loading, setLoading] = useState(true);
-  const [totalPages, setTotalPages] = useState(1);
+  const [totalPages, setTotalPages] = useState(1); 
 
   const navigate = useNavigate();
+ 
+  
 
   function apiCall(
     search = searchText,
@@ -39,8 +43,8 @@ const Tags = () => {
       .then((response) => {
         console.log("🟩 Response from TagServices:", response);
 
-        setTagList(response.tags); // ✅ now valid
-        setTotalPages(response.totalPages); // ✅ store total pages
+        setTagList(response.tags); 
+        setTotalPages(response.totalPages); 
         setCurrentPage(response.currentPage);
         setLoading(false);
       })
