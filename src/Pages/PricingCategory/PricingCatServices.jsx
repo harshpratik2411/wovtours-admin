@@ -26,9 +26,9 @@ class PricingCatServices {
           status: PricingCat.status,
           start_age:PricingCat.start_age,
           end_age:PricingCat.end_age,
-          level: PricingCat.level,
           created_at: PricingCat.created_at,
-          updated_at: PricingCat.updated_at,
+          updated_at: PricingCat.updated_at, 
+          
         })),
         totalCount: data.count,
         totalPages: Math.ceil(data.count / 10),
@@ -45,7 +45,7 @@ class PricingCatServices {
     }
   }
 
-  static async get(id) {
+   static async get(id) {
     const url = APIService.baseUrl + `api/admin/pricing-category/${id}/`;
     console.log("URL called", url);
 
@@ -54,16 +54,17 @@ class PricingCatServices {
       if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
 
-      const difficulty = await response.json();
+      const PricingCat = await response.json();
 
       return {
-        id: difficulty.id,
-        name: difficulty.title,
-        desc: difficulty.description,
-        status: difficulty.status,
-        level: difficulty.level,
-        created_at: difficulty.created_at,
-        updated_at: difficulty.updated_at, 
+        id: PricingCat .id,
+        name: PricingCat .title,
+        desc: PricingCat .description,
+        status: PricingCat .status,
+        start_age:PricingCat.start_age,
+        end_age:PricingCat.end_age,
+        created_at:PricingCat.created_at,
+        updated_at: PricingCat.updated_at, 
         
       };
     } catch (error) {
@@ -71,8 +72,35 @@ class PricingCatServices {
       return null;
     }
   }
+static async update(id, data) {
+    console.log("Update API called");
 
-  static async add(data) {
+    const url = APIService.baseUrl + `api/admin/pricing-category/${id}/`;
+
+    try {
+      let response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: LocalStorage.getAccesToken(),
+        },
+        body: JSON.stringify(data),
+      });
+
+      console.log("Response = ", response.status);
+
+      if (APIService.isUnauthenticated(response.status)) {
+        await APIService.refreshToken();
+        return this.update(id, data);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error(`Failed to update pricing category with id ${id}:`, error);
+      return null;
+    }
+  }
+     static async add(data) {
     const url = APIService.baseUrl + "api/admin/pricing-category/";
     console.log("Data = ", data);
 
@@ -103,36 +131,6 @@ class PricingCatServices {
       return null;
     }
   }
-
-  static async update(id, data) {
-    console.log("Update API called");
-
-    const url = APIService.baseUrl + `api/admin/pricing-category/${id}/`;
-
-    try {
-      let response = await fetch(url, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: LocalStorage.getAccesToken(),
-        },
-        body: JSON.stringify(data),
-      });
-
-      console.log("Response = ", response.status);
-
-      if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.update(id, data);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error(`Failed to update pricing category with id ${id}:`, error);
-      return null;
-    }
-  }
-
   static async delete(id) {
     const url = APIService.baseUrl + `api/admin/pricing-category/${id}/`;
 

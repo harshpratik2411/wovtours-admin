@@ -16,7 +16,7 @@ import PricingCatServices from "./PricingCatServices";
 
 
 
-const Difficulties = () => {
+const PricingCat = () => {
   const [activeMenu, setActiveMenu] = useState(null);
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
@@ -340,13 +340,13 @@ const Difficulties = () => {
                 {activeMenu === PricingCat.id && (
                   <div className="mt-3 dropdown-menu bg-white border rounded shadow w-full z-10">
                     <button
-                      onClick={() => navigate(`/pricing-category/view/${tag.id}`)}
+                      onClick={() => navigate(`/pricing-category/view/${PricingCat.id}`)}
                       className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                     >
                       <FaEye size={14} /> View
                     </button>
                     <button
-                      onClick={() => navigate(`/pricing-category/update/${tag.id}`)}
+                      onClick={() => navigate(`/pricing-category/update/${PricingCat.id}`)}
                       className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                     >
                       <FaEdit size={14} /> Update
@@ -396,4 +396,4 @@ const Difficulties = () => {
   );
 };
 
-export default Difficulties;
+export default PricingCat;
