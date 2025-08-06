@@ -100,7 +100,7 @@ const Tags = () => {
       <h1 className="text-3xl font-bold -mt-10 text-center lg:ml-32 mb-10">
         Tags
       </h1>
-      <div className="bg-white   p-4 sm:p-6 lg:ml-72 rounded-xl shadow-md font-rubik w-full max-w-6xl mx-auto -mt-2 mb-12">
+      <div className="bg-white  p-4 sm:p-6 lg:ml-72 rounded-xl shadow-md font-rubik w-full max-w-6xl mx-auto -mt-2 mb-12">
         {/* Search, Sort, Filter, Add */}
         <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-3 mb-4">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 relative w-full sm:w-auto">
@@ -160,20 +160,29 @@ const Tags = () => {
             </div>
 
             {/* Status Filter */}
-            <div className="relative w-full sm:w-auto">
-              <select
-                value={status}
-                onChange={(e) => {
-                  const newStatus = e.target.value;
-                  apiCall(searchText, orderBy, currentPage, newStatus);
-                }}
-                className="border text-sm text-gray-600 bg-white px-3 py-1 rounded w-full sm:w-auto focus:outline-none"
-              >
-                <option value="">All Status</option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
+            <select
+  value={status}
+  onChange={async (e) => {
+    const newStatus = e.target.value;
+    const newPage = 1;
+
+    const result = await apiCall(searchText, orderBy, newPage, newStatus);
+
+   
+    if (!result || result.length === 0) {
+      setCurrentPage(1); 
+    } else {
+      setCurrentPage(newPage); 
+    }
+
+    setStatus(newStatus); 
+  }}
+  className="border text-sm text-gray-600 bg-white px-3 py-1 rounded w-full sm:w-auto focus:outline-none"
+>
+  <option value="">All Status</option>
+  <option value="Active">Active</option>
+  <option value="Inactive">Inactive</option>
+</select>
           </div>
 
           {/* Add Button */}
@@ -186,8 +195,8 @@ const Tags = () => {
         </div>
 
         {/* Table View */}
-        <div className="overflow-x-auto hidden sm:block">
-          <table className="min-w-full text-left text-sm">
+        <div className="overflow-x-auto  hidden sm:block">
+          <table className="min-w-full  text-left text-sm">
             <thead className="text-gray-500 font-rubik uppercase border-b">
               <tr>
                 <th className="py-2  w-[15%]">Title</th>
@@ -340,7 +349,7 @@ const Tags = () => {
         </div>
 
         {totalPages > 1 && (
-          <div className="mt-6 flex justify-center items-center space-x-2">
+          <div className="mt-2 flex  justify-center items-center space-x-2">
             {[...Array(totalPages)].map((_, idx) => (
               <button
                 key={idx + 1}
