@@ -109,20 +109,22 @@ const AddDifficulties = () => {
                   className="w-full border border-gray-300 rounded-lg px-4 py-5 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                 />
               </div>
-                         <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">level</label>
-                <input
-                  type="number"
-                   name="level" 
-                   maxLength={50} 
-                  value={formData.level}
-                  onChange={handleChange}
-                  placeholder="Enter level"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                  /> 
-                 
-              </div>
+                 <div>
+  <label className="block text-sm font-semibold text-gray-700 mb-1">Level</label>
+  <select
+    name="level"
+    value={formData.level}
+    onChange={handleChange}
+    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    required
+  >
+    <option value="">Select Level</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+  </select>
+</div>
                 <div>
                 <label className="block text-sm font-semibold text-gray-700 ml-1 mb-1">Status</label>
                 <select
