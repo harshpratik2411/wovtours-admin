@@ -200,7 +200,8 @@ const Difficulties = () => {
             <thead className="text-gray-500 font-rubik uppercase border-b">
               <tr>
                 <th className="py-2  w-[15%]">Title</th>
-                <th className="py-2  w-[35%]">Description</th>
+                <th className="py-2  w-[10%]">Level</th>
+                <th className="py-2  w-[30%]">Description</th>
                 <th className="py-2  w-[10%]">Status</th>
                 <th className="py-2  w-[15%]">Created At</th>
                 <th className="py-2  w-[15%]">Updated At</th>
@@ -223,6 +224,9 @@ const Difficulties = () => {
                   <tr key={Difficulty.id} className="border-b  hover:bg-gray-50">
                     <td className="py-6">
                       <p className="font-medium text-gray-800">{Difficulty.name}</p>
+                    </td>
+                    <td className="py-6">
+                      <p className="font-medium ml-3 text-gray-800">{Difficulty.level}</p>
                     </td>
                     <td className="py-4  text-gray-700">{Difficulty.desc}</td>
                     <td className="py-4">
