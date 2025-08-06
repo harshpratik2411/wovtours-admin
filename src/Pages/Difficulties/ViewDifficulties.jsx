@@ -1,24 +1,46 @@
-import React from 'react'
-import { useParams } from 'react-router-dom'
-import {
-  FaInfoCircle,
-  FaClipboardList,
-} from 'react-icons/fa'
-import Navbar from '../../Components/Navbar/Navbar'
-import Sidebar from '../../Components/Siderbar/Sidebar'
-import difficulties from './DifficultiesUI' // Assuming this is your data file
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { FaInfoCircle, FaClipboardList } from 'react-icons/fa';
+import Navbar from '../../Components/Navbar/Navbar';
+import Sidebar from '../../Components/Siderbar/Sidebar';
+import DifficultiesServices from '../../Pages/Difficulties/DifficultiesServices'
+import DateFormatter from '../../Services/DateFormatter';
 
 const getStatusClass = (status) => {
-  if (status === 'Available') return 'bg-blue-100 text-blue-600'
-  if (status === 'Few Left') return 'bg-yellow-100 text-yellow-600'
-  return 'bg-red-100 text-red-600'
-}
+  if (status === 'Available') return 'bg-blue-100 text-blue-600';
+  if (status === 'Few Left') return 'bg-yellow-100 text-yellow-600';
+  return 'bg-red-100 text-red-600';
+};
 
-const ViewTag = () => {
-  const { id } = useParams()
-  const difficulty = difficulties.find((d) => d.id === id)
+const Viewdifficulty = () => {
+  const { id } = useParams();
+  const [Difficulty, setDifficulty] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!difficulty) {
+  useEffect(() => {
+    const fetchDifficulty = async () => {
+      setLoading(true);
+      const data = await DifficultiesServices.get(id);
+      setDifficulty(data);
+      setLoading(false);
+    };
+
+    fetchDifficulty();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <Sidebar />
+        <div className="w-full lg:ml-32 mx-auto p-6 font-rubik">
+          <p className="text-center text-lg text-gray-500">Loading...</p>
+        </div>
+      </>
+    );
+  }
+
+  if (!Difficulty) {
     return (
       <>
         <Navbar />
@@ -30,7 +52,7 @@ const ViewTag = () => {
           </p>
         </div>
       </>
-    )
+    );
   }
 
   return (
@@ -47,56 +69,55 @@ const ViewTag = () => {
             </h2>
           </div>
 
-          {/* Difficulty Info */}
-          <div className="grid lg:grid-cols-2 gap-8 text-gray-700 text-base lg:text-lg mb-10">
-            <div className="space-y-4">
-              <div className="flex gap-3">
-                <span className="font-semibold w-32">Name:</span>
-                <span>{difficulty.name}</span>
+          {/* Tag Info in two-column layout */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-gray-700 text-base lg:text-lg mb-10">
+            {/* Left Side: Tag Name + Status */}
+            <div className="space-y-6">
+              <div>
+                <span className="font-semibold block mb-1">Difficulty Name:</span>
+                <span>{Difficulty.name}</span>
               </div>
-              <div className="flex gap-3">
-                <span className="font-semibold lg:ml-0 ml-1 w-32">Slug:</span>
-                <span>{difficulty.slug}</span>
-              </div>
-              <div className="flex gap-3">
-                <span className="font-semibold lg:ml-0 ml-1 w-32">Difficulty Level:</span>
-                <span className='lg:ml-0 ml-1'>{difficulty.level}</span>
-              </div>
-            </div>
 
-            <div className="flex items-start lg:items-center gap-3">
-              <span className="font-semibold lg:ml-0 ml-1 mt-1">Status:</span>
-              <span
-                className={`px-4 py-2 rounded-full lg:ml-0 ml-16 text-sm font-medium ${getStatusClass(
-                  difficulty.status
-                )}`}
-              >
-                {difficulty.status}
-              </span>
+              <div>
+                <span className="font-semibold block mb-1">Status:</span>
+                <span className={`px-4 py-2 -ml-1 rounded-full text-sm font-medium inline-block ${getStatusClass(Difficulty.status)}`}>
+                  {Difficulty.status}
+                </span>
+              </div> 
+              <div>
+                <span className="font-semibold  block mb-1">Level:</span>
+                <span className=' ml-4  text-lg'>{Difficulty.level}</span>
+              </div>
+            </div> 
+
+            {/* Right Side: Created At + Updated At */}
+            <div className="space-y-6">
+              <div>
+                <span className="font-semibold block mb-1">Created At:</span>
+                <span>{DateFormatter.formatDate(Difficulty.created_at)}</span>
+              </div>
+
+              <div>
+                <span className="font-semibold block mb-1">Updated At:</span>
+                <span>{DateFormatter.formatDate(Difficulty.updated_at)}</span>
+              </div>
             </div>
           </div>
 
-          {/* Static Description */}
+          {/* Description */}
           <div className="mt-6 border-t pt-6">
             <div className="flex items-center gap-3 mb-2">
               <FaClipboardList className="text-lg text-gray-700" />
-              <h3 className="text-xl font-semibold text-gray-800">
-                Difficulty Description
-              </h3>
+              <h3 className="text-xl font-semibold text-gray-800">Difficulty Description</h3>
             </div>
             <p className="text-gray-600 text-left leading-relaxed">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu
-              metus condimentum, finibus eros nec, volutpat odio. Integer et nisi a
-              sem gravida sollicitudin. Suspendisse potenti. Sed cursus nunc sit amet
-              ex rutrum, non pulvinar magna porta. Etiam ut enim nec nulla tincidunt
-              tempus. Vestibulum ante ipsum primis in faucibus orci luctus et
-              ultrices posuere cubilia curae.
+              {Difficulty.desc || 'No description provided.'}
             </p>
           </div>
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default ViewTag
+export default Viewdifficulty;

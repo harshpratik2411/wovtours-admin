@@ -58,7 +58,8 @@ class DifficultiesServices {
         id: difficulty.id,
         name: difficulty.title,
         desc: difficulty.description,
-        status: difficulty.status,
+        status: difficulty.status, 
+         level: difficulty.level,
         created_at: difficulty.created_at,
         updated_at: difficulty.updated_at,
       };
