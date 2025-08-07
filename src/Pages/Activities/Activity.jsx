@@ -21,7 +21,7 @@ const Activity = () => {
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
- const [PricingCatList, setPricingCatList] = useState([]);
+ const [ActivityList, setActivityList] = useState([]);
   const [status, setStatus] = useState("");
   const [orderBy, setOrderBy] = useState("");
   const [selectedSortLabel, setSelectedSortLabel] = useState("Sort By");
@@ -42,18 +42,18 @@ const Activity = () => {
   ) {
     setLoading(true);
 
-  PricingCatServices.getAll(search, order, page, currentStatus)
+  ActivityServices.getAll(search, order, page, currentStatus)
       .then((response) => {
       
 
-     setPricingCatList(response.PricingCategory);
+     setActivityList(response.Activities);
         setTotalPages(response.totalPages); 
         setCurrentPage(response.currentPage);
         setLoading(false);
       })
       .catch((err) => {
       
-        setPricingCatList([]);
+        setActivityList([]);
         setTotalPages(1);
         setLoading(false);
       });
@@ -101,7 +101,7 @@ const Activity = () => {
       <Navbar />
       <Sidebar />
       <h1 className="text-3xl font-bold -mt-10 text-center lg:ml-32 mb-10">
-        Pricing Category
+       Activities
       </h1>
       <div className="bg-white  p-4 sm:p-6 lg:ml-72 rounded-xl shadow-md font-rubik w-full max-w-6xl mx-auto -mt-2 mb-12">
         {/* Search, Sort, Filter, Add */}
@@ -200,125 +200,133 @@ const Activity = () => {
 
         {/* Table View */}
       <div className="overflow-x-auto hidden sm:block">
-  <table className="min-w-full text-left text-sm">
-    <thead className="text-gray-500 font-rubik uppercase border-b">
+ <table className="min-w-full text-left text-sm">
+  <thead className="text-gray-500 font-rubik uppercase border-b">
+    <tr>
+      <th className="py-2 w-[10%]">Image</th>
+      <th className="py-2 w-[10%]">Title</th>
+      <th className="py-2 w-[15%]">Description</th>
+      <th className="py-2 w-[10%]">Media ID</th>
+      <th className="py-2 w-[10%]">Status</th>
+      <th className="py-2 w-[15%]">Created At</th>
+      <th className="py-2 w-[15%]">Updated At</th>
+      <th className="py-2 w-[10%] text-right">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {loading ? (
       <tr>
-        <th className="py-2 w-[10%]">Title</th>
-        <th className="py-2 w-[25%]">Description</th>
-        <th className="py-2 pl-2 w-[10%]">Status</th>
-        <th className="py-2  w-[10%]">Starting Age</th>
-        <th className="py-2 pl-2 w-[10%]">End Age</th>
-        <th className="py-2 w-[15%]">Created At</th>
-        <th className="py-2 w-[15%]">Updated At</th>
-        <th className="py-2 w-[10%] text-right">Actions</th>
+        <td colSpan="8" className="text-center text-lg py-20 text-gray-500">
+          Loading...
+        </td>
       </tr>
-    </thead>
-    <tbody>
-      {loading ? (
-        <tr>
-          <td colSpan="8" className="text-center text-lg py-20 text-gray-500">
-            Loading...
+    ) : ActivityList.length > 0 ? (
+      ActivityList.map((activity) => (
+        <tr key={activity.id} className="border-b hover:bg-gray-50">
+          <td className="py-4">
+            <img
+              src={activity.media_url || "/placeholder.jpg"}
+              alt={activity.title}
+              className="h-14 w-20 object-cover rounded-md"
+            />
           </td>
-        </tr>
-      ) : PricingCatList.length > 0 ? (
-        PricingCatList.map((PricingCat) => (
-          <tr key={PricingCat.id} className="border-b hover:bg-gray-50">
-            <td className="py-6">
-              <p className="font-medium text-gray-800">{PricingCat.name}</p>
-            </td>
-            <td className="py-6">
-              <p className="font-medium text-gray-800">{PricingCat.desc}</p>
-            </td>
-            <td className="py-4">
-              <span
-                className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(
-                  PricingCat.status
-                )}`}
+          <td className="py-6">
+            <p className="font-medium  text-gray-800">{activity.title}</p>
+          </td>
+          <td className="py-6">
+            <p className="font-medium ml-6  text-gray-800">{activity.description}</p>
+          </td>
+          <td className="py-6">
+            <p className="font-medium ml-6 text-gray-800">{activity.media_id}</p>
+          </td>
+          <td className="py-4">
+            <spanm
+              className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(
+                activity.status
+              )}`}
+            >
+              {activity.status}
+            </spanm>
+          </td>
+          <td className="py-4 text-gray-700">
+            {DateFormatter.formatDate(activity.created_at)}
+          </td>
+          <td className="py-4 text-gray-700">
+            {DateFormatter.formatDate(activity.updated_at)}
+          </td>
+          <td className="py-4 text-right">
+            <div className="relative inline-block">
+              <button
+                onClick={() => toggleMenu(activity.id)}
+                className="text-gray-600 hover:text-black menu-toggle"
               >
-                {PricingCat.status}
-              </span>
-            </td>
-            <td className="py-6">
-              <p className="font-medium ml-10 text-gray-800">{PricingCat.start_age}</p>
-            </td>
-            <td className="py-4 pl-6  text-gray-700">{PricingCat.end_age}</td>
-            <td className="py-4  text-gray-700">
-              {DateFormatter.formatDate(PricingCat.created_at)}
-            </td>
-            <td className="py-4 text-gray-700">
-              {DateFormatter.formatDate(PricingCat.updated_at)}
-            </td>
-            <td className="py-4 text-right">
-              <div className="relative inline-block">
-                <button
-                  onClick={() => toggleMenu(PricingCat.id)}
-                  className="text-gray-600 hover:text-black menu-toggle"
-                >
-                  <BsThreeDotsVertical size={18} />
-                </button>
-                {activeMenu === PricingCat.id && (
-                  <div className="dropdown-menu absolute right-0 -top-[4rem] z-10 bg-white border rounded shadow w-32">
-                    <button
-                      onClick={() =>
-                        navigate(`/pricing-category/view/${PricingCat.id}`)
-                      }
-                      className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
-                    >
-                      <FaEye size={14} /> View
-                    </button>
-                    <button
-                      onClick={() =>
-                        navigate(`/pricing-category/update/${PricingCat.id}`)
-                      }
-                      className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
-                    >
-                      <FaEdit size={14} /> Update
-                    </button>
-                  </div>
-                )}
-              </div>
-            </td>
-          </tr>
-        ))
-      ) : (
-        <tr>
-          <td
-            colSpan="8"
-            className="text-center text-3xl py-40 font-semibold text-gray-600"
-          >
-            No data found
+                <BsThreeDotsVertical size={18} />
+              </button>
+              {activeMenu === activity.id && (
+                <div className="dropdown-menu absolute right-0 -top-[4rem] z-10 bg-white border rounded shadow w-32">
+                  <button
+                    onClick={() =>
+                      navigate(`/pricing-category/view/${activity.id}`)
+                    }
+                    className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
+                  >
+                    <FaEye size={14} /> View
+                  </button>
+                  <button
+                    onClick={() =>
+                      navigate(`/pricing-category/update/${activity.id}`)
+                    }
+                    className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
+                  >
+                    <FaEdit size={14} /> Update
+                  </button>
+                </div>
+              )}
+            </div>
           </td>
         </tr>
-      )}
-    </tbody>
-  </table>
+      ))
+    ) : (
+      <tr>
+        <td
+          colSpan="8"
+          className="text-center text-3xl py-40 font-semibold text-gray-600"
+        >
+          No data found
+        </td>
+      </tr>
+    )}
+  </tbody>
+</table>
+
+
 </div>
 
 
         {/* Mobile View */}
         <div className="block sm:hidden space-y-5   flex-col items-center justify-center">
-          {!loading && PricingCatList && PricingCatList.length > 0 ? (
-            PricingCatList.map((PricingCat) => (
+          {!loading && ActivityList && ActivityList.length > 0 ? (
+            ActivityList.map((activity) => (
               <div
-                key={PricingCat.id}
+                key={activity.id}
                 className="bg-gray-50 px-5 py-4 rounded-xl shadow-md border w-full"
                 data-aos="fade-up"
               >
                 <div className="flex justify-between items-start">
                   <div>
                     <h2 className="text-lg font-semibold ml-1 text-gray-800 mb-2">
-                      {PricingCat.name}
+                      {activity.name}
                     </h2>
                     <p
                       className={`text-xs inline-block px-2 py-1 rounded ${getStatusClass(
-                        PricingCat.status
+                        activity.status
                       )}`}
                     >
-                      {PricingCat.status}
+                      {activity.status}
                     </p>
                   </div>
                   <button
-                    onClick={() => toggleMenu(PricingCat.id)}
+                    onClick={() => toggleMenu(activity.id)}
                     className="text-gray-600 menu-toggle"
                   >
                     <BsThreeDotsVertical size={20} />
@@ -326,27 +334,27 @@ const Activity = () => {
                 </div>
                 <div className="mt-4 ml-1 space-y-2 text-sm text-gray-700">
                   <p>
-                    <span className="font-bold">Description:</span> {PricingCat.desc}
+                    <span className="font-bold">Description:</span> {activity.desc}
                   </p>
                   <p>
                     <span className="font-bold">Created At:</span>{" "}
-                    {DateFormatter.formatDate(PricingCat.created_at)}
+                    {DateFormatter.formatDate(activity.created_at)}
                   </p>
                   <p>
                     <span className="font-bold">Updated At:</span>{" "}
-                    {DateFormatter.formatDate(PricingCat.updated_at)}
+                    {DateFormatter.formatDate(activity.updated_at)}
                   </p>
                 </div>
-                {activeMenu === PricingCat.id && (
+                {activeMenu === activity.id && (
                   <div className="mt-3 dropdown-menu bg-white border rounded shadow w-full z-10">
                     <button
-                      onClick={() => navigate(`/pricing-category/view/${PricingCat.id}`)}
+                      onClick={() => navigate(`/pricing-category/view/${activity.id}`)}
                       className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                     >
                       <FaEye size={14} /> View
                     </button>
                     <button
-                      onClick={() => navigate(`/pricing-category/update/${PricingCat.id}`)}
+                      onClick={() => navigate(`/pricing-category/update/${activity.id}`)}
                       className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                     >
                       <FaEdit size={14} /> Update

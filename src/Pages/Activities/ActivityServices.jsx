@@ -16,7 +16,7 @@ class ActivityServices {
       }
 
       const data = await response.json();
-      console.log("🟦 API RAW RESPONSE:", data);
+     // console.log("🟦 API RAW RESPONSE:", data);
 
       return {
         Activities: data.results.map((activity) => ({
