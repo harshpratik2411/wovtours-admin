@@ -39,15 +39,15 @@ const Settings = () => {
 
             {/* Buttons */}
             <div className="flex lg:ml-0 ml-5 gap-4">
-              <button
+              {/* <button
                 onClick={() => navigate('/settings/add')}
                 className="text-gray-700 border border-gray-300 px-4 py-2 rounded-md text-md hover:bg-gray-100 transition"
               >
                 Add
-              </button>
+              </button> */}
               <button
                 onClick={() => navigate('/Settings/update')}
-                className="text-gray-700 border border-gray-300 px-4 py-2 rounded-md text-md hover:bg-gray-100 transition"
+                className="text-gray-700 border border-gray-300 px-4 py-2 mr-5 mt-3 rounded-md text-md hover:bg-gray-100 transition"
               >
                 Update
               </button>

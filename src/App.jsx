@@ -35,7 +35,6 @@ import PricingCat from "./Pages/PricingCategory/PricingCat";
 import AddPricingCat from "./Pages/PricingCategory/AddPricingCat";
 import UpdatePricingCat from "./Pages/PricingCategory/UpdatePricingCat";
 import ViewPricingCat from "./Pages/PricingCategory/ViewPricingCat"; 
-import AddSettings from "./Pages/Settings/AddSettings";
 import UpdateSettings from "./Pages/Settings/UpdateSettings";
 
 
@@ -92,8 +91,7 @@ function App() {
           {/* Bookings */}
           <Route path="/bookings" element={<PrivateRoute><Bookings/></PrivateRoute>} />  
           {/* Settings */}
-          <Route path="/settings" element={<PrivateRoute><Settings/></PrivateRoute>} />   
-          <Route path="/settings/add" element={<PrivateRoute><AddSettings/></PrivateRoute>} />   
+          <Route path="/settings" element={<PrivateRoute><Settings/></PrivateRoute>} />    
           <Route path="/settings/update" element={<PrivateRoute><UpdateSettings/></PrivateRoute>} />   
           {/* TripEnquiry */}
           <Route path="/trip-enquiry" element={<PrivateRoute><TripEnquiry/></PrivateRoute>} />  
