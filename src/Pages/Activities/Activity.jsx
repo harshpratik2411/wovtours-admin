@@ -266,7 +266,7 @@ const Activity = () => {
                 <div className="dropdown-menu absolute right-0 -top-[4rem] z-10 bg-white border rounded shadow w-32">
                   <button
                     onClick={() =>
-                      navigate(`/pricing-category/view/${activity.id}`)
+                      navigate(`/activities/view/${activity.id}`)
                     }
                     className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                   >
@@ -274,7 +274,7 @@ const Activity = () => {
                   </button>
                   <button
                     onClick={() =>
-                      navigate(`/pricing-category/update/${activity.id}`)
+                      navigate(`/activities/update/${activity.id}`)
                     }
                     className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                   >
@@ -304,72 +304,88 @@ const Activity = () => {
 
 
         {/* Mobile View */}
-        <div className="block sm:hidden space-y-5   flex-col items-center justify-center">
-          {!loading && ActivityList && ActivityList.length > 0 ? (
-            ActivityList.map((activity) => (
-              <div
-                key={activity.id}
-                className="bg-gray-50 px-5 py-4 rounded-xl shadow-md border w-full"
-                data-aos="fade-up"
-              >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h2 className="text-lg font-semibold ml-1 text-gray-800 mb-2">
-                      {activity.name}
-                    </h2>
-                    <p
-                      className={`text-xs inline-block px-2 py-1 rounded ${getStatusClass(
-                        activity.status
-                      )}`}
-                    >
-                      {activity.status}
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => toggleMenu(activity.id)}
-                    className="text-gray-600 menu-toggle"
-                  >
-                    <BsThreeDotsVertical size={20} />
-                  </button>
-                </div>
-                <div className="mt-4 ml-1 space-y-2 text-sm text-gray-700">
-                  <p>
-                    <span className="font-bold">Description:</span> {activity.desc}
-                  </p>
-                  <p>
-                    <span className="font-bold">Created At:</span>{" "}
-                    {DateFormatter.formatDate(activity.created_at)}
-                  </p>
-                  <p>
-                    <span className="font-bold">Updated At:</span>{" "}
-                    {DateFormatter.formatDate(activity.updated_at)}
-                  </p>
-                </div>
-                {activeMenu === activity.id && (
-                  <div className="mt-3 dropdown-menu bg-white border rounded shadow w-full z-10">
-                    <button
-                      onClick={() => navigate(`/pricing-category/view/${activity.id}`)}
-                      className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
-                    >
-                      <FaEye size={14} /> View
-                    </button>
-                    <button
-                      onClick={() => navigate(`/pricing-category/update/${activity.id}`)}
-                      className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
-                    >
-                      <FaEdit size={14} /> Update
-                    </button>
-                  </div>
-                )}
-              </div>
-            ))
-          ) : (
-            <div className="text-center font-semibold text-gray-600 py-10">
-              No data found
-            </div>
-          )}
+<div className="block sm:hidden space-y-5 flex-col items-center justify-center">
+  {!loading && ActivityList && ActivityList.length > 0 ? (
+    ActivityList.map((activity) => (
+      <div
+        key={activity.id}
+        className="bg-white px-4 py-5 rounded-xl shadow-md border w-full"
+        data-aos="fade-up"
+      >
+        <img
+          src={activity.media_url || "/placeholder.jpg"}
+          alt={activity.title}
+          className="w-full h-48 object-cover rounded-md mb-4"
+        />
+        <div className="flex justify-between items-start mb-2">
+          <div>
+            <h2 className="text-lg font-semibold text-gray-800">
+              {activity.title}
+            </h2>
+          <strong className="text-sm text-gray-700">Status:</strong> 
+            <p    
+              className={`text-xs ml-2 inline-block mt-1 px-2 py-1 rounded-full font-medium ${getStatusClass(
+                activity.status
+              )}`}
+            >   
+              
+            
+              {activity.status}
+            </p>
+          </div>
+          <button
+            onClick={() => toggleMenu(activity.id)}
+            className="text-gray-600 menu-toggle"
+          >
+            <BsThreeDotsVertical size={20} />
+          </button>
         </div>
 
+        <div className="text-sm text-gray-700 space-y-2 mt-2">
+          <p>
+            <span className="font-bold">Description:</span>{" "}
+            {activity.description}
+          </p>
+          <p>
+            <span className="font-bold">Media ID:</span>{" "}
+            {activity.media_id || "N/A"}
+          </p>
+          <p>
+            <span className="font-bold">Created At:</span>{" "}
+            {DateFormatter.formatDate(activity.created_at)}
+          </p>
+          <p>
+            <span className="font-bold">Updated At:</span>{" "}
+            {DateFormatter.formatDate(activity.updated_at)}
+          </p>
+        </div>
+
+        {activeMenu === activity.id && (
+          <div className="mt-3 dropdown-menu bg-white border rounded shadow w-full z-10">
+            <button
+              onClick={() => navigate(`/activities/view/${activity.id}`)}
+              className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
+            >
+              <FaEye size={14} /> View
+            </button>
+            <button
+              onClick={() => navigate(`/activities/update/${activity.id}`)}
+              className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
+            >
+              <FaEdit size={14} /> Update
+            </button>
+          </div>
+        )}
+      </div>
+    ))
+  ) : (
+    <div className="text-center font-semibold text-gray-600 py-10">
+      No data found
+    </div>
+  )}
+</div>
+
+           
         {totalPages > 1 && (
           <div className="mt-2 flex  justify-center items-center space-x-2">
             {[...Array(totalPages)].map((_, idx) => (
