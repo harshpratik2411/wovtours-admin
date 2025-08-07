@@ -1,190 +1,225 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import Navbar from '../../Components/Navbar/Navbar'
-import Sidebar from '../../Components/Siderbar/Sidebar' 
-import ActivityUi from "./ActivityUi";
+import Sidebar from '../../Components/Siderbar/Sidebar'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
+import ActivityServices from './ActivityServices'
+import { useAlert } from '../../Context/AlertContext/AlertContext'
 
-const UpdateActivities = () => {
+const UpdateActivity = () => {
   const { id } = useParams()
-  const Activities = ActivityUi.find((t) => t.id === id) 
+  const navigate = useNavigate()
+  const { showAlert } = useAlert()
+
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    status: 'Active',
+    media_url: '',
+    media_id: '',
+  })
+
+  const [loading, setLoading] = useState(true)
+  const [notFound, setNotFound] = useState(false)
+ const [selectedImage, setSelectedImage] = useState(null)
+const [previewURL, setPreviewURL] = useState('')
 
   useEffect(() => {
     AOS.init({ duration: 800, once: true })
-  }, [])
 
-  const [formData, setFormData] = useState({
-    name: Activities?.name || '',
-    price: Activities?.price || '',
-    image: Activities?.image || '',
-    description: Activities?.description || 'A great Activities to Loree beautiful places.',
-    status: Activities?.status || 'active', 
-    slug: Activities?.slug || "",
-    shortdesc: Activities?.shortdesc || "lorem dolar ipsum set morlar pom pom", 
-    featured : Activities?. featured || ""
-  })
+    const fetchActivity = async () => {
+      const activity = await ActivityServices.get(id)
+      if (!activity) {
+        setNotFound(true)
+        setLoading(false)
+        return
+      }
 
-  if (!Activities) {
-    return <p className="text-center mt-20 text-red-500">Activity  not found.</p>
-  }
+      setFormData({
+        title: activity.title || '',
+        description: activity.description || '',
+        status: activity.status || 'Inactive',
+        media_url: activity.media_url || '',
+        media_id: activity.media_id || '',
+      })
+      setLoading(false)
+    }
+
+    fetchActivity()
+  }, [id])
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target
-    if (name === 'image' && files.length > 0) {
-      const imageUrl = URL.createObjectURL(files[0])
-      setFormData({ ...formData, image: imageUrl })
+    const { name, value } = e.target
+    setFormData({ ...formData, [name]: value })
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const updated = await ActivityServices.update(id, formData)
+    if (updated) {
+      showAlert('Activity updated successfully.', 'success')
+      navigate('/activities')
     } else {
-      setFormData({ ...formData, [name]: value })
+      showAlert('Failed to update activity.', 'error')
     }
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    alert('Activities updated (in-memory).')
-  } 
-  const handleDelete = () => {
-    alert(`Tag "${Activities.name}" deleted (in-memory).`)
+  const handleDelete = async () => {
+    const confirmed = window.confirm('Are you sure you want to delete this activity?')
+    if (!confirmed) return
+
+    const success = await ActivityServices.delete(id)
+    if (success) {
+      showAlert('Activity deleted successfully.', 'success')
+      navigate('/activities')
+    } else {
+      showAlert('Failed to delete activity.', 'error')
+    }
   }
 
+  if (loading) return <p className="text-center mt-20">Loading...</p>
+  if (notFound) return <p className="text-center mt-20 text-red-500">Activity not found.</p>
 
   return (
     <>
       <Navbar />
       <Sidebar />
-
-      <div className="lg:ml-72 max-w-7xl mx-auto lg:p-6 p-2 -mt-12 font-rubik">
-        <h2 className="lg:text-4xl text-3xl font-bold text-gray-800 mb-10 font-slab text-center" data-aos="fade-up">
+      <div className="lg:ml-64 mt-8 p-4 max-w-6xl mx-auto font-rubik">
+        <h2
+          className="text-3xl lg:text-4xl font-bold text-center mb-10 font-slab"
+          data-aos="fade-up"
+        >
           Update Activity
         </h2>
 
-        <div className="bg-white shadow-xl rounded-xl p-8 grid grid-cols-1 lg:grid-cols-2 gap-10">
-          {/* Left Column: Form */}
-          <form onSubmit={handleSubmit} className="space-y-6 order-2 lg:order-1" data-aos="fade-up">
-            {/* Activities Name */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Activity Name</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Slug</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.slug}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
+        <div
+          className="flex flex-col lg:flex-row bg-white shadow-xl rounded-xl overflow-hidden"
+          data-aos="fade-up"
+        >
+          {/* Left: Form */}
+          <div className="lg:w-1/2 p-6 sm:p-8">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Title */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  Activity Title
+                </label>
+                <input
+                  type="text"
+                  name="title"
+                  maxLength={100}
+                  value={formData.title}
+                  onChange={handleChange}
+                  required
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
 
-            {/* Description */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Description</label>
-              <textarea
-                name="description"
-                rows="4"
-                value={formData.description}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-5 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-              />
-            </div>
-               
-                <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Short Description</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.shortdesc}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-               
-                 
-            {/* Status */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Status</label>
-              <select
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
-            </div>
- 
-            <div>
-              <label className="block -mb-[18px]  text-sm font-semibold text-gray-700 ">Featured</label>
-            
-             <span className="ml-20 ">
+              {/* Description */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  Description
+                </label>
+                <textarea
+                  name="description"
+                  rows="4"
+                  maxLength={250}
+                  value={formData.description}
+                  onChange={handleChange}
+                  required
+                  className="w-full  border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                />
+              </div>
                     <input
-                      id="my-checkbox"
-                      type="checkbox"
-                      class="appearance-none w-4 h-4 border border-gray-400 rounded-md cursor-pointer
-                      checked:bg-primary checked:border-indigo-600 checked:text-white
-                      focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                      />
-                      </span>
-            
-            </div>
- 
-               
-             
-            <div className="pt-4 flex items-center gap-4">
+  type="number"
+  name="media_id"
+  value={formData.media_id}
+  onChange={handleChange}
+  required
+  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+/>
+
+               <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  Media URL
+                </label>
+              <textarea
+  name="media_url"
+  maxLength={255}
+  value={formData.media_url}
+  onChange={handleChange}
+  required
+  rows={2}
+  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+/>
+
+              {/* Status */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  Status
+                </label>
+                <select
+                  name="status"
+                  value={formData.status}
+                  onChange={handleChange}
+                  required
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+              </div>
+        
+              {/* Buttons */}
+              <div className="pt-4 flex items-center gap-4">
                 <button
                   type="submit"
-                  className="bg-gradient-to-r lg:-mt-6 -mt-8 bg-primary text-white w-full py-3 rounded-lg font-semibold hover:bg-primary/80 transition duration-200"
+                  className="bg-primary text-white w-full py-3 rounded-lg font-semibold hover:bg-primary/80 transition duration-200"
                 >
-                  Update Changes
+                  Update
                 </button>
                 <button
                   type="button"
                   onClick={handleDelete}
-                  className="text-red-600 border lg:-mt-6 -mt-8 border-red-300 hover:bg-red-50 px-3 py-2 rounded-md text-sm font-medium transition duration-200"
+                  className="text-red-600 border border-red-300 hover:bg-red-50 px-4 py-2 rounded-md text-sm font-medium transition duration-200"
                 >
                   Delete
                 </button>
               </div>
-          </form>
-
-          {/* Right Column: Image Preview */}
-          <div className="flex flex-col gap-4 items-center  justify-center order-1 lg:order-2" data-aos="zoom-in">
-            {/* Image Upload Moved Here */}
-            <div className="w-full">
-              <label className="block text-sm  font-semibold text-gray-700 mb-1">Change Image</label>
-              <input
-                type="file"
-                name="image"
-                accept="image/*"
-                onChange={handleChange}
-                className="w-full text-sm text-gray-600 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-              />
-            </div>
-
-            {formData.image ? (
-              <img
-                src={formData.image}
-                alt="Activities Preview"
-                className="rounded-xl shadow-md   w-full h-auto object-contain border border-gray-200"
-              />
-            ) : (
-              <div className="w-full h-[300px] flex items-center justify-center bg-gray-100 text-gray-400 rounded-xl border border-dashed">
-                No Image Selected
-              </div>
-            )}
+            </form>
           </div>
+
+          {/* Right: Image Preview */}
+         <div className="lg:w-1/2 bg-gray-100 flex flex-col items-center justify-center p-4 sm:p-8 border-t lg:border-t-0 lg:border-l gap-4">
+  {/* Image Preview */}
+  <img
+    src={previewURL || formData.media_url || "/placeholder.jpg"}
+    alt={formData.title}
+    className="w-full h-96 object-cover rounded-lg shadow-md"
+  />
+
+  {/* File Input for Upload */}
+  <label className="cursor-pointer mt-2 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition duration-200">
+    Select New Image
+    <input
+      type="file"
+      accept="image/*"
+      onChange={(e) => {
+        const file = e.target.files[0]
+        if (file) {
+          setSelectedImage(file)
+          setPreviewURL(URL.createObjectURL(file))
+        }
+      }}
+      className="hidden"
+    />
+  </label>
+</div>
+
         </div>
       </div>
     </>
   )
 }
 
-export default UpdateActivities
+export default UpdateActivity
