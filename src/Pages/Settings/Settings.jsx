@@ -1,182 +1,166 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Sidebar from '../../Components/Siderbar/Sidebar';
 import Navbar from '../../Components/Navbar/Navbar';
+import { useNavigate } from 'react-router-dom';
+import SettingsServices from './SettingServices';
+import { FiSettings, FiGlobe, FiMapPin, FiPhone, FiMail } from 'react-icons/fi';
+import { FaClock } from 'react-icons/fa';
+import { MdAlternateEmail, MdWebAsset } from 'react-icons/md';
 
 const Settings = () => {
+  const [settings, setSettings] = useState([]);
+  const navigate = useNavigate();
+
   useEffect(() => {
     AOS.init({ duration: 800 });
+    loadSettings();
   }, []);
 
-  const [logo, setLogo] = useState(null);
-  const [form, setForm] = useState({
-    name: 'Wov Tours ',
-    tagline: 'Walks Of Varanasi',
-    description: 'Test description',
-    mobile: '9999999999',
-    email: 'test@gmail.com',
-    email_password: 'Test@123',
-    email_host: 'test',
-    email_port: 200,
-    website: 'https://wovtours.com',
-  });
-
-  const handleChange = (field, value) => {
-    setForm({ ...form, [field]: value });
-  };
-
-  const handleLogoUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) setLogo(URL.createObjectURL(file));
+  const loadSettings = async () => {
+    const { settings } = await SettingsServices.getAll('', '', 1);
+    setSettings(settings);
   };
 
   return (
     <>
       <Navbar />
       <Sidebar />
-      <div className="min-h-screen lg:ml-72 bg-custom-gray py-10 px-4 font-rubik">
-        <div className="max-w-4xl mx-auto bg-white lg:-mt-10 -mt-16 text-gray-800 shadow-lg rounded-xl p-10">
-          <h2 className="text-3xl font-bold mb-8 text-center text-gray-800" data-aos="fade-down">
-            Website Settings
-          </h2>
+      <div className="min-h-screen -mt-10 lg:ml-72 bg-gradient-to-br from-gray-100 to-gray-200 py-12 lg:px-6 px-4 font-rubik">
+        <div className="max-w-6xl mx-auto  bg-white text-gray-800 shadow-xl  relative">
 
-          <form className="space-y-6" data-aos="fade-up">
-            {/* Site Name */}
-            <div>
-              <label className="block text-sm font-medium mb-1">Site Name</label>
-              <input
-                type="text"
-                value={form.name}
-                onChange={(e) => handleChange('name', e.target.value)}
-                className="w-full border border-gray-300 p-3 rounded-lg"
-                placeholder="Enter site name"
-              />
-            </div>
+          {/* Header */}
+          <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-6 mb-10 border-b pb-6">
+            <h2 className="text-4xl mt-3 font-bold text-gray-800 flex items-center gap-3" data-aos="fade-down">
+              <span className="text-3xl  text-blue-600" />
+              Website Settings
+            </h2>
 
-            {/* Tagline */}
-            <div>
-              <label className="block text-sm font-medium mb-1">Tagline</label>
-              <input
-                type="text"
-                value={form.tagline}
-                onChange={(e) => handleChange('tagline', e.target.value)}
-                className="w-full border border-gray-300 p-3 rounded-lg"
-                placeholder="Enter tagline"
-              />
-            </div>
-
-            {/* Description */}
-            <div>
-              <label className="block text-sm font-medium mb-1">Description</label>
-              <textarea
-                rows={3}
-                value={form.description}
-                onChange={(e) => handleChange('description', e.target.value)}
-                className="w-full border border-gray-300 p-3 rounded-lg"
-                placeholder="Enter site description"
-              />
-            </div>
-
-            {/* Logo Upload */}
-            <div>
-              <label className="block text-sm font-medium mb-1">Logo</label>
-              {logo && (
-                <img src={logo} alt="Site Logo" className="w-16 h-16 mb-2 rounded-full object-cover border" />
-              )}
-              <input type="file" onChange={handleLogoUpload} className="text-sm text-gray-600" />
-              {logo && (
-                <button
-                  onClick={() => setLogo(null)}
-                  className="block text-red-600 mt-2 text-sm hover:underline"
-                >
-                  Remove Logo
-                </button>
-              )}
-            </div>
-
-            {/* Mobile */}
-            <div>
-              <label className="block text-sm font-medium mb-1">Mobile</label>
-              <input
-                type="text"
-                value={form.mobile}
-                onChange={(e) => handleChange('mobile', e.target.value)}
-                className="w-full border border-gray-300 p-3 rounded-lg"
-                placeholder="Enter mobile number"
-              />
-            </div>
-
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-medium mb-1">Email</label>
-              <input
-                type="email"
-                value={form.email}
-                onChange={(e) => handleChange('email', e.target.value)}
-                className="w-full border border-gray-300 p-3 rounded-lg"
-                placeholder="Enter email address"
-              />
-            </div>
-
-            {/* Email Password */}
-            <div>
-              <label className="block text-sm font-medium mb-1">Email Password</label>
-              <input
-                type="password"
-                value={form.email_password}
-                onChange={(e) => handleChange('email_password', e.target.value)}
-                className="w-full border border-gray-300 p-3 rounded-lg"
-                placeholder="Enter email password"
-              />
-            </div>
-
-            {/* Email Host */}
-            <div>
-              <label className="block text-sm font-medium mb-1">Email Host</label>
-              <input
-                type="text"
-                value={form.email_host}
-                onChange={(e) => handleChange('email_host', e.target.value)}
-                className="w-full border border-gray-300 p-3 rounded-lg"
-                placeholder="Enter email host"
-              />
-            </div>
-
-            {/* Email Port */}
-            <div>
-              <label className="block text-sm font-medium mb-1">Email Port</label>
-              <input
-                type="number"
-                value={form.email_port}
-                onChange={(e) => handleChange('email_port', Number(e.target.value))}
-                className="w-full border border-gray-300 p-3 rounded-lg"
-                placeholder="Enter email port"
-              />
-            </div>
-
-            {/* Website */}
-            <div>
-              <label className="block text-sm font-medium mb-1">Website URL</label>
-              <input
-                type="url"
-                value={form.website}
-                onChange={(e) => handleChange('website', e.target.value)}
-                className="w-full border border-gray-300 p-3 rounded-lg"
-                placeholder="https://example.com"
-              />
-            </div>
-
-            {/* Save Button */}
-            <div className="text-right">
+            {/* Buttons */}
+            <div className="flex lg:ml-0 ml-5 gap-4">
               <button
-                type="button"
-                className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg shadow transition"
+                onClick={() => navigate('/settings/add')}
+                className="text-gray-700 border border-gray-300 px-4 py-2 rounded-md text-md hover:bg-gray-100 transition"
               >
-                Save Settings
+                Add
+              </button>
+              <button
+                onClick={() => navigate('/Settings/update')}
+                className="text-gray-700 border border-gray-300 px-4 py-2 rounded-md text-md hover:bg-gray-100 transition"
+              >
+                Update
               </button>
             </div>
-          </form>
+          </div>
+
+          {/* Settings Content */}
+          {settings.length === 0 ? (
+            <p className="text-center text-gray-600 text-xl font-medium">Loading settings...</p>
+          ) : (
+            settings.map((setting) => (
+              <div
+                key={setting.id}
+                className="p-4 md:p-8 bg-gradient-to-br bg-custom-gray  shadow-2xl mb-12 border border-gray-100 hover:shadow-2xl transition-all duration-300"
+                data-aos="fade-up"
+              >
+                {/* Title */}
+                <h3 className="text-3xl font-semibold text-gray-700 mb-6 border-b pb-2 flex items-center gap-2">
+                  <span className="text-blue-500" /> {setting.name}
+                </h3>
+
+                {/* Info Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-base">
+                  <div className="flex items-start gap-2 p-2 rounded-md transition">
+                    <FiGlobe className="text-blue-400 mt-1" />
+                    <span><strong className='text-lg'>Tagline:</strong> {setting.tagline}</span>
+                  </div>
+                  <div className="flex items-start gap-2 p-2 rounded-md transition">
+                    <MdWebAsset className="text-blue-400 mt-1" />
+                    <span><strong className='text-lg'>Description:</strong> {setting.description}</span>
+                  </div>
+                  <div className="flex items-start gap-2 p-2 rounded-md transition">
+                    <FiMapPin className="text-blue-400 mt-1" />
+                    <span><strong className='text-lg'>Address:</strong> {setting.address}</span>
+                  </div>
+                  <div className="flex items-start gap-2 p-2 rounded-md transition">
+                    <FiPhone className="text-blue-400 mt-1" />
+                    <div>
+                      <div><strong className='text-lg'>Mobile 1:</strong> {setting.mobile_1}</div> 
+                      <div><strong className='text-lg'>Mobile 2:</strong> {setting.mobile_2}</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2 p-2 rounded-md transition">
+                    <MdAlternateEmail className="text-blue-400 mt-1" />
+                    <span><strong className='text-lg'>Email:</strong> {setting.email}</span>
+                  </div>
+                  <div className="flex items-start gap-2 p-2 rounded-md transition">
+                    <FiMail className="text-blue-400 mt-1" />
+                    <span><strong className='text-lg'>Email Password:</strong> {setting.email_password}</span>
+                  </div>
+                  <div className="flex items-start lg:ml-6 gap-2 p-2 rounded-md transition">
+                    <span><strong className='text-lg'>Host:</strong> {setting.host}</span>
+                  </div>
+                  <div className="flex items-start lg:ml-6 gap-2 p-2 rounded-md transition">
+                    <span><strong className='text-lg'>Port:</strong> {setting.port}</span>
+                  </div>
+                  <div className="flex lg:ml-6 items-start gap-2 p-2 rounded-md transition">
+                    <span><strong className='text-lg'>Website:</strong></span>
+                    <a
+                      href={setting.website}
+                      className="text-blue-600 hover:text-blue-800 underline"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {setting.website}
+                    </a>
+                  </div>
+                </div>
+
+                {/* Timestamps - BELOW INFO GRID */}
+                <div className="mt-6 ml-6">
+                  <div className="flex items-center  gap-2 p-2 rounded-md transition">
+                    <FaClock className="text-gray-500" />
+                    <span><strong className='text-lg'>Created:</strong> {new Date(setting.created_at).toLocaleString()}</span>
+                  </div>
+                  <div className="flex items-center gap-2 p-2 rounded-md transition">
+                    <FaClock className="text-gray-500" />
+                    <span><strong className='text-lg'>Updated:</strong> {new Date(setting.updated_at).toLocaleString()}</span>
+                  </div>
+                </div>
+
+                {/* Logo */}
+                <div className="mt-6 ml-6">
+                  <strong className="block text-lg mb-2">Logo:</strong>
+                  <img
+                    src={setting.logo}
+                    alt="Logo"
+                    className="w-28 h-28 object-contain border rounded-lg shadow-sm"
+                  />
+                </div>
+
+                {/* Social Media */}
+                <div className="mt-8 ml-6">
+                  <strong className="block text-lg mb-2">Social Media:</strong>
+                  <ul className="list-disc pl-6 space-y-2 text-base">
+                    {setting.social_media.map((sm) => (
+                      <li key={sm.id}>
+                        <strong>{sm.name}:</strong>{' '}
+                        <a
+                          href={sm.url}
+                          className="text-blue-600 hover:text-blue-800 underline"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {sm.url}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </>
