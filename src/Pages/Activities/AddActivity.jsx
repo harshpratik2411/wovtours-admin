@@ -12,7 +12,8 @@ const AddActivity = () => {
   const [mediaId, setMediaId] = useState("");
   const [status, setStatus] = useState("Active");
   const [mediaFile, setMediaFile] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); 
+   const { showAlert } = useAlert();
 
   const navigate = useNavigate();
 
@@ -20,7 +21,7 @@ const AddActivity = () => {
     e.preventDefault();
 
     if (!title.trim()) {
-      showalert("Title is required");
+      showAlert("Title is required");
       return;
     }
 
@@ -39,7 +40,7 @@ const AddActivity = () => {
     setLoading(false);
 
     if (result) {
-      showalert("Activity added successfully!");
+      showAlert("Activity added successfully!");
       navigate("/activities");
     }
   };

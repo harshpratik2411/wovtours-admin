@@ -9,14 +9,22 @@ class ActivityServices {
       `api/admin/activity/?search=${search}&ordering=${orderBy}&page=${page}&status=${status}&level=${level}`;
 
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        headers: {
+          Authorization: LocalStorage.getAccesToken(),
+        },
+      });
+
+      if (APIService.isUnauthenticated(response.status)) {
+        await APIService.refreshToken();
+        return this.getAll(search, orderBy, page, status, level);
+      }
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
-     // console.log("🟦 API RAW RESPONSE:", data);
 
       return {
         Activities: data.results.map((activity) => ({
@@ -49,7 +57,17 @@ class ActivityServices {
     console.log("URL called", url);
 
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        headers: {
+          Authorization: LocalStorage.getAccesToken(),
+        },
+      });
+
+      if (APIService.isUnauthenticated(response.status)) {
+        await APIService.refreshToken();
+        return this.get(id);
+      }
+
       if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
 
@@ -80,7 +98,6 @@ class ActivityServices {
       let requestOptions;
 
       if (mediaChanged) {
-        // Use FormData when media file is updated
         const formData = new FormData();
         for (const key in data) {
           if (data[key] !== undefined && data[key] !== null) {
@@ -96,9 +113,8 @@ class ActivityServices {
           body: formData,
         };
       } else {
-        // Use JSON for non-media updates (title, description, etc.)
         const filteredData = { ...data };
-        delete filteredData.media; // Don't include media if not changed
+        delete filteredData.media;
 
         requestOptions = {
           method: "PUT",
@@ -117,10 +133,15 @@ class ActivityServices {
         return this.update(id, data, mediaChanged);
       }
 
+      if (!response.ok) {
+        console.error("Failed to update activity:", await response.text());
+        return false;
+      }
+
       return await response.json();
     } catch (error) {
-      console.error(`Failed to update activity with id ${id}:`, error);
-      return null;
+      console.error("Error updating activity:", error);
+      return false;
     }
   }
 
@@ -136,7 +157,7 @@ class ActivityServices {
         }
       }
 
-      const response = await fetch(url, {
+      let response = await fetch(url, {
         method: "POST",
         headers: {
           Authorization: LocalStorage.getAccesToken(),
@@ -173,8 +194,6 @@ class ActivityServices {
           Authorization: LocalStorage.getAccesToken(),
         },
       });
-
-      console.log("Response = ", response.status);
 
       if (APIService.isUnauthenticated(response.status)) {
         await APIService.refreshToken();

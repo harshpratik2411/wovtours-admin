@@ -5,12 +5,15 @@ import Sidebar from '../../Components/Siderbar/Sidebar'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 import ActivityServices from './ActivityServices'
-import { useAlert } from '../../Context/AlertContext/AlertContext'
+import { useAlert } from '../../Context/AlertContext/AlertContext' 
 
-const UpdateActivity = () => {
+
+
+
+const UpdateActivity = () => { 
+   const { showAlert } = useAlert();
   const { id } = useParams()
-  const navigate = useNavigate()
-  const { showAlert } = useAlert()
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     title: '',
@@ -22,8 +25,8 @@ const UpdateActivity = () => {
 
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
- const [selectedImage, setSelectedImage] = useState(null)
-const [previewURL, setPreviewURL] = useState('')
+  const [selectedImage, setSelectedImage] = useState(null)
+  const [previewURL, setPreviewURL] = useState('')
 
   useEffect(() => {
     AOS.init({ duration: 800, once: true })
@@ -43,6 +46,7 @@ const [previewURL, setPreviewURL] = useState('')
         media_url: activity.media_url || '',
         media_id: activity.media_id || '',
       })
+      setPreviewURL(activity.media_url || '') // Set preview from existing media
       setLoading(false)
     }
 
@@ -56,7 +60,16 @@ const [previewURL, setPreviewURL] = useState('')
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const updated = await ActivityServices.update(id, formData)
+
+    const dataToUpdate = { ...formData }
+
+    // Append media file if selected
+    if (selectedImage) {
+      dataToUpdate.media = selectedImage
+    }
+
+    const updated = await ActivityServices.update(id, dataToUpdate, !!selectedImage)
+
     if (updated) {
       showAlert('Activity updated successfully.', 'success')
       navigate('/activities')
@@ -86,17 +99,11 @@ const [previewURL, setPreviewURL] = useState('')
       <Navbar />
       <Sidebar />
       <div className="lg:ml-64 mt-8 p-4 max-w-6xl mx-auto font-rubik">
-        <h2
-          className="text-3xl lg:text-4xl font-bold text-center mb-10 font-slab"
-          data-aos="fade-up"
-        >
+        <h2 className="text-3xl lg:text-4xl font-bold text-center mb-10 font-slab" data-aos="fade-up">
           Update Activity
         </h2>
 
-        <div
-          className="flex flex-col lg:flex-row bg-white shadow-xl rounded-xl overflow-hidden"
-          data-aos="fade-up"
-        >
+        <div className="flex flex-col lg:flex-row bg-white shadow-xl rounded-xl overflow-hidden" data-aos="fade-up">
           {/* Left: Form */}
           <div className="lg:w-1/2 p-6 sm:p-8">
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -128,10 +135,10 @@ const [previewURL, setPreviewURL] = useState('')
                   value={formData.description}
                   onChange={handleChange}
                   required
-                  className="w-full  border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                 />
-              </div> 
-    
+              </div>
+
               {/* Status */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
@@ -148,7 +155,7 @@ const [previewURL, setPreviewURL] = useState('')
                   <option value="Inactive">Inactive</option>
                 </select>
               </div>
-        
+
               {/* Buttons */}
               <div className="pt-4 flex items-center gap-4">
                 <button
@@ -169,32 +176,30 @@ const [previewURL, setPreviewURL] = useState('')
           </div>
 
           {/* Right: Image Preview */}
-         <div className="lg:w-1/2  bg-gray-100 flex flex-col items-center justify-center p-4 sm:p-8 border-t lg:border-t-0 lg:border-l gap-4">
-  {/* Image Preview */}
-  <img
-    src={previewURL || formData.media_url || "/placeholder.jpg"}
-    alt={formData.title}
-    className="w-full h-96 object-cover rounded-lg shadow-md"
-  />
+          <div className="lg:w-1/2 bg-gray-100 flex flex-col items-center justify-center p-4 sm:p-8 border-t lg:border-t-0 lg:border-l gap-4">
+            <img
+              src={previewURL || '/placeholder.jpg'}
+              alt={formData.title}
+              className="w-full h-96 object-cover rounded-lg shadow-md"
+            />
 
-  {/* File Input for Upload */}
-  <label className="cursor-pointer  mt-2 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition duration-200">
-    Select New Image
-    <input
-      type="file"
-      accept="image/*"
-      onChange={(e) => {
-        const file = e.target.files[0]
-        if (file) {
-          setSelectedImage(file)
-          setPreviewURL(URL.createObjectURL(file))
-        }
-      }}
-      className="hidden"
-    />
-  </label>
-</div>
-
+            {/* File Input for Upload */}
+            <label className="cursor-pointer mt-2 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition duration-200">
+              Select New Image
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files[0]
+                  if (file) {
+                    setSelectedImage(file)
+                    setPreviewURL(URL.createObjectURL(file))
+                  }
+                }}
+                className="hidden"
+              />
+            </label>
+          </div>
         </div>
       </div>
     </>
