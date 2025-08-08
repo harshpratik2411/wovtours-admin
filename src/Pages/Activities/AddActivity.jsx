@@ -30,7 +30,6 @@ const AddActivity = () => {
     const data = {
       title,
       description,
-      media_id: mediaId,
       status,
       media: mediaFile,
     };
@@ -89,21 +88,7 @@ const AddActivity = () => {
             />
           </div>
 
-          {/* Media ID */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">
-              Media ID
-            </label>
-            <input
-              id="mediaId"
-              type="text"
-              value={mediaId}
-              onChange={(e) => setMediaId(e.target.value)}
-              placeholder="Enter media ID"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
+      
           {/* Status */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
@@ -158,7 +143,7 @@ const AddActivity = () => {
             <img
               src={URL.createObjectURL(mediaFile)}
               alt="Preview"
-              className="w-full max-w-md h-auto object-cover rounded-md shadow-md"
+              className="w-full max-w-md h-96 object-cover rounded-md shadow-md"
               onLoad={() => URL.revokeObjectURL(mediaFile)}
             />
           ) : (

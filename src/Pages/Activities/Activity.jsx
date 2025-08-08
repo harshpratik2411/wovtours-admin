@@ -206,9 +206,9 @@ const Activity = () => {
       <th className="py-2 w-[10%]">Image</th>
       <th className="py-2 w-[10%]">Title</th>
       <th className="py-2 w-[15%]">Description</th>
-      <th className="py-2 w-[10%]">Media ID</th>
+       <th className="py-2 w-[5%]"></th>
       <th className="py-2 w-[10%]">Status</th>
-      <th className="py-2 w-[15%]">Created At</th>
+      <th className="py-2 w-[20%]">Created At</th>
       <th className="py-2 w-[15%]">Updated At</th>
       <th className="py-2 w-[10%] text-right">Actions</th>
     </tr>
@@ -346,10 +346,7 @@ const Activity = () => {
             <span className="font-bold">Description:</span>{" "}
             {activity.description}
           </p>
-          <p>
-            <span className="font-bold">Media ID:</span>{" "}
-            {activity.media_id || "N/A"}
-          </p>
+          
           <p>
             <span className="font-bold">Created At:</span>{" "}
             {DateFormatter.formatDate(activity.created_at)}

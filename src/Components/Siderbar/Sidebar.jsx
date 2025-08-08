@@ -60,74 +60,74 @@ const Sidebar = () => {
             <h1 className="text-2xl font-bold mb-10">Wov Tours</h1>
             <ul className="space-y-6">
               <li className="flex items-center justify-between">
-                <a href="/" className={`flex items-center gap-3 font-medium ${isActive('/') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                <a href="/" className={`flex items-center gap-3 font-medium ${isActive('/') ? 'text-white' : 'text-white/50 hover:text-white transition'}`}>
                   <MdDashboard className="text-xl" />
                   <span>Dashboard</span>
                 </a>
                 <span className="text-xs bg-red-500 px-2 py-0.5 rounded-md">2</span>
               </li>
               <li>
-                <a href="/categories" className={`flex items-center gap-3 ${isActive('/categories') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                <a href="/categories" className={`flex items-center gap-3 ${isActive('/categories') ? 'text-white' : 'text-white/50 hover:text-white transition'}`}>
                   <MdOutlineCategory className="text-xl" />
                   <span>Categories</span>
                 </a>
               </li>
               <li>
-                <a href="/tags" className={`flex items-center gap-3 ${isActive('/tags') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                <a href="/tags" className={`flex items-center gap-3 ${isActive('/tags') ? 'text-white' : 'text-white/50 hover:text-white transition'}`}>
                   <MdLabel className="text-xl" />
                   <span>Tags</span>
                 </a>
               </li>
               <li>
-                <a href="/difficulties" className={`flex items-center gap-3 ${isActive('/difficulties') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                <a href="/difficulties" className={`flex items-center gap-3 ${isActive('/difficulties') ? 'text-white' : 'text-white/50 hover:text-white transition'}`}>
                   <MdTerrain className="text-xl" />
                   <span>Difficulties</span>
                 </a>
               </li>
               <li>
-                <a href="/activities" className={`flex items-center gap-3 ${isActive('/activities') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                <a href="/activities" className={`flex items-center gap-3 ${isActive('/activities') ? 'text-white' : 'text-white/50 hover:text-white transition'}`}>
                   <MdHiking className="text-xl" />
                   <span>Activities</span>
                 </a>
               </li>
               <li>
-                <a href="/pricing-category" className={`flex items-center gap-3 ${isActive('/pricing category') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                <a href="/pricing-category" className={`flex items-center gap-3 ${isActive('/pricing category') ? 'text-white' : 'text-white/50 hover:text-white transition'}`}>
                   <HiOutlineDocumentCurrencyRupee className="text-xl" />
                   <span>Pricing Category</span>
                 </a>
               </li>
               <li>
-                <a href="/destinations" className={`flex items-center gap-3 ${isActive('/destinations') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                <a href="/destinations" className={`flex items-center gap-3 ${isActive('/destinations') ? 'text-white' : 'text-white/50 hover:text-white transition'}`}>
                   <MdPublic className="text-xl" />
                   <span>Destinations</span>
                 </a>
               </li>
               <li>
-                <a href="/trip-type" className={`flex items-center gap-3 ${isActive('/trip-type') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                <a href="/trip-type" className={`flex items-center gap-3 ${isActive('/trip-type') ? 'text-white' : 'text-white/50 hover:text-white transition'}`}>
                   <MdTour className="text-xl" />
                   <span>Trip Type</span>
                 </a>
               </li>
               <li>
-                <a href="/trips" className={`flex items-center gap-3 ${isActive('/trips') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                <a href="/trips" className={`flex items-center gap-3 ${isActive('/trips') ? 'text-white' : 'text-white/50 hover:text-white transition'}`}>
                   <MdOutlineProductionQuantityLimits className="text-xl" />
                   <span>Trips</span>
                 </a>
               </li>
               <li>
-                <a href="/trip-enquiry" className={`flex items-center gap-3 ${isActive('/trip-enquiry') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                <a href="/trip-enquiry" className={`flex items-center gap-3 ${isActive('/trip-enquiry') ? 'text-white' : 'text-white/50 hover:text-white transition'}`}>
                   <MdOutlineProductionQuantityLimits className="text-xl" />
                   <span>Trip Enquiry</span>
                 </a>
               </li>
               <li>
-                <a href="/bookings" className={`flex items-center gap-3 ${isActive('/trip-enquiry') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                <a href="/bookings" className={`flex items-center gap-3 ${isActive('/trip-enquiry') ? 'text-white' : 'text-white/50 hover:text-white transition'}`}>
                   <BsBookmarkCheckFill className="text-xl" />
                   <span>Bookings</span>
                 </a>
               </li>
               <li>
-                <a href="/users" className={`flex items-center gap-3 ${isActive('/users') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
+                <a href="/users" className={`flex items-center gap-3 ${isActive('/users') ? 'text-white' : 'text-white/50 hover:text-white transition'}`}>
                   <MdPeople className="text-xl" />
                   <span>Users</span>
                 </a>
@@ -137,7 +137,7 @@ const Sidebar = () => {
 
             <div className="space-y-6">
               <h2 className="text-xs font-robotoSlab text-white/50 tracking-widest">OTHER</h2>
-              <div className="flex items-center gap-3 text-white/80 hover:text-white transition"> 
+              <div className="flex items-center gap-3 text-white/50 hover:text-white transition"> 
               <ul>
                 <li>
                 <a href="/settings" className={`flex items-center gap-3 ${isActive('/settings') ? 'text-white' : 'text-white/80 hover:text-white transition'}`}>
