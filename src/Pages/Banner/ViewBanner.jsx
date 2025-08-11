@@ -6,6 +6,8 @@ import { FaInfoCircle, FaClipboardList } from "react-icons/fa";
 import DateFormatter from "../../Services/DateFormatter";
 import StatusClassMap from "../../Services/StatusClassMap"; 
 import BannerServices from "./BannerServices";
+ 
+  
 
 const ViewBanner = () => {
   const { id } = useParams();
@@ -68,13 +70,32 @@ const ViewBanner = () => {
           </div>
 
           {/* Image */}
-         <div className="flex justify-center mb-10">
-  <img
-    src={banner.media_url || "/placeholder.jpg"}
-    alt={banner.title}
-    className="rounded-lg shadow-md max-h-[400px] w-full  border"
-  />
+       <div className="flex justify-center mb-10">
+  {banner.media_url ? (
+    banner.media_url.match(/\.(mp4|webm|ogg)$/i) ? (
+      <video
+        controls
+        className="rounded-lg  object-cover shadow-md max-h-[400px] w-full border"
+      >
+        <source src={banner.media_url} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    ) : (
+      <img
+        src={banner.media_url}
+        alt={banner.title}
+        className="rounded-lg object-cover shadow-md max-h-[400px] w-full border"
+      />
+    )
+  ) : (
+    <img
+      src="/placeholder.jpg"
+      alt="Placeholder"
+      className="rounded-lg shadow-md max-h-[400px] w-full border"
+    />
+  )}
 </div>
+
 
 
           {/* Details Grid */}

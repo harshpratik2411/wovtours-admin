@@ -142,18 +142,30 @@ const AddBanner = () => {
             <label className="block text-sm font-semibold text-gray-700 mb-3">
               Media Preview
             </label>
-            {mediaFile && mediaFile.type.startsWith("image/") ? (
-              <img
-                src={URL.createObjectURL(mediaFile)}
-                alt="Preview"
-                className="w-full max-w-md h-96 object-cover rounded-md shadow-md"
-                onLoad={() => URL.revokeObjectURL(mediaFile)}
-              />
-            ) : (
-              <div className="w-full max-w-md h-64 bg-gray-100 rounded-md flex items-center justify-center text-gray-400">
-                No image selected
-              </div>
-            )}
+             {mediaFile ? (
+  mediaFile.type.startsWith("image/") ? (
+    <img
+      src={URL.createObjectURL(mediaFile)}
+      alt="Preview"
+      className="w-full max-w-md h-96 object-cover rounded-md shadow-md"
+      onLoad={() => URL.revokeObjectURL(mediaFile)}
+    />
+  ) : mediaFile.type.startsWith("video/") ? (
+    <video
+      controls
+      src={URL.createObjectURL(mediaFile)}
+      className="w-full max-w-md h-96 object-cover rounded-md shadow-md"
+      onLoadedData={() => URL.revokeObjectURL(mediaFile)}
+    />
+  ) : (
+    <div className="text-gray-400">Unsupported file type</div>
+  )
+) : (
+  <div className="w-full max-w-md h-64 bg-gray-100 rounded-md flex items-center justify-center text-gray-400">
+    No file selected
+  </div>
+)}
+
           </div> 
         </div>
       </div>

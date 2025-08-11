@@ -205,7 +205,7 @@ const Banner = () => {
     <tr>
       <th className="py-2 w-[10%]">Image</th>
       <th className="py-2 w-[10%]">Title</th>
-      <th className="py-2 w-[10%]">Banner Type</th>
+      <th className="py-2 w-[10%]">Banner </th>
        <th className="py-2 w-[10%]"></th>
       <th className="py-2 w-[10%]">Status</th>
       <th className="py-2 w-[20%]">Created At</th>
@@ -220,15 +220,37 @@ const Banner = () => {
           Loading...
         </td>
       </tr>
-    ) : BannerList.length > 0 ? (
-      BannerList.map((banner) => (
-        <tr key={banner.id} className="border-b hover:bg-gray-50">
-          <td className="py-4">
+    ) :   BannerList.length > 0 ? (
+    BannerList.map((banner) => (
+      <tr key={banner.id} className="border-b hover:bg-gray-50">
+        <td className="py-4">
+          {banner.media_url ? (
+            banner.media_url.match(/\.(jpeg|jpg|gif|png|webp)$/i) ? (
+              <img
+                src={banner.media_url}
+                alt={banner.title}
+                className="h-14 w-20 object-cover rounded-md"
+              />
+            ) : banner.media_url.match(/\.(mp4|webm|ogg)$/i) ? (
+              <video
+                src={banner.media_url}
+                className="h-14 w-20 object-cover rounded-md"
+                controls
+              />
+            ) : (
+              <img
+                src="/placeholder.jpg"
+                alt="Unsupported file"
+                className="h-14 w-20 object-cover rounded-md"
+              />
+            )
+          ) : (
             <img
-              src={banner.media_url || "/placeholder.jpg"}
-              alt={banner.title}
+              src="/placeholder.jpg"
+              alt="No media"
               className="h-14 w-20 object-cover rounded-md"
             />
+          )}
           </td>
           <td className="py-6">
             <p className="font-medium  text-gray-800">{banner.title}</p>
