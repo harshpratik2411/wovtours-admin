@@ -50,7 +50,7 @@ const AddBanner = () => {
 
       <div className="lg:ml-80 p-4 max-w-5xl mx-auto font-rubik">
         <h2 className="text-3xl lg:text-4xl font-bold text-gray-800 mb-10 text-center font-slab">
-          Add New Activity
+          Add New Bannner
         </h2>
 
         <div className="bg-white shadow-xl rounded-xl p-8 flex flex-col lg:flex-row gap-8">
@@ -113,7 +113,7 @@ const AddBanner = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className={`bg-primary text-white px-6 py-3 rounded-lg font-semibold transition duration-200 ${
+                className={`bg-primary text-white lg:px-6 px-3 lg:py-3 py-2 rounded-lg font-semibold transition duration-200 ${
                   loading ? "opacity-60 cursor-not-allowed" : "hover:opacity-90"
                 }`}
               >
@@ -123,7 +123,7 @@ const AddBanner = () => {
               <button
                 type="button"
                 onClick={() => navigate("/banners")}
-                className="border px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition"
+                className="border lg:px-6 px-3 lg:py-3 py-2 rounded-lg font-semibold hover:bg-gray-100 transition"
               >
                 Cancel
               </button>

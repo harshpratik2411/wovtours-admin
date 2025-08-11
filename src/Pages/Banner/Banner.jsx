@@ -205,7 +205,7 @@ const Banner = () => {
     <tr>
       <th className="py-2 w-[10%]">Image</th>
       <th className="py-2 w-[10%]">Title</th>
-      <th className="py-2 w-[10%]">Banner </th>
+      <th className="py-2 pl-3 w-[10%]">Banner </th>
        <th className="py-2 w-[10%]"></th>
       <th className="py-2 w-[10%]">Status</th>
       <th className="py-2 w-[20%]">Created At</th>
@@ -334,11 +334,34 @@ const Banner = () => {
         className="bg-white px-4 py-5 rounded-xl shadow-md border w-full"
         data-aos="fade-up"
       >
-        <img
-          src={banner.media_url || "/placeholder.jpg"}
-          alt={banner.title}
-          className="w-full h-48 object-cover rounded-md mb-4"
-        />
+         {banner.media_url ? (
+  banner.media_url.match(/\.(jpeg|jpg|gif|png|webp)$/i) ? (
+    <img
+      src={banner.media_url}
+      alt={banner.title}
+      className="w-full h-48 object-cover rounded-md mb-4"
+    />
+  ) : banner.media_url.match(/\.(mp4|webm|ogg)$/i) ? (
+    <video
+      src={banner.media_url}
+      controls
+      className="w-full h-48 object-cover rounded-md mb-4"
+    />
+  ) : (
+    <img
+      src="/placeholder.jpg"
+      alt="Unsupported file"
+      className="w-full h-48 object-cover rounded-md mb-4"
+    />
+  )
+) : (
+  <img
+    src="/placeholder.jpg"
+    alt="No media"
+    className="w-full h-48 object-cover rounded-md mb-4"
+/>
+)}
+
         <div className="flex justify-between items-start mb-2">
           <div>
             <h2 className="text-lg font-semibold text-gray-800">
@@ -425,7 +448,7 @@ const Banner = () => {
 
       {/* Floating Add Button on Mobile */}
       <button
-        onClick={() => navigate("/banners/add-banners")}
+        onClick={() => navigate("/banners/add")}
         className="sm:hidden fixed bottom-3 right-6 bg-primary text-white p-4 rounded-full shadow-lg hover:bg-blue-700"
         title="Add tag"
       >

@@ -2,10 +2,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css";
 import Homepage from "./Pages/Homepage";
 import Categories from "./Pages/Category/Categories";
-import ViewTrip from "./Pages/Category/ViewTrip";
-import UpdateTrip from "./Pages/Category/UpdateTrip";
+import AddCategory from "./Pages/Category/AddCategory";
+import UpdateCategory from "./Pages/Category/UpdateCategory";
+import ViewCategory from "./Pages/Category/ViewCategory";
 import Login from "./Pages/Login";
-import Add from "./Pages/Category/Add";
 import PrivateRoute from "./Pages/PrivateRoute"; 
 import Tags from "./Pages/Tags/Tags";  
 import ViewTag from "./Pages/Tags/ViewTag";
@@ -55,9 +55,9 @@ function App() {
 
           {/* Categories */}
           <Route path="/categories" element={<PrivateRoute><Categories /></PrivateRoute>} />
-          <Route path="/categories/view/:id" element={<PrivateRoute><ViewTrip /></PrivateRoute>} />
-          <Route path="/categories/update/:id" element={<PrivateRoute><UpdateTrip /></PrivateRoute>} />
-          <Route path="/categories/add" element={<PrivateRoute><Add /></PrivateRoute>} />
+          <Route path="/categories/view/:id" element={<PrivateRoute><ViewCategory /></PrivateRoute>} />
+          <Route path="/categories/update/:id" element={<PrivateRoute><UpdateCategory /></PrivateRoute>} />
+          <Route path="/categories/add" element={<PrivateRoute><AddCategory /></PrivateRoute>} />
 
           {/* Tags */}
           <Route path="/tags" element={<PrivateRoute><Tags /></PrivateRoute>} />
