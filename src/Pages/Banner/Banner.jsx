@@ -11,17 +11,17 @@ import { useNavigate } from "react-router-dom";
 import DateFormatter from "../../Services/DateFormatter";
 import FilterOptions from "../../Services/FilterOptions";
 import StatusClassMap from "../../Services/StatusClassMap";
-import ActivityServices from "./ActivityServices";
+import BannerServices from "./BannerServices";
 
 
 
 
-const Activity = () => {
+const Banner = () => {
   const [activeMenu, setActiveMenu] = useState(null);
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
- const [ActivityList, setActivityList] = useState([]);
+ const [BannerList, setBannerList] = useState([]);
   const [status, setStatus] = useState("");
   const [orderBy, setOrderBy] = useState("");
   const [selectedSortLabel, setSelectedSortLabel] = useState("Sort By");
@@ -42,11 +42,11 @@ const Activity = () => {
   ) {
     setLoading(true);
 
-  ActivityServices.getAll(search, order, page, currentStatus)
+  BannerServices.getAll(search, order, page, currentStatus)
       .then((response) => {
       
 
-     setActivityList(response.Activities);
+     setBannerList(response.Banners);
         setTotalPages(response.totalPages); 
         setCurrentPage(response.currentPage);
         setLoading(false);
@@ -191,7 +191,7 @@ const Activity = () => {
 
           {/* Add Button */}
           <button
-            onClick={() => navigate("/activities/add")}
+            onClick={() => navigate("/banners/add")}
             className="flex items-center gap-1 border text-sm text-gray-600 bg-white px-2 py-2 rounded hover:bg-gray-100"
           >
             <FaPlus size={12} /> Add
@@ -205,8 +205,8 @@ const Activity = () => {
     <tr>
       <th className="py-2 w-[10%]">Image</th>
       <th className="py-2 w-[10%]">Title</th>
-      <th className="py-2 w-[15%]">Description</th>
-       <th className="py-2 w-[5%]"></th>
+      <th className="py-2 w-[10%]">Description</th>
+       <th className="py-2 w-[10%]"></th>
       <th className="py-2 w-[10%]">Status</th>
       <th className="py-2 w-[20%]">Created At</th>
       <th className="py-2 w-[15%]">Updated At</th>
@@ -220,53 +220,53 @@ const Activity = () => {
           Loading...
         </td>
       </tr>
-    ) : ActivityList.length > 0 ? (
-      ActivityList.map((activity) => (
-        <tr key={activity.id} className="border-b hover:bg-gray-50">
+    ) : BannerList.length > 0 ? (
+      BannerList.map((banner) => (
+        <tr key={banner.id} className="border-b hover:bg-gray-50">
           <td className="py-4">
             <img
-              src={activity.media_url || "/placeholder.jpg"}
-              alt={activity.title}
+              src={banner.media_url || "/placeholder.jpg"}
+              alt={banner.title}
               className="h-14 w-20 object-cover rounded-md"
             />
           </td>
           <td className="py-6">
-            <p className="font-medium  text-gray-800">{activity.title}</p>
+            <p className="font-medium  text-gray-800">{banner.title}</p>
           </td>
           <td className="py-6">
-            <p className="font-medium ml-6  text-gray-800">{activity.description}</p>
+            <p className="font-medium ml-3   text-gray-800">{banner.banner_type}</p>
           </td>
           <td className="py-6">
-            <p className="font-medium ml-6 text-gray-800">{activity.media_id}</p>
+            <p className="font-medium ml-6 text-gray-800">{banner.media_id}</p>
           </td>
           <td className="py-4">
-            <span
+            <spanm
               className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(
-                activity.status
+                banner.status
               )}`}
             >
-              {activity.status}
-            </span>
+              {banner.status}
+            </spanm>
           </td>
           <td className="py-4 text-gray-700">
-            {DateFormatter.formatDate(activity.created_at)}
+            {DateFormatter.formatDate(banner.created_at)}
           </td>
           <td className="py-4 text-gray-700">
-            {DateFormatter.formatDate(activity.updated_at)}
+            {DateFormatter.formatDate(banner.updated_at)}
           </td>
           <td className="py-4 text-right">
             <div className="relative inline-block">
               <button
-                onClick={() => toggleMenu(activity.id)}
+                onClick={() => toggleMenu(banner.id)}
                 className="text-gray-600 hover:text-black menu-toggle"
               >
                 <BsThreeDotsVertical size={18} />
               </button>
-              {activeMenu === activity.id && (
+              {activeMenu === banner.id && (
                 <div className="dropdown-menu absolute right-0 -top-[4rem] z-10 bg-white border rounded shadow w-32">
                   <button
                     onClick={() =>
-                      navigate(`/activities/view/${activity.id}`)
+                      navigate(`/activities/view/${banner.id}`)
                     }
                     className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                   >
@@ -274,7 +274,7 @@ const Activity = () => {
                   </button>
                   <button
                     onClick={() =>
-                      navigate(`/activities/update/${activity.id}`)
+                      navigate(`/activities/update/${banner.id}`)
                     }
                     className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                   >
@@ -305,36 +305,36 @@ const Activity = () => {
 
         {/* Mobile View */}
 <div className="block sm:hidden space-y-5 flex-col items-center justify-center">
-  {!loading && ActivityList && ActivityList.length > 0 ? (
-    ActivityList.map((activity) => (
+  {!loading && BannerList && BannerList.length > 0 ? (
+    BannerList.map((banner) => (
       <div
-        key={activity.id}
+        key={banner.id}
         className="bg-white px-4 py-5 rounded-xl shadow-md border w-full"
         data-aos="fade-up"
       >
         <img
-          src={activity.media_url || "/placeholder.jpg"}
-          alt={activity.title}
+          src={banner.media_url || "/placeholder.jpg"}
+          alt={banner.title}
           className="w-full h-48 object-cover rounded-md mb-4"
         />
         <div className="flex justify-between items-start mb-2">
           <div>
             <h2 className="text-lg font-semibold text-gray-800">
-              {activity.title}
+              {banner.title}
             </h2>
           <strong className="text-sm text-gray-700">Status:</strong> 
             <p    
               className={`text-xs ml-2 inline-block mt-1 px-2 py-1 rounded-full font-medium ${getStatusClass(
-                activity.status
+                banner.status
               )}`}
             >   
               
             
-              {activity.status}
+              {banner.status}
             </p>
           </div>
           <button
-            onClick={() => toggleMenu(activity.id)}
+            onClick={() => toggleMenu(banner.id)}
             className="text-gray-600 menu-toggle"
           >
             <BsThreeDotsVertical size={20} />
@@ -344,29 +344,29 @@ const Activity = () => {
         <div className="text-sm text-gray-700 space-y-2 mt-2">
           <p>
             <span className="font-bold">Description:</span>{" "}
-            {activity.description}
+            {banner.description}
           </p>
           
           <p>
             <span className="font-bold">Created At:</span>{" "}
-            {DateFormatter.formatDate(activity.created_at)}
+            {DateFormatter.formatDate(banner.created_at)}
           </p>
           <p>
             <span className="font-bold">Updated At:</span>{" "}
-            {DateFormatter.formatDate(activity.updated_at)}
+            {DateFormatter.formatDate(banner.updated_at)}
           </p>
         </div>
 
-        {activeMenu === activity.id && (
+        {activeMenu === banner.id && (
           <div className="mt-3 dropdown-menu bg-white border rounded shadow w-full z-10">
             <button
-              onClick={() => navigate(`/activities/view/${activity.id}`)}
+              onClick={() => navigate(`/banners/view/${banner.id}`)}
               className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
             >
               <FaEye size={14} /> View
             </button>
             <button
-              onClick={() => navigate(`/activities/update/${activity.id}`)}
+              onClick={() => navigate(`/banners/update/${banner.id}`)}
               className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
             >
               <FaEdit size={14} /> Update
@@ -407,7 +407,7 @@ const Activity = () => {
 
       {/* Floating Add Button on Mobile */}
       <button
-        onClick={() => navigate("/activities/add-activities")}
+        onClick={() => navigate("/banners/add-banners")}
         className="sm:hidden fixed bottom-3 right-6 bg-primary text-white p-4 rounded-full shadow-lg hover:bg-blue-700"
         title="Add tag"
       >
@@ -417,4 +417,4 @@ const Activity = () => {
   );
 };
 
-export default Activity;
+export default Banner;

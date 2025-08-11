@@ -14,7 +14,8 @@ import {
   MdMenu,
 } from 'react-icons/md';  
 import { HiOutlineDocumentCurrencyRupee } from "react-icons/hi2";
-import { BsBookmarkCheckFill } from "react-icons/bs";
+import { BsBookmarkCheckFill } from "react-icons/bs"; 
+import { LuFullscreen } from "react-icons/lu";
 import AOS from 'aos';
 import 'aos/dist/aos.css';  
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -100,6 +101,12 @@ const Sidebar = () => {
                 <a href="/destinations" className={`flex items-center gap-3 ${isActive('/destinations') ? 'text-white' : 'text-white/50 hover:text-white transition'}`}>
                   <MdPublic className="text-xl" />
                   <span>Destinations</span>
+                </a>
+              </li>
+              <li>
+                <a href="/banners" className={`flex items-center gap-3 ${isActive('/banners') ? 'text-white' : 'text-white/50 hover:text-white transition'}`}>
+                  <LuFullscreen className="text-xl" />
+                  <span>Banners</span>
                 </a>
               </li>
               <li>

@@ -36,6 +36,10 @@ import AddPricingCat from "./Pages/PricingCategory/AddPricingCat";
 import UpdatePricingCat from "./Pages/PricingCategory/UpdatePricingCat";
 import ViewPricingCat from "./Pages/PricingCategory/ViewPricingCat"; 
 import UpdateSettings from "./Pages/Settings/UpdateSettings";
+import Banner from "./Pages/Banner/Banner"; 
+import AddBanner from "./Pages/Banner/AddBanner";
+import UpdateBanner from "./Pages/Banner/UpdateBanner";
+import ViewBanner from './Pages/Banner/viewBanner'
 
 
 function App() {
@@ -101,6 +105,12 @@ function App() {
           <Route path="/pricing-category/view/:id" element={<PrivateRoute><ViewPricingCat /></PrivateRoute>} />
           <Route path="/pricing-category/update/:id" element={<PrivateRoute><UpdatePricingCat /></PrivateRoute>} />
           <Route path="/pricing-category/add" element={<PrivateRoute><AddPricingCat/></PrivateRoute>} />  
+          {/* Banners */}
+
+           <Route path="/banners" element={<PrivateRoute>< Banner /></PrivateRoute>} />
+          <Route path="/pricing-category/view/:id" element={<PrivateRoute><ViewBanner /></PrivateRoute>} />
+          <Route path="/pricing-category/update/:id" element={<PrivateRoute><UpdateBanner /></PrivateRoute>} />
+          <Route path="/pricing-category/add" element={<PrivateRoute><AddBanner/></PrivateRoute>} />  
 
 
         </Routes>
