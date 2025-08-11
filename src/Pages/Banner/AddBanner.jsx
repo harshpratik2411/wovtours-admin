@@ -8,7 +8,7 @@ import BannerServices from "./BannerServices";
 
 const AddBanner = () => {
   const [title, setTitle] = useState("");
- // const [bannerType, setBannerType] = useState("");
+  const [bannerType, setBannerType] = useState("");
   const [status, setStatus] = useState("Active");
   const [mediaFile, setMediaFile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -28,9 +28,9 @@ const AddBanner = () => {
 
     const data = {
       title,
-     // banner_type: bannerType, 
+      banner_type: bannerType,
       status,
-     media: mediaFile,
+      media: mediaFile,
     };
 
     const result = await BannerServices.add(data);
@@ -43,7 +43,7 @@ const AddBanner = () => {
     }
   };
 
-  return (
+  return ( 
     <>
       <Navbar />
       <Sidebar />
@@ -72,20 +72,25 @@ const AddBanner = () => {
               />
             </div>
 
-            {/* Description */}
-             {/* <div>
+            {/* Banner Type - Updated as Dropdown */}
+            <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
-               Banner Type
+                Banner Type
               </label>
-              <textarea
+              <select
                 id="banner_type"
                 value={bannerType}
                 onChange={(e) => setBannerType(e.target.value)}
-                placeholder="Enter description"
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                rows={4}
-              />
-            </div> */}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select banner type</option>
+                <option value="HOME">HOME</option>
+                <option value="ABOUT">ABOUT</option>
+                <option value="OUR_TEAM">OUR_TEAM</option>
+                <option value="OUR_FAQ">OUR_FAQ</option>
+                <option value="OUR_CONTACT">OUR_CONTACT</option>
+              </select>
+            </div>
 
             {/* Status */}
             <div>
@@ -117,7 +122,7 @@ const AddBanner = () => {
 
               <button
                 type="button"
-                onClick={() => navigate("/activities")}
+                onClick={() => navigate("/banners")}
                 className="border px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition"
               >
                 Cancel
@@ -126,7 +131,7 @@ const AddBanner = () => {
           </form>
 
           {/* Right: File Upload Preview */}
-           <div className="flex-1 flex flex-col items-center justify-center p-4 border rounded-lg">
+          <div className="flex-1 flex flex-col items-center justify-center p-4 border rounded-lg">
             <input
               id="mediaFile"
               type="file"

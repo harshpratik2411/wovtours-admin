@@ -8,9 +8,6 @@ import BannerServices from './BannerServices'
 import { useAlert } from '../../Context/AlertContext/AlertContext' 
 import Banner from './Banner'
 
-
-
-
 const UpdateBanner = () => { 
    const { showAlert } = useAlert();
   const { id } = useParams()
@@ -27,7 +24,7 @@ const UpdateBanner = () => {
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
   const [selectedImage, setSelectedImage] = useState(null)
-  const [previewURL, setPreviewURL] = useState('')
+  const [previewURL, setPreviewURL] = useState('') 
 
   useEffect(() => {
     AOS.init({ duration: 800, once: true })
@@ -124,20 +121,24 @@ const UpdateBanner = () => {
                 />
               </div>
 
-              {/* Description */}
+              {/* Banner Type */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
-                 Banner Type
+                  Banner Type
                 </label>
-               <textarea
-  name="banner_type"
-  rows="4"
-  maxLength={250}
-  value={formData.banner_type}
-  onChange={handleChange}
-  required
-  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-/>
+                <select
+                  name="banner_type"
+                  value={formData.banner_type}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Select banner type</option>
+                  <option value="HOME">HOME</option>
+                  <option value="ABOUT">ABOUT</option>
+                  <option value="OUR_TEAM">OUR_TEAM</option>
+                  <option value="OUR_FAQ">OUR_FAQ</option>
+                  <option value="OUR_CONTACT">OUR_CONTACT</option>
+                </select>
               </div>
 
               {/* Status */}
