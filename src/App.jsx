@@ -108,9 +108,9 @@ function App() {
           {/* Banners */}
 
            <Route path="/banners" element={<PrivateRoute>< Banner /></PrivateRoute>} />
-          <Route path="/pricing-category/view/:id" element={<PrivateRoute><ViewBanner /></PrivateRoute>} />
-          <Route path="/pricing-category/update/:id" element={<PrivateRoute><UpdateBanner /></PrivateRoute>} />
-          <Route path="/pricing-category/add" element={<PrivateRoute><AddBanner/></PrivateRoute>} />  
+          <Route path="/banners/view/:id" element={<PrivateRoute><ViewBanner /></PrivateRoute>} />
+          <Route path="/banners/update/:id" element={<PrivateRoute><UpdateBanner /></PrivateRoute>} />
+          <Route path="/banners/add" element={<PrivateRoute><AddBanner/></PrivateRoute>} />  
 
 
         </Routes>

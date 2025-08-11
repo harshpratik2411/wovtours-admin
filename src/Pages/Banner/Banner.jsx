@@ -53,7 +53,7 @@ const Banner = () => {
       })
       .catch((err) => {
       
-        setActivityList([]);
+        setBannerList([]);
         setTotalPages(1);
         setLoading(false);
       });
@@ -101,7 +101,7 @@ const Banner = () => {
       <Navbar />
       <Sidebar />
       <h1 className="text-3xl font-bold -mt-10 text-center lg:ml-32 mb-10">
-       Activities
+       Banners
       </h1>
       <div className="bg-white  p-4 sm:p-6 lg:ml-72 rounded-xl shadow-md font-rubik w-full max-w-6xl mx-auto -mt-2 mb-12">
         {/* Search, Sort, Filter, Add */}
@@ -205,7 +205,7 @@ const Banner = () => {
     <tr>
       <th className="py-2 w-[10%]">Image</th>
       <th className="py-2 w-[10%]">Title</th>
-      <th className="py-2 w-[10%]">Description</th>
+      <th className="py-2 w-[10%]">Banner Type</th>
        <th className="py-2 w-[10%]"></th>
       <th className="py-2 w-[10%]">Status</th>
       <th className="py-2 w-[20%]">Created At</th>
@@ -240,13 +240,13 @@ const Banner = () => {
             <p className="font-medium ml-6 text-gray-800">{banner.media_id}</p>
           </td>
           <td className="py-4">
-            <spanm
+            <span
               className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(
                 banner.status
               )}`}
             >
               {banner.status}
-            </spanm>
+            </span>
           </td>
           <td className="py-4 text-gray-700">
             {DateFormatter.formatDate(banner.created_at)}
@@ -266,7 +266,7 @@ const Banner = () => {
                 <div className="dropdown-menu absolute right-0 -top-[4rem] z-10 bg-white border rounded shadow w-32">
                   <button
                     onClick={() =>
-                      navigate(`/activities/view/${banner.id}`)
+                      navigate(`/banners/view/${banner.id}`)
                     }
                     className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                   >
@@ -274,7 +274,7 @@ const Banner = () => {
                   </button>
                   <button
                     onClick={() =>
-                      navigate(`/activities/update/${banner.id}`)
+                      navigate(`/banners/update/${banner.id}`)
                     }
                     className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                   >
@@ -342,11 +342,7 @@ const Banner = () => {
         </div>
 
         <div className="text-sm text-gray-700 space-y-2 mt-2">
-          <p>
-            <span className="font-bold">Description:</span>{" "}
-            {banner.description}
-          </p>
-          
+         
           <p>
             <span className="font-bold">Created At:</span>{" "}
             {DateFormatter.formatDate(banner.created_at)}

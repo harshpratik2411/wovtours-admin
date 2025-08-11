@@ -1,24 +1,14 @@
 import APIService from "../APIServices";
 import LocalStorage from "../LocalStorage";
-import AuthService from "../AuthService";
 
 class BannerServices {
-  static async getAll(search, orderBy, page, status, level) {
+  static async getAll(search, orderBy, page, status) {
     const url =
       APIService.baseUrl +
       `api/admin/banner/?search=${search}&ordering=${orderBy}&page=${page}&status=${status}`;
 
     try {
-      const response = await fetch(url, {
-        headers: {
-          Authorization: LocalStorage.getAccesToken(),
-        },
-      });
-
-      if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.getAll(search, orderBy, page, status,);
-      }
+      const response = await fetch(url); 
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -56,16 +46,7 @@ class BannerServices {
     console.log("URL called", url);
 
     try {
-      const response = await fetch(url, {
-        headers: {
-          Authorization: LocalStorage.getAccesToken(),
-        },
-      });
-
-      if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.get(id);
-      }
+      const response = await fetch(url); // No Authorization header for GET
 
       if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -209,3 +190,4 @@ class BannerServices {
 }
 
 export default BannerServices;
+ 

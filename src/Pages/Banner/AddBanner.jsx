@@ -6,4 +6,4 @@ const AddBanner = () => {
   )
 }
 
-export default AddBanner
+export default AddBanner 
