@@ -1,112 +1,158 @@
-import React from 'react'
-import { useParams } from 'react-router-dom'
-import {
-  FaInfoCircle,
-  FaClipboardList,
-} from 'react-icons/fa'
-import Navbar from '../../Components/Navbar/Navbar'
-import Sidebar from '../../Components/Siderbar/Sidebar'
-import DestinationUi from '../Destinations/DestinationUi'
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import Navbar from "../../Components/Navbar/Navbar";
+import Sidebar from "../../Components/Siderbar/Sidebar";
+import { FaInfoCircle, FaClipboardList } from "react-icons/fa";
+import DateFormatter from "../../Services/DateFormatter";
+import StatusClassMap from "../../Services/StatusClassMap";
+import DestinationServices from "./DestinationServices";
 
-const getStatusClass = (status) => {
-  if (status === 'Available') return 'bg-blue-100 text-blue-600'
-  if (status === 'Few Left') return 'bg-yellow-100 text-yellow-600'
-  return 'bg-red-100 text-red-600'
-}
+const ViewDestination = () => {
+  const { id } = useParams();
+  const [destination, setDestination] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-const ViewActivities = () => {
-  const { id } = useParams()
-  const activities = DestinationUi.find((t) => t.id === id)
+  useEffect(() => {
+    const fetchDestination = async () => {
+      try {
+        setLoading(true);
+        const data = await DestinationServices.get(id);
+        setDestination(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch Destination:", error);
+        setLoading(false);
+      }
+    };
 
-  if (!activities) {
+    fetchDestination();
+  }, [id]);
+
+  if (loading) {
     return (
       <>
         <Navbar />
         <Sidebar />
-        <div className="w-full  lg:ml-32 mx-auto p-6 font-rubik">
-          <p className="text-center text-xl text-red-500 font-semibold flex items-center justify-center gap-2">
-            <FaInfoCircle className="text-2xl" />
-            Destination not found.
-          </p>
+        <div className="lg:ml-32 mx-auto p-6 text-center text-xl font-semibold text-gray-600">
+          Loading Destination...
         </div>
       </>
-    )
+    );
+  }
+
+  if (!destination) {
+    return (
+      <>
+        <Navbar />
+        <Sidebar />
+        <div className="lg:ml-32 mx-auto p-6 text-center text-red-500 font-semibold flex items-center justify-center gap-2">
+          <FaInfoCircle className="text-2xl" />
+          Destination not found.
+        </div>
+      </>
+    );
   }
 
   return (
     <>
       <Navbar />
       <Sidebar />
-      <div className="w-full -mt-5   lg:ml-32 mx-auto p-6 font-rubik bg-custom-gray min-h-screen">
-        <div className="rounded-xl -mt-10 bg-white shadow-lg p-10 max-w-6xl mx-auto ">
+      <div className="w-full -mt-5 lg:ml-32 mx-auto p-6 font-rubik bg-custom-gray min-h-screen">
+        <div className="rounded-xl -mt-10 bg-white shadow-lg p-10 max-w-6xl mx-auto">
           {/* Header */}
           <div className="flex items-center gap-4 mb-8 border-primary border-b pb-4">
             <FaInfoCircle className="text-3xl text-black" />
-            <h2 className="lg:text-3xl text-2xl font-slab font-bold text-gray-800">
+            <h2 className="lg:text-3xl text-2xl font-bold text-gray-800">
               View Destination Details
             </h2>
           </div>
 
-          {/* Activity Image */}
+          {/* Media */}
           <div className="flex justify-center mb-10">
-            <img
-              src={activities.image}
-              alt={activities.name}
-              className="rounded-lg shadow-md max-h-[400px] w-full object-cover border"
-            />
+            {destination.media_url ? (
+              destination.media_url.match(/\.(mp4|webm|ogg)$/i) ? (
+                <video
+                  controls
+                  className="rounded-lg object-cover shadow-md max-h-[400px] w-full border"
+                >
+                  <source src={destination.media_url} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              ) : (
+                <img
+                  src={destination.media_url}
+                  alt={destination.title}
+                  className="rounded-lg object-cover shadow-md max-h-[400px] w-full border"
+                />
+              )
+            ) : (
+              <img
+                src="/placeholder.jpg"
+                alt="Placeholder"
+                className="rounded-lg shadow-md max-h-[400px] w-full border"
+              />
+            )}
           </div>
 
-          {/* Activity Info */}
-          <div className="grid lg:grid-cols-2  gap-8 text-gray-700 text-base lg:text-lg mb-10">
-            <div className="space-y-4 ">
+          {/* Info Grid */}
+          <div className="grid lg:grid-cols-2 gap-8 text-gray-700 text-xs lg:text-lg mb-10">
+            <div className="space-y-4">
               <div className="flex gap-3">
-                <span className="font-semibold lg:ml-0 ml-5 w-32">Destination Name:</span>
-                <span className='-ml-3'>{activities.name}</span>
+                <span className="font-semibold w-40">Title:</span>
+                <span>{destination.title}</span>
               </div>
+
               <div className="flex gap-3">
-                <span className="font-semibold lg:ml-0 ml-5 w-32">Slug:</span>
-                <span className='-ml-3'>{activities.slug}</span>
+                <span className="font-semibold w-40">Description:</span>
+                <span>{destination.description || "N/A"}</span>
               </div>
-              
-              <div className="flex lg:-ml-6 -ml-0 gap-3">
-                <span className="font-semibold lg:ml-6 ml-5 w-32">Featured:</span>
-                   <span className='-ml-3'>{activities.featured}</span>
+
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Parent Id:</span>
+                <span>{destination.parent_id || "N/A"}</span>
+              </div>
+
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Created At:</span>
+                <span>{DateFormatter.formatDate(destination.created_at)}</span>
+              </div>
+
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Updated At:</span>
+                <span>{DateFormatter.formatDate(destination.updated_at)}</span>
               </div>
             </div>
 
-            <div className="flex items-start lg:-mt-0 -mt-4 lg:items-center gap-3">
-              <span className="font-semibold lg:ml-0 ml-5 mt-1">Status:</span>
+            <div className="flex items-start lg:items-center gap-3 lg:mt-4">
+              <span className="font-semibold mt-2">Status:</span>
               <span
-                className={`px-4 py-2 lg:ml-6 ml-12 rounded-full text-sm font-medium ${getStatusClass(
-                  activities.status
+                className={`lg:px-4 px-2 py-2 lg:mt-2 rounded-full lg:text-sm font-medium ${StatusClassMap.getClass(
+                  destination.status
                 )}`}
               >
-                {activities.status}
+                {destination.status}
               </span>
             </div>
-          <strong className='font-semibold lg:ml-0 ml-5 mt-1'>Short Description: </strong>
-          <span className='text-gray-600 font-medium lg:-mt-0 -mt-4 lg:ml-0 ml-5 text-left'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam eum animi illo exercitationem id et!</span>
-          </div>  
-
-          {/* Static Description */}
-          <div className="mt-6 border-t pt-6">
-            <div className="flex items-center  lg:ml-0 ml-5 gap-3 mb-2">
-              <FaClipboardList className="text-lg text-gray-700" />
-              <h3 className="lg:text-xl text-lg font-semibold text-gray-800">Activity Description</h3>
-            </div>
-            <p className="text-gray-600 lg:ml-0 ml-5 text-left leading-relaxed">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu
-              metus condimentum, finibus eros nec, volutpat odio. Integer et nisi a
-              sem gravida sollicitudin. Suspendisse potenti. Sed cursus nunc sit amet
-              ex rutrum, non pulvinar magna porta. Etiam ut enim nec nulla tincidunt
-              tempus. Vestibulum ante ipsum primis in faucibus orci luctus et
-              ultrices posuere cubilia curae.
-            </p>
           </div>
+
+          {/* Full Description */}
+          {destination.description && (
+            <div className="mt-6 border-t pt-6">
+              <div className="flex items-center gap-3 mb-2">
+                <FaClipboardList className="text-lg text-gray-700" />
+                <h3 className="lg:text-xl text-lg font-semibold text-gray-800">
+                  Full Description
+                </h3>
+              </div>
+              <p className="text-gray-600 leading-relaxed">
+                {destination.description}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default ViewActivities
+export default ViewDestination;
