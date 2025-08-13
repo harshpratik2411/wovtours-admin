@@ -258,9 +258,12 @@ const Categories = () => {
           <td className="py-6">
             <p className="font-medium ml-3   text-gray-800">{category.description}</p>
           </td>
-          <td className="py-6">
-            <p className="font-medium ml-6 text-gray-800">{category.parent_id}</p>
-          </td>
+         <td className="py-6">
+  <p className="font-medium ml-6   text-gray-800">
+    {category.parent_id ?? 'none'}
+  </p>
+</td>
+
           <td className="py-4">
             <span
               className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(

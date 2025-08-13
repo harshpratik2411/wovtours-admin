@@ -26,32 +26,45 @@ const UpdateCategory = () => {
   const [notFound, setNotFound] = useState(false)
   const [selectedImage, setSelectedImage] = useState(null)
   const [previewURL, setPreviewURL] = useState('') 
+  const [categories, setCategories] = useState([]);
+
 
   useEffect(() => {
-    AOS.init({ duration: 800, once: true })
+  AOS.init({ duration: 800, once: true });
 
-    const fetchCategories = async () => {
-      const category = await CategoryServices.get(id)
-      if (!category) {
-        setNotFound(true)
-        setLoading(false)
-        return
-      }
-
-      setFormData({
-        title: category.title || '',
-        description: category.description || '',
-        parent_id: category.parent_id || '',
-        status: category.status || 'Inactive',
-        media_url: category.media_url || '',
-        media_id: category.media_id || '',
-      })
-      setPreviewURL(category.media_url || '') 
-      setLoading(false)
+  const fetchCategoryDetails = async () => {
+    const category = await CategoryServices.get(id);
+    if (!category) {
+      setNotFound(true);
+      setLoading(false);
+      return;
     }
 
-    fetchCategories()
-  }, [id])
+    setFormData({
+      title: category.title || '',
+      description: category.description || '',
+      parent_id: category.parent_id || '',
+      status: category.status || 'Inactive',
+      media_url: category.media_url || '',
+      media_id: category.media_id || '',
+    });
+    setPreviewURL(category.media_url || '');
+    setLoading(false);
+  };
+
+  const fetchAllCategories = async () => {
+    try {
+      const response = await CategoryServices.getAll("", "", 1, ""); 
+      setCategories(response.Categories || []);
+    } catch (error) {
+      console.error("Failed to fetch categories", error);
+    }
+  };
+
+  fetchCategoryDetails();
+  fetchAllCategories();
+}, [id]);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -138,27 +151,24 @@ const UpdateCategory = () => {
 
               {/* Category Type */}
              <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-              Parent Id
-              </label>
-              <input 
-  type="number"
-  name="parent_id" // <-- This was missing
-  value={formData.parent_id || ''}
-  onChange={handleChange} 
-  placeholder="Enter Id"
-  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-/>
+  <label className="block text-sm font-semibold text-gray-700 mb-1">
+    Parent Category
+  </label>
+  <select
+    name="parent_id"
+    value={formData.parent_id || ''}
+    onChange={handleChange}
+    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+  >
+    <option value="">None</option>
+    {categories.map((cat) => (
+      <option key={cat.id} value={cat.id}>
+        {cat.title}
+      </option>
+    ))}
+  </select>
+</div>
 
-             
-                {/* <option value="">Select banner type</option>
-                <option value="HOME">HOME</option>
-                <option value="ABOUT">ABOUT</option>
-                <option value="OUR_TEAM">OUR_TEAM</option>
-                <option value="OUR_FAQ">OUR_FAQ</option>
-                <option value="OUR_CONTACT">OUR_CONTACT</option> */}
-            
-            </div>
               {/* Status */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
