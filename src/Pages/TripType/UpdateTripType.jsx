@@ -1,186 +1,228 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import Navbar from '../../Components/Navbar/Navbar'
-import Sidebar from '../../Components/Siderbar/Sidebar' 
-import TripTypesList from '../TripType/TripTypesUi'
+import Sidebar from '../../Components/Siderbar/Sidebar'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
+import TripTypeServices from './TripTypeServices'
+import { useAlert } from '../../Context/AlertContext/AlertContext'
+import { MdDescription } from 'react-icons/md'
 
-const UpdateDestination = () => {
+const UpdateTripType = () => {
+  const { showAlert } = useAlert()
   const { id } = useParams()
-  const TripTypes =  TripTypesList.find((t) => t.id === id) 
+  const navigate = useNavigate()
+
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    parent_id: '',
+    status: 'Active',
+    media_url: '',
+    media_id: '',
+  })
+
+  const [loading, setLoading] = useState(true)
+  const [notFound, setNotFound] = useState(false)
+  const [selectedImage, setSelectedImage] = useState(null)
+  const [previewURL, setPreviewURL] = useState('')
+  const [tripTypeList, setTripTypeList] = useState([])
 
   useEffect(() => {
     AOS.init({ duration: 800, once: true })
-  }, [])
 
-  const [formData, setFormData] = useState({
-    name: TripTypes?.name || '',
-    price: TripTypes?.price || '',
-    image: TripTypes?.image || '',
-    description: TripTypes?.description || 'A great TripTypes to Loree beautiful places.',
-    status: TripTypes?.status || 'active', 
-    slug: TripTypes?.slug || "",
-    shortdesc: TripTypes?.shortdesc || "lorem dolar ipsum set morlar pom pom", 
-    featured : TripTypes?. featured || "",
-    desc: TripTypes?. desc|| ""
-  })
+    const fetchCategoryDetails = async () => {
+      const tripType = await TripTypeServices.get(id)
+      if (!tripType) {
+        setNotFound(true)
+        setLoading(false)
+        return
+      }
 
-  if (!TripTypes) {
-    return <p className="text-center mt-20 text-red-500">Trip Type  not found.</p>
-  }
+      setFormData({
+        title: tripType.title || '',
+        description: tripType.description || '',
+        parent_id: tripType.parent_id || '',
+        status: tripType.status || 'Inactive',
+        media_url: tripType.media_url || '',
+        media_id: tripType.media_id || '',
+      })
+      setPreviewURL(tripType.media_url || '')
+      setLoading(false)
+    }
+
+    const fetchAllCategories = async () => {
+      try {
+        const response = await TripTypeServices.getAll('', '', 1, '')
+        setTripTypeList(response.TripTypes || [])
+      } catch (error) {
+        console.error('Failed to fetch Trip Types', error)
+      }
+    }
+
+    fetchCategoryDetails()
+    fetchAllCategories()
+  }, [id])
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target
-    if (name === 'image' && files.length > 0) {
-      const imageUrl = URL.createObjectURL(files[0])
-      setFormData({ ...formData, image: imageUrl })
+    const { name, value } = e.target
+    setFormData({ ...formData, [name]: value })
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    const dataToUpdate = { ...formData }
+
+    if (selectedImage) {
+      dataToUpdate.media = selectedImage
+    }
+
+    const updated = await TripTypeServices.update(id, dataToUpdate, !!selectedImage)
+
+    if (updated) {
+      showAlert('Trip Type updated successfully.', 'success')
+      navigate('/trip-type')
     } else {
-      setFormData({ ...formData, [name]: value })
+      showAlert('Failed to update Trip Type.', 'error')
     }
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    alert('TripTypes updated (in-memory).')
-  } 
-  const handleDelete = () => {
-    alert(`Tag "${TripTypes.name}" deleted (in-memory).`)
+  const handleDelete = async () => {
+    const confirmed = window.confirm('Are you sure you want to delete this Trip type?')
+    if (!confirmed) return
+
+    const success = await TripTypeServices.delete(id)
+    if (success) {
+      showAlert('Trip Type deleted successfully.', 'success')
+      navigate('/trip-type')
+    } else {
+      showAlert('Failed to delete Trip Type.', 'error')
+    }
   }
 
+  if (loading) return <p className="text-center mt-20">Loading...</p>
+  if (notFound) return <p className="text-center mt-20 text-red-500">Trip Type not found.</p>
 
   return (
     <>
       <Navbar />
       <Sidebar />
-
-      <div className="lg:ml-64 max-w-7xl mx-auto lg:p-6 p-2 -mt-12 font-rubik">
-        <h2 className="lg:text-4xl text-3xl font-bold text-gray-800 mb-10 font-slab text-center" data-aos="fade-up">
+      <div className="lg:ml-64 mt-8 p-4 max-w-6xl mx-auto font-rubik">
+        <h2 className="text-3xl lg:text-4xl font-bold text-center mb-10 font-slab" data-aos="fade-up">
           Update Trip Type
         </h2>
 
-        <div className="bg-white shadow-xl rounded-xl p-8 grid grid-cols-1 lg:grid-cols-2 gap-10">
-          {/* Left Column: Form */}
-          <form onSubmit={handleSubmit} className="space-y-6 order-2 lg:order-1" data-aos="fade-up">
-            {/* TripTypes Name */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Trip Type Name</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Slug</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.slug}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
+        <div className="flex flex-col lg:flex-row bg-white shadow-xl rounded-xl overflow-hidden" data-aos="fade-up">
+          {/* Left: Form */}
+          <div className="lg:w-1/2 p-6 sm:p-8">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Title */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  Trip Type Title
+                </label>
+                <input
+                  type="text"
+                  name="title"
+                  maxLength={100}
+                  value={formData.title}
+                  onChange={handleChange}
+                  required
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
 
-            {/* Description */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Description</label>
-              <textarea
-                name="description"
-                rows="4"
-                value={formData.description}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-5 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-              />
-            </div>
-               
-                <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Short Description</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.shortdesc}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-               
-                 
-            {/* Status */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Status</label>
-              <select
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
-            </div>
- 
-            <div>
-              <label className="block -mb-[18px]  text-sm font-semibold text-gray-700 ">Featured</label>
-            
-             <span className="ml-20 ">
-                    <input
-                      id="my-checkbox"
-                      type="checkbox"
-                      class="appearance-none w-4 h-4 border border-gray-400 rounded-md cursor-pointer
-                      checked:bg-primary checked:border-indigo-600 checked:text-white
-                      focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                      />
-                      </span>
-            
-            </div>
- 
-               
-             
-            <div className="pt-4 flex items-center gap-4">
+              {/* Description */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Description</label>
+                <input
+                  type="text"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  placeholder="Enter description"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                  rows={4}
+                />
+              </div>
+
+              {/* Parent Category */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Parent Category</label>
+                <select
+                  name="parent_id"
+                  value={formData.parent_id || ''}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">None</option>
+                  {tripTypeList.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Status */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Status</label>
+                <select
+                  name="status"
+                  value={formData.status}
+                  onChange={handleChange}
+                  required
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+              </div>
+
+              {/* Buttons */}
+              <div className="pt-4 flex items-center gap-4">
                 <button
                   type="submit"
-                  className="bg-gradient-to-r lg:-mt-6 -mt-8 bg-primary text-white w-full py-3 rounded-lg font-semibold hover:bg-primary/80 transition duration-200"
+                  className="bg-primary text-white w-full py-3 rounded-lg font-semibold hover:bg-primary/80 transition duration-200"
                 >
-                  Update Changes
+                  Update
                 </button>
                 <button
                   type="button"
                   onClick={handleDelete}
-                  className="text-red-600 border lg:-mt-6 -mt-8 border-red-300 hover:bg-red-50 px-3 py-2 rounded-md text-sm font-medium transition duration-200"
+                  className="text-red-600 border border-red-300 hover:bg-red-50 px-4 py-2 rounded-md text-sm font-medium transition duration-200"
                 >
                   Delete
                 </button>
               </div>
-          </form>
+            </form>
+          </div>
 
-          {/* Right Column: Image Preview */}
-          <div className="flex flex-col gap-4 items-center  justify-center order-1 lg:order-2" data-aos="zoom-in">
-            {/* Image Upload Moved Here */}
-            <div className="w-full">
-              <label className="block text-sm  font-semibold text-gray-700 mb-1">Change Image</label>
+          {/* Right: Image Preview */}
+          <div className="lg:w-1/2 bg-gray-100 flex flex-col items-center justify-center p-4 sm:p-8 border-t lg:border-t-0 lg:border-l gap-4">
+            <img
+              src={previewURL || '/placeholder.jpg'}
+              alt={formData.title}
+              className="w-full h-96 object-cover rounded-lg shadow-md"
+            />
+
+            {/* File Input */}
+            <label className="cursor-pointer mt-2 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition duration-200">
+              Select New Image
               <input
                 type="file"
-                name="image"
                 accept="image/*"
-                onChange={handleChange}
-                className="w-full text-sm text-gray-600 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                onChange={(e) => {
+                  const file = e.target.files[0]
+                  if (file) {
+                    setSelectedImage(file)
+                    setPreviewURL(URL.createObjectURL(file))
+                  }
+                }}
+                className="hidden"
               />
-            </div>
-
-            {formData.image ? (
-              <img
-                src={formData.image}
-                alt="TripTypes Preview"
-                className="rounded-xl shadow-md   w-full h-auto object-contain border border-gray-200"
-              />
-            ) : (
-              <div className="w-full h-[300px] flex items-center justify-center bg-gray-100 text-gray-400 rounded-xl border border-dashed">
-                No Image Selected
-              </div>
-            )}
+            </label>
           </div>
         </div>
       </div>
@@ -188,4 +230,4 @@ const UpdateDestination = () => {
   )
 }
 
-export default UpdateDestination;
+export default UpdateTripType

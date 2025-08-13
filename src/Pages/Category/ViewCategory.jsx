@@ -91,7 +91,7 @@ const ViewCategory = () => {
     <img
       src="/placeholder.jpg"
       alt="Placeholder"
-      className="rounded-lg shadow-md max-h-[400px] w-full border"
+      className="rounded-lg  shadow-md max-h-[400px] w-full border"
     />
   )}
 </div>
