@@ -39,7 +39,11 @@ import UpdateSettings from "./Pages/Settings/UpdateSettings";
 import Banner from "./Pages/Banner/Banner"; 
 import AddBanner from "./Pages/Banner/AddBanner";
 import UpdateBanner from "./Pages/Banner/UpdateBanner";
-import ViewBanner from './Pages/Banner/viewBanner'
+import ViewBanner from './Pages/Banner/viewBanner' 
+import Trips from "./Pages/Trips/Trips";
+import AddTrips from "./Pages/Trips/AddTrips";
+import ViewTrips from "./Pages/Trips/ViewTrips";
+import UpdateTrips from "./Pages/Trips/UpdateTrips";
 
 
 function App() {
@@ -110,7 +114,13 @@ function App() {
            <Route path="/banners" element={<PrivateRoute>< Banner /></PrivateRoute>} />
           <Route path="/banners/view/:id" element={<PrivateRoute><ViewBanner /></PrivateRoute>} />
           <Route path="/banners/update/:id" element={<PrivateRoute><UpdateBanner /></PrivateRoute>} />
-          <Route path="/banners/add" element={<PrivateRoute><AddBanner/></PrivateRoute>} />  
+          <Route path="/banners/add" element={<PrivateRoute><AddBanner/></PrivateRoute>} />   
+
+              {/* Trips */}
+           <Route path="/trips" element={<PrivateRoute>< Trips /></PrivateRoute>} />
+          <Route path="/trips/view/:id" element={<PrivateRoute><ViewTrips /></PrivateRoute>} />
+          <Route path="/trips/update/:id" element={<PrivateRoute><UpdateTrips /></PrivateRoute>} />
+          <Route path="/trips/add" element={<PrivateRoute><AddTrips/></PrivateRoute>} />  
 
 
         </Routes>
