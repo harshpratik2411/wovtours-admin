@@ -220,33 +220,34 @@ const Trips = () => {
     TripList.map((trip) => (
       <tr key={trip.id} className="border-b hover:bg-gray-50">
         <td className="py-4">
-          {trip.media_url ? (
-            trip.media_url.match(/\.(jpeg|jpg|gif|png|webp)$/i) ? (
-              <img
-                src={trip.media_url}
-                alt={trip.title}
-                className="h-14 w-20 object-cover rounded-md"
-              />
-            ) : trip.media_url.match(/\.(mp4|webm|ogg)$/i) ? (
-              <video
-                src={trip.media_url}
-                className="h-14 w-20 object-cover rounded-md"
-                controls
-              />
-            ) : (
-              <img
-                src="/placeholder.jpg"
-                alt="Unsupported file"
-                className="h-14 w-20 object-cover rounded-md"
-              />
-            )
-          ) : (
-            <img
-              src="/placeholder.jpg"
-              alt="No media"
-              className="h-14 w-20 object-cover rounded-md"
-            />
-          )}
+          {trip.media_urls ? (
+  /\.(jpeg|jpg|gif|png|webp)$/i.test(trip.media_urls) ? (
+    <img
+      src={trip.media_urls}
+      alt={trip.title}
+      className="h-14 w-20 object-cover rounded-md"
+    />
+  ) : /\.(mp4|webm|ogg)$/i.test(trip.media_urls) ? (
+    <video
+      src={trip.media_urls}
+      className="h-14 w-20 object-cover rounded-md"
+      controls
+    />
+  ) : (
+    <img
+      src="/placeholder.jpg"
+      alt="Unsupported file"
+      className="h-14 w-20 object-cover rounded-md"
+    />
+  )
+) : (
+  <img
+    src="/placeholder.jpg"
+    alt="No media"
+    className="h-14 w-20 object-cover rounded-md"
+  />
+)}
+
           </td>
           <td className="py-6">
             <p className="font-medium text-gray-800">{trip.title}</p>
@@ -336,7 +337,7 @@ const Trips = () => {
         data-aos="fade-up"
       > 
          {trip.media_url ? (
-  trip.media_url.match(/\.(jpeg|jpg|gif|png|webp)$/i) ? (
+  trip.media_urls.match(/\.(jpeg|jpg|gif|png|webp)$/i) ? (
     <img
       src={trip.media_url}
       alt={trip.title}
