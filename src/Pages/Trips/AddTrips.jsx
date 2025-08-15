@@ -17,7 +17,6 @@ const AddTrips = () => {
   const { showAlert } = useAlert();
   const navigate = useNavigate();
 
-  // Fetch destinations to populate dropdown
   useEffect(() => {
     const fetchTrips = async () => {
       try {
@@ -164,6 +163,7 @@ const AddTrips = () => {
               accept="image/*,video/*"
               onChange={(e) => setMediaFile(e.target.files[0])}
               className="mb-4 w-full max-w-md"
+              multiple
             />
             <label className="block text-sm font-semibold text-gray-700 mb-3">
               Media Preview
