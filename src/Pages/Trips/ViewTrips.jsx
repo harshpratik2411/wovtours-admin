@@ -7,6 +7,17 @@ import DateFormatter from "../../Services/DateFormatter";
 import StatusClassMap from "../../Services/StatusClassMap";
 import TripServices from "./TripsServices";
 
+const renderField = (field) => {
+  if (Array.isArray(field)) {
+    return field.length ? field.join(", ") : "N/A";
+  }
+  if (typeof field === "object" && field !== null) {
+    // If object, stringify or customize this rendering as needed
+    return JSON.stringify(field);
+  }
+  return field || "N/A";
+};
+
 const ViewTrips = () => {
   const { id } = useParams();
   const [trip, setTrip] = useState(null);
@@ -17,7 +28,27 @@ const ViewTrips = () => {
       try {
         setLoading(true);
         const data = await TripServices.get(id);
-        setTrip(data);
+
+        // Map all the fields explicitly if needed
+        const mappedTrip = {
+          id: data.id,
+          title: data.title,
+          description: data.description,
+          hilights: data.hilights,
+          includes: data.includes,
+          excludes: data.excludes,
+          faqs: data.faqs,
+          tags: data.tags,
+          trip_types: data.trip_types,
+          trip_activity: data.trip_activity,
+          media_urls: data.media_urls,
+          status: data.status,
+          created_at: data.created_at,
+          updated_at: data.updated_at,
+          parent_id: data.parent_id,
+        };
+
+        setTrip(mappedTrip);
         setLoading(false);
       } catch (error) {
         console.error("Failed to fetch Trip:", error);
@@ -106,18 +137,58 @@ const ViewTrips = () => {
           <div className="grid lg:grid-cols-2 gap-8 text-gray-700 text-xs lg:text-lg mb-10">
             <div className="space-y-4">
               <div className="flex gap-3">
+                <span className="font-semibold w-40">ID:</span>
+                <span>{trip.id}</span>
+              </div>
+
+              <div className="flex gap-3">
                 <span className="font-semibold w-40">Title:</span>
                 <span>{trip.title}</span>
               </div>
 
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Description:</span>
-                <span>{trip.description || "N/A"}</span>
+                <span>{renderField(trip.description)}</span>
+              </div>
+
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Highlights:</span>
+                <span>{renderField(trip.hilights)}</span>
+              </div>
+
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Includes:</span>
+                <span>{renderField(trip.includes)}</span>
+              </div>
+
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Excludes:</span>
+                <span>{renderField(trip.excludes)}</span>
+              </div>
+
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">FAQs:</span>
+                <span>{renderField(trip.faqs)}</span>
+              </div>
+
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Tags:</span>
+                <span>{renderField(trip.tags)}</span>
+              </div>
+
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Trip Types:</span>
+                <span>{renderField(trip.trip_types)}</span>
+              </div>
+
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Trip Activity:</span>
+                <span>{renderField(trip.trip_activity)}</span>
               </div>
 
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Parent Id:</span>
-                <span>{trip.parent_id || "N/A"}</span>
+                <span>{renderField(trip.parent_id)}</span>
               </div>
 
               <div className="flex gap-3">
@@ -152,9 +223,7 @@ const ViewTrips = () => {
                   Full Description
                 </h3>
               </div>
-              <p className="text-gray-600 leading-relaxed">
-                {trip.description}
-              </p>
+              <p className="text-gray-600 leading-relaxed">{trip.description}</p>
             </div>
           )}
         </div>
