@@ -12,7 +12,6 @@ const renderField = (field) => {
     return field.length ? field.join(", ") : "N/A";
   }
   if (typeof field === "object" && field !== null) {
-    // If object, stringify or customize this rendering as needed
     return JSON.stringify(field);
   }
   return field || "N/A";
@@ -29,7 +28,6 @@ const ViewTrips = () => {
         setLoading(true);
         const data = await TripServices.get(id);
 
-        // Map all the fields explicitly if needed
         const mappedTrip = {
           id: data.id,
           title: data.title,
@@ -85,34 +83,48 @@ const ViewTrips = () => {
   }
 
   const renderMedia = () => {
-    if (trip.media_urls) {
-      if (/\.(mp4|webm|ogg)$/i.test(trip.media_urls)) {
-        return (
-          <video
-            controls
-            className="rounded-lg object-cover shadow-md max-h-[400px] w-full border"
-          >
-            <source src={trip.media_urls} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        );
-      } else if (/\.(jpeg|jpg|gif|png|webp)$/i.test(trip.media_urls)) {
-        return (
-          <img
-            src={trip.media_urls}
-            alt={trip.title}
-            className="rounded-lg object-cover shadow-md max-h-[400px] w-full border"
-          />
-        );
-      }
+    if (!trip.media_urls || trip.media_urls.length === 0) {
+      return (
+        <img
+          src="/placeholder.jpg"
+          alt="Placeholder"
+          className="rounded-lg shadow-md max-h-[400px] w-full border"
+        />
+      );
     }
 
     return (
-      <img
-        src="/placeholder.jpg"
-        alt="Placeholder"
-        className="rounded-lg shadow-md max-h-[400px] w-full border"
-      />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+        {trip.media_urls.map((url, index) => {
+          const isVideo = /\.(mp4|webm|ogg)$/i.test(url);
+          const isImage = /\.(jpeg|jpg|gif|png|webp)$/i.test(url);
+
+          return (
+            <div
+              key={index}
+              className="rounded-lg overflow-hidden shadow-md aspect-[4/3] w-full border bg-black flex items-center justify-center"
+            >
+              {isVideo ? (
+                <video
+                  controls
+                  className="object-cover w-full h-full"
+                >
+                  <source src={url} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              ) : isImage ? (
+                <img
+                  src={url}
+                  alt={`Media ${index + 1}`}
+                  className="object-cover w-full h-full"
+                />
+              ) : (
+                <div className="text-gray-500 text-sm">Unsupported file type</div>
+              )}
+            </div>
+          );
+        })}
+      </div>
     );
   };
 
@@ -122,7 +134,6 @@ const ViewTrips = () => {
       <Sidebar />
       <div className="w-full -mt-5 lg:ml-32 mx-auto p-6 font-rubik bg-custom-gray min-h-screen">
         <div className="rounded-xl -mt-10 bg-white shadow-lg p-10 max-w-6xl mx-auto">
-          {/* Header */}
           <div className="flex items-center gap-4 mb-8 border-primary border-b pb-4">
             <FaInfoCircle className="text-3xl text-black" />
             <h2 className="lg:text-3xl text-2xl font-bold text-gray-800">
@@ -130,10 +141,8 @@ const ViewTrips = () => {
             </h2>
           </div>
 
-          {/* Media */}
           <div className="flex justify-center mb-10">{renderMedia()}</div>
 
-          {/* Info Grid */}
           <div className="grid lg:grid-cols-2 gap-8 text-gray-700 text-xs lg:text-lg mb-10">
             <div className="space-y-4">
               <div className="flex gap-3">
@@ -214,7 +223,6 @@ const ViewTrips = () => {
             </div>
           </div>
 
-          {/* Full Description */}
           {trip.description && (
             <div className="mt-6 border-t pt-6">
               <div className="flex items-center gap-3 mb-2">

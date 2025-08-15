@@ -139,42 +139,50 @@ class TripServices {
   }
 
   static async add(data) {
-    const url = APIService.baseUrl + "api/admin/trip/";
-    console.log("Data = ", data);
+  const url = APIService.baseUrl + "api/admin/trip/";
+  console.log("Data = ", data);
 
-    try {
-      const formData = new FormData();
-      for (const key in data) {
-        if (data[key] !== undefined && data[key] !== null) {
+  try {
+    const formData = new FormData();
+
+    for (const key in data) {
+      if (data[key] !== undefined && data[key] !== null) {
+        if (key === "media" && Array.isArray(data[key])) {
+          data[key].forEach((file) => {
+            formData.append("media", file); // append each file individually
+          });
+        } else {
           formData.append(key, data[key]);
         }
       }
+    }
 
-      let response = await fetch(url, {
-        method: "POST",
-        headers: {
-          Authorization: LocalStorage.getAccesToken(),
-        },
-        body: formData,
-      });
+    let response = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: LocalStorage.getAccesToken(), // No Content-Type here
+      },
+      body: formData,
+    });
 
-      if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.add(data);
-      }
+    if (APIService.isUnauthenticated(response.status)) {
+      await APIService.refreshToken();
+      return this.add(data);
+    }
 
-      if (APIService.isError(response.status)) {
-        const errorData = await response.json();
-        alert(errorData["error"]);
-        return null;
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error("Failed to add trip:", error);
+    if (APIService.isError(response.status)) {
+      const errorData = await response.json();
+      alert(errorData["error"]);
       return null;
     }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Failed to add trip:", error);
+    return null;
   }
+}
+
 
   static async delete(id) {
     const url = APIService.baseUrl + `api/admin/trip/${id}/`;

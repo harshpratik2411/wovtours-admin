@@ -220,33 +220,34 @@ const Trips = () => {
     TripList.map((trip) => (
       <tr key={trip.id} className="border-b hover:bg-gray-50">
         <td className="py-4">
-          {trip.media_urls ? (
-  /\.(jpeg|jpg|gif|png|webp)$/i.test(trip.media_urls) ? (
-    <img
-      src={trip.media_urls}
-      alt={trip.title}
-      className="h-14 w-20 object-cover rounded-md"
-    />
-  ) : /\.(mp4|webm|ogg)$/i.test(trip.media_urls) ? (
-    <video
-      src={trip.media_urls}
-      className="h-14 w-20 object-cover rounded-md"
-      controls
-    />
+  {trip.media_urls && trip.media_urls.length > 0 ? (
+    /\.(jpeg|jpg|gif|png|webp)$/i.test(trip.media_urls[0]) ? (
+      <img
+        src={trip.media_urls[0]}
+        alt={trip.title}
+        className="h-14 w-20 object-cover rounded-md"
+      />
+    ) : /\.(mp4|webm|ogg)$/i.test(trip.media_urls[0]) ? (
+      <video
+        src={trip.media_urls[0]}
+        className="h-14 w-20 object-cover rounded-md"
+        controls
+      />
+    ) : (
+      <img
+        src="/placeholder.jpg"
+        alt="Unsupported file"
+        className="h-14 w-20 object-cover rounded-md"
+      />
+    )
   ) : (
     <img
       src="/placeholder.jpg"
-      alt="Unsupported file"
+      alt="No media"
       className="h-14 w-20 object-cover rounded-md"
     />
-  )
-) : (
-  <img
-    src="/placeholder.jpg"
-    alt="No media"
-    className="h-14 w-20 object-cover rounded-md"
-  />
-)}
+  )}
+
 
           </td>
           <td className="py-6">
@@ -336,16 +337,16 @@ const Trips = () => {
         className="bg-white px-4 py-5 rounded-xl shadow-md border w-full"
         data-aos="fade-up"
       > 
-         {trip.media_url ? (
-  trip.media_urls.match(/\.(jpeg|jpg|gif|png|webp)$/i) ? (
+      {trip.media_urls && trip.media_urls.length > 0 ? (
+  /\.(jpeg|jpg|gif|png|webp)$/i.test(trip.media_urls[0]) ? (
     <img
-      src={trip.media_url}
+      src={trip.media_urls[0]}
       alt={trip.title}
       className="w-full h-48 object-cover rounded-md mb-4"
     />
-  ) : trip.media_url.match(/\.(mp4|webm|ogg)$/i) ? (
+  ) : /\.(mp4|webm|ogg)$/i.test(trip.media_urls[0]) ? (
     <video
-      src={trip.media_url}
+      src={trip.media_urls[0]}
       controls
       className="w-full h-48 object-cover rounded-md mb-4"
     />
@@ -361,32 +362,41 @@ const Trips = () => {
     src="/placeholder.jpg"
     alt="No media"
     className="w-full h-48 object-cover rounded-md mb-4"
-/>
+  />
 )}
 
-        <div className="flex justify-between items-start mb-2">
-          <div>
-            <h2 className="text-lg font-semibold text-gray-800">
-              {trip.title}
-            </h2>
-          <strong className="text-sm text-gray-700">Status:</strong> 
-            <p    
-              className={`text-xs ml-2 inline-block mt-1 px-2 py-1 rounded-full font-medium ${getStatusClass(
-                trip.status
-              )}`}
-            >   
-              
-            
-              {trip.status}
-            </p>
-          </div>
-          <button
-            onClick={() => toggleMenu(trip.id)}
-            className="text-gray-600 menu-toggle"
-          >
-            <BsThreeDotsVertical size={20} />
-          </button>
-        </div>
+<div className="flex justify-between items-start mb-2">
+  <div>
+    <h2 className="text-lg font-semibold text-gray-800 mb-2">
+      {trip.title}
+    </h2>
+
+    {/* Description line */}
+    <div className="flex items-center mb-2">
+      <strong className="text-sm text-gray-700 mr-2">Description:</strong>
+      <p className="text-sm text-gray-800">{trip.description}</p>
+    </div>
+
+    {/* Status line */}
+    <div className="flex items-center">
+      <strong className="text-sm text-gray-700 mr-2">Status:</strong>
+      <p
+        className={`text-xs inline-block px-2 py-1 rounded-full font-medium ml-2 ${getStatusClass(trip.status)}`}
+      >
+        {trip.status}
+      </p>
+    </div>
+  </div>
+
+  <button
+    onClick={() => toggleMenu(trip.id)}
+    className="text-gray-600 menu-toggle"
+  >
+    <BsThreeDotsVertical size={20} />
+  </button>
+</div>
+
+
 
         <div className="text-sm text-gray-700 space-y-2 mt-2">
          

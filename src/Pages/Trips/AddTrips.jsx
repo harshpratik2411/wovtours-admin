@@ -10,7 +10,7 @@ const AddTrips = () => {
   const [parentId, setParentId] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("Active");
-  const [mediaFile, setMediaFile] = useState(null);
+  const [mediaFiles, setMediaFiles] = useState([]);  // Changed to array
   const [loading, setLoading] = useState(false);
   const [trips, setTrips] = useState([]);
 
@@ -31,6 +31,12 @@ const AddTrips = () => {
     fetchTrips();
   }, []);
 
+  // Handle adding multiple images one by one
+  const handleMediaChange = (e) => {
+    const files = Array.from(e.target.files);
+    setMediaFiles((prevFiles) => [...prevFiles, ...files]);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -46,7 +52,7 @@ const AddTrips = () => {
       description,
       parent_id: parentId || null,
       status,
-      media: mediaFile,
+      media: mediaFiles,  // Send all selected files
     };
 
     const result = await TripServices.add(data);
@@ -160,35 +166,38 @@ const AddTrips = () => {
           <div className="flex-1 flex flex-col items-center justify-center p-4 border rounded-lg">
             <input
               type="file"
-              accept="image/*,video/*"
-              onChange={(e) => setMediaFile(e.target.files[0])}
+              accept="image/*"
+              onChange={handleMediaChange}
               className="mb-4 w-full max-w-md"
               multiple
             />
             <label className="block text-sm font-semibold text-gray-700 mb-3">
               Media Preview
             </label>
-            {mediaFile ? (
-              mediaFile.type.startsWith("image/") ? (
-                <img
-                  src={URL.createObjectURL(mediaFile)}
-                  alt="Preview"
-                  className="w-full max-w-md h-96 object-cover rounded-md shadow-md"
-                  onLoad={() => URL.revokeObjectURL(mediaFile)}
-                />
-              ) : mediaFile.type.startsWith("video/") ? (
-                <video
-                  controls
-                  src={URL.createObjectURL(mediaFile)}
-                  className="w-full max-w-md h-96 object-cover rounded-md shadow-md"
-                  onLoadedData={() => URL.revokeObjectURL(mediaFile)}
-                />
-              ) : (
-                <div className="text-gray-400">Unsupported file type</div>
-              )
+            {mediaFiles.length > 0 ? (
+              <div className="w-full max-w-md grid grid-cols-2 gap-4 overflow-auto max-h-96">
+                {mediaFiles.map((file, idx) =>
+                  file.type.startsWith("image/") ? (
+                    <img
+                      key={idx}
+                      src={URL.createObjectURL(file)}
+                      alt={`Preview ${idx + 1}`}
+                      className="w-full h-48 object-cover rounded-md shadow-md"
+                      onLoad={() => URL.revokeObjectURL(file)}
+                    />
+                  ) : (
+                    <div
+                      key={idx}
+                      className="text-gray-400 border rounded-md p-4 flex items-center justify-center"
+                    >
+                      Unsupported file type
+                    </div>
+                  )
+                )}
+              </div>
             ) : (
               <div className="w-full max-w-md h-64 bg-gray-100 rounded-md flex items-center justify-center text-gray-400">
-                No file selected
+                No files selected
               </div>
             )}
           </div>
