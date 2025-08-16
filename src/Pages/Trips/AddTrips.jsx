@@ -1,36 +1,49 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from '../../Components/Navbar/Navbar';
+import Navbar from "../../Components/Navbar/Navbar";
 import Sidebar from "../../Components/Siderbar/Sidebar";
 import { useAlert } from "../../Context/AlertContext/AlertContext";
 import TripServices from "./TripsServices";
+import TagServices from "../../Pages/Tags/TagServices";
+import TripTypeServices from "../../Pages/TripType/TripTypeServices";
 
 const AddTrips = () => {
   const [title, setTitle] = useState("");
-  const [parentId, setParentId] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("Active");
-  const [mediaFiles, setMediaFiles] = useState([]);  // Changed to array
+  const [mediaFiles, setMediaFiles] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [trips, setTrips] = useState([]);
+  const [trips, setTrips] = useState(false);
+  const [tripType, setTripType] = useState(false);
+  const [tagList, setTagList] = useState([]);
+  const [tag, setTag] = useState("");
 
   const { showAlert } = useAlert();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchTrips = async () => {
+    const fetchData = async () => {
       try {
-        const response = await TripServices.getAll("", "", 1, "");
-        setTrips(response.Trips || []);
-      } catch (error) {
-        console.error("Failed to fetch destinations", error);
-        setTrips([]);
+        const tripsRes = await TripServices.getAll("", "", 1, "");
+        setTrips(tripsRes.Trips || []);
+      } catch (err) {
+        console.error("Failed to fetch trips", err);
+      }
+
+      try {
+        const tagRes = await TagServices.getAll("", "", 1, "");
+        console.log("REsponse = ", tagRes.tags);
+        console.log("REsponse = ", tagRes.tags || []);
+
+        setTagList(tagRes.tags || []);
+        console.log("After setting = ", tagList);
+      } catch (err) {
+        console.error("Failed to fetch tags", err);
       }
     };
 
-    fetchTrips();
+    fetchData();
   }, []);
-
   // Handle adding multiple images one by one
   const handleMediaChange = (e) => {
     const files = Array.from(e.target.files);
@@ -50,9 +63,9 @@ const AddTrips = () => {
     const data = {
       title,
       description,
-      parent_id: parentId || null,
+      tag: tagList,
       status,
-      media: mediaFiles,  // Send all selected files
+      media: mediaFiles, // Send all selected files
     };
 
     const result = await TripServices.add(data);
@@ -109,22 +122,21 @@ const AddTrips = () => {
             {/* Parent Destination Dropdown */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Parent Destination
+                Tags
               </label>
               <select
-                value={parentId}
-                onChange={(e) => setParentId(e.target.value)}
+                value={tag}
+                onChange={(e) => setTag(e.target.value)}
                 className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">None</option>
-                {trips.map((t) => (
+                {tagList.map((t) => (
                   <option key={t.id} value={t.id}>
                     {t.title}
                   </option>
                 ))}
               </select>
             </div>
-
             {/* Status */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">

@@ -22,8 +22,8 @@ class TagServices {
       return {
         tags: data.results.map((tag) => ({
           id: tag.id,
-          name: tag.title,
-          desc: tag.description,
+          title: tag.title,
+          description: tag.description,
           status: tag.status,
           created_at: tag.created_at,
           updated_at: tag.updated_at,
@@ -53,7 +53,7 @@ class TagServices {
         throw new Error(`HTTP error! status: ${response.status}`);
 
       const tag = await response.json();
-      
+
       return {
         id: tag.id,
         name: tag.title,
@@ -105,9 +105,7 @@ class TagServices {
 
   static async update(id, data) {
     console.log("Update API called");
-
     const url = APIService.baseUrl + `api/admin/tags/${id}/`;
-
     try {
       let response = await fetch(url, {
         method: "PUT",
