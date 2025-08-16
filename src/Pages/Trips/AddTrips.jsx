@@ -13,10 +13,8 @@ const AddTrips = () => {
   const [status, setStatus] = useState("Active");
   const [mediaFiles, setMediaFiles] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [trips, setTrips] = useState(false);
-  const [tripType, setTripType] = useState(false);
   const [tagList, setTagList] = useState([]);
-  const [tag, setTag] = useState("");
+  const [selectedTags, setSelectedTags] = useState([]);
 
   const { showAlert } = useAlert();
   const navigate = useNavigate();
@@ -32,11 +30,7 @@ const AddTrips = () => {
 
       try {
         const tagRes = await TagServices.getAll("", "", 1, "");
-        console.log("REsponse = ", tagRes.tags);
-        console.log("REsponse = ", tagRes.tags || []);
-
         setTagList(tagRes.tags || []);
-        console.log("After setting = ", tagList);
       } catch (err) {
         console.error("Failed to fetch tags", err);
       }
@@ -44,10 +38,22 @@ const AddTrips = () => {
 
     fetchData();
   }, []);
+
   // Handle adding multiple images one by one
   const handleMediaChange = (e) => {
     const files = Array.from(e.target.files);
     setMediaFiles((prevFiles) => [...prevFiles, ...files]);
+  };
+
+  const handleTagSelect = (e) => {
+    const value = e.target.value;
+    if (value && !selectedTags.includes(value)) {
+      setSelectedTags([...selectedTags, value]);
+    }
+  };
+
+  const removeTag = (id) => {
+    setSelectedTags(selectedTags.filter((t) => t !== id));
   };
 
   const handleSubmit = async (e) => {
@@ -63,9 +69,9 @@ const AddTrips = () => {
     const data = {
       title,
       description,
-      tag: tagList,
+      tag: selectedTags,
       status,
-      media: mediaFiles, // Send all selected files
+      media: mediaFiles,
     };
 
     const result = await TripServices.add(data);
@@ -119,24 +125,47 @@ const AddTrips = () => {
               />
             </div>
 
-            {/* Parent Destination Dropdown */}
+            {/* Tag Selection (Multi-Select) */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Tags
               </label>
               <select
-                value={tag}
-                onChange={(e) => setTag(e.target.value)}
+                onChange={handleTagSelect}
                 className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="">None</option>
+                <option value="">Select a tag</option>
                 {tagList.map((t) => (
                   <option key={t.id} value={t.id}>
                     {t.title}
                   </option>
                 ))}
               </select>
+
+              {/* Selected Tags */}
+              <div className="flex flex-wrap mt-3 gap-2">
+  {selectedTags.map((tagId) => {
+    const tag = tagList.find((t) => String(t.id) === String(tagId));
+    return (
+      <span
+        key={tagId}
+        className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full flex items-center gap-2"
+      >
+        {tag ? tag.title : 'Unknown Tag'}
+        <button
+          type="button"
+          onClick={() => removeTag(tagId)}
+          className="text-red-500 hover:text-red-700 font-bold ml-1"
+        >
+          ×
+        </button>
+      </span>
+    );
+  })}
+</div>
+
             </div>
+
             {/* Status */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">

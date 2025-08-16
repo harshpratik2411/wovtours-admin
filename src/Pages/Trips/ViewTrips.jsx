@@ -9,12 +9,12 @@ import TripServices from "./TripsServices";
 
 const renderField = (field) => {
   if (Array.isArray(field)) {
-    return field.length ? field.join(", ") : "N/A";
+    return field.length ? field.join(", ") : "none";
   }
   if (typeof field === "object" && field !== null) {
     return JSON.stringify(field);
   }
-  return field || "N/A";
+  return field || "none";
 };
 
 const ViewTrips = () => {
@@ -36,7 +36,7 @@ const ViewTrips = () => {
           includes: data.includes,
           excludes: data.excludes,
           faqs: data.faqs,
-          tags: data.tags,
+          tag: data.tag,
           trip_types: data.trip_types,
           trip_activity: data.trip_activity,
           media_urls: data.media_urls,
@@ -182,7 +182,7 @@ const ViewTrips = () => {
 
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Tags:</span>
-                <span>{renderField(trip.tags)}</span>
+                <span>{renderField(trip.tag)}</span>
               </div>
 
               <div className="flex gap-3">
