@@ -75,7 +75,7 @@ const ViewTag = () => {
             <div className="space-y-6">
               <div>
                 <span className="font-semibold block mb-1">Tag Name:</span>
-                <span>{tag.name}</span>
+                <span>{tag.title}</span>
               </div>
 
               <div>

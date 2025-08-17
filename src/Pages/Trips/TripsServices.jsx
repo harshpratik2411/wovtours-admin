@@ -17,22 +17,7 @@ class TripServices {
       const data = await response.json();
 
       return {
-        Trips: data.results.map((trip) => ({
-          id: trip.id,
-          title: trip.title,
-          description: trip.description,
-          hilights: trip.hilights,
-          includes: trip.includes,
-          excludes: trip.excludes,
-          faqs: trip.faqs,
-          tags: trip.tags,
-          trip_types: trip.trip_types,
-          trip_activity: trip.trip_activity,
-          media_urls: trip.media_urls,
-          status: trip.status,
-          created_at: trip.created_at,
-          updated_at: trip.updated_at,
-        })),
+        Trips: data.results,
         totalCount: data.count,
         totalPages: Math.ceil(data.count / 10),
         currentPage: page,
@@ -60,22 +45,7 @@ class TripServices {
 
       const trip = await response.json();
 
-      return {
-        id: trip.id,
-        title: trip.title,
-        description: trip.description,
-        hilights: trip.hilights,
-        includes: trip.includes,
-        excludes: trip.excludes,
-        faqs: trip.faqs,
-        tags: trip.tags,
-        trip_types: trip.trip_types,
-        trip_activity: trip.trip_activity,
-        media_urls: trip.media_urls,
-        status: trip.status,
-        created_at: trip.created_at,
-        updated_at: trip.updated_at,
-      };
+      return trip;
     } catch (error) {
       console.error("Failed to fetch trip:", error);
       return null;

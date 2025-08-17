@@ -21,32 +21,14 @@ const ViewTrips = () => {
   const { id } = useParams();
   const [trip, setTrip] = useState(null);
   const [loading, setLoading] = useState(true);
+  // const [tag, setTag] = useState(null);
 
   useEffect(() => {
     const fetchTrip = async () => {
       try {
         setLoading(true);
         const data = await TripServices.get(id);
-
-        const mappedTrip = {
-          id: data.id,
-          title: data.title,
-          description: data.description,
-          hilights: data.hilights,
-          includes: data.includes,
-          excludes: data.excludes,
-          faqs: data.faqs,
-          tag: data.tag,
-          trip_types: data.trip_types,
-          trip_activity: data.trip_activity,
-          media_urls: data.media_urls,
-          status: data.status,
-          created_at: data.created_at,
-          updated_at: data.updated_at,
-          parent_id: data.parent_id,
-        };
-
-        setTrip(mappedTrip);
+        setTrip(data);
         setLoading(false);
       } catch (error) {
         console.error("Failed to fetch Trip:", error);
@@ -105,10 +87,7 @@ const ViewTrips = () => {
               className="rounded-lg overflow-hidden shadow-md aspect-[4/3] w-full border bg-black flex items-center justify-center"
             >
               {isVideo ? (
-                <video
-                  controls
-                  className="object-cover w-full h-full"
-                >
+                <video controls className="object-cover w-full h-full">
                   <source src={url} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
@@ -119,7 +98,9 @@ const ViewTrips = () => {
                   className="object-cover w-full h-full"
                 />
               ) : (
-                <div className="text-gray-500 text-sm">Unsupported file type</div>
+                <div className="text-gray-500 text-sm">
+                  Unsupported file type
+                </div>
               )}
             </div>
           );
@@ -182,22 +163,28 @@ const ViewTrips = () => {
 
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Tags:</span>
-                <span>{renderField(trip.tag)}</span>
+                {trip.tags.map((tag, index) => (
+                  <span key={index}>{renderField(tag.title)}</span>
+                ))}
               </div>
 
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Trip Types:</span>
-                <span>{renderField(trip.trip_types)}</span>
+                {trip.trip_types.map((trip_type, index) => (
+                  <span key={index}>{renderField(trip_type.title)}</span>
+                ))}
               </div>
 
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Trip Activity:</span>
-                <span>{renderField(trip.trip_activity)}</span>
+                {trip.trip_activity.map((activity, index) => (
+                  <span key={index}>{renderField(activity.title)}</span>
+                ))}
               </div>
 
               <div className="flex gap-3">
-                <span className="font-semibold w-40">Parent Id:</span>
-                <span>{renderField(trip.parent_id)}</span>
+                <span className="font-semibold w-40">Category:</span>
+                <span>{renderField(trip.category?.title??"None")}</span>
               </div>
 
               <div className="flex gap-3">
@@ -231,7 +218,9 @@ const ViewTrips = () => {
                   Full Description
                 </h3>
               </div>
-              <p className="text-gray-600 leading-relaxed">{trip.description}</p>
+              <p className="text-gray-600 leading-relaxed">
+                {trip.description}
+              </p>
             </div>
           )}
         </div>

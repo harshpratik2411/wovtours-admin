@@ -39,7 +39,6 @@ const AddTrips = () => {
     fetchData();
   }, []);
 
-  // Handle adding multiple images one by one
   const handleMediaChange = (e) => {
     const files = Array.from(e.target.files);
     setMediaFiles((prevFiles) => [...prevFiles, ...files]);
