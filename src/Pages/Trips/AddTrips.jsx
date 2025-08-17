@@ -5,8 +5,8 @@ import Sidebar from "../../Components/Siderbar/Sidebar";
 import { useAlert } from "../../Context/AlertContext/AlertContext";
 import TripServices from "./TripsServices";
 import TagServices from "../../Pages/Tags/TagServices";
-import TripTypeServices from "../../Pages/TripType/TripTypeServices"; 
-import CategoryServices from '../../Pages/Category/CategoryServices'
+import TripTypeServices from "../../Pages/TripType/TripTypeServices";
+import CategoryServices from "../../Pages/Category/CategoryServices";
 
 const AddTrips = () => {
   const [title, setTitle] = useState("");
@@ -17,10 +17,9 @@ const AddTrips = () => {
   const [tagList, setTagList] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [tripTypeList, setTripTypeList] = useState([]);
-  const [selectedTripTypes, setSelectedTripTypes] = useState([]); 
+  const [selectedTripTypes, setSelectedTripTypes] = useState([]);
   const [category, setCategory] = useState([]);
-  const [selectedcategory, setSelectedCategory] = useState([]);
-
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   const { showAlert } = useAlert();
   const navigate = useNavigate();
@@ -43,19 +42,25 @@ const AddTrips = () => {
 
       try {
         const tripTypeRes = await TripTypeServices.getAll("", "", 1, "");
-        console.log("Trip Types fetched successfully 1:", tripTypeRes.TripTypes);
+        console.log(
+          "Trip Types fetched successfully 1:",
+          tripTypeRes.TripTypes
+        );
         setTripTypeList(tripTypeRes.TripTypes || []);
       } catch (err) {
         console.error("Failed to fetch trip types", err);
       }
-    
-      // try {
-      //   const CategoriesRes = await CategoryServices.getAll("", "", 1, "");
-      //   console.log("Trip Types fetched successfully 1:", CategoriesRes.Categories);
-      //   setTripTypeList(CategoriesRes.Categories || []);
-      // } catch (err) {
-      //   console.error("Failed to fetch categories types", err);
-      // }
+
+      try {
+        const CategoriesRes = await CategoryServices.getAll("", "", 1, "");
+        console.log(
+          "Category fetched successfully 1:",
+          CategoriesRes.Categories
+        );
+        setCategory(CategoriesRes.Categories || []);
+      } catch (err) {
+        console.error("Failed to fetch categories types", err);
+      }
     };
 
     fetchData();
@@ -67,12 +72,11 @@ const AddTrips = () => {
   };
 
   const handleTagSelect = (e) => {
-  const value = parseInt(e.target.value); // convert to number
-  if (value && !selectedTags.includes(value)) {
-    setSelectedTags([...selectedTags, value]);
-  }
-};
-
+    const value = parseInt(e.target.value);
+    if (value && !selectedTags.includes(value)) {
+      setSelectedTags([...selectedTags, value]);
+    }
+  };
 
   const removeTag = (id) => {
     setSelectedTags(selectedTags.filter((t) => t !== id));
@@ -81,8 +85,8 @@ const AddTrips = () => {
   const handleTripTypeSelect = (e) => {
     const value = parseInt(e.target.value);
     console.log("Selected Trip Type:", value);
-    console.log("Type of Selected Trip Type:", typeof(value));
-    
+    console.log("Type of Selected Trip Type:", typeof value);
+
     if (value && !selectedTripTypes.includes(value)) {
       setSelectedTripTypes([...selectedTripTypes, value]);
     }
@@ -90,6 +94,11 @@ const AddTrips = () => {
 
   const removeTripType = (id) => {
     setSelectedTripTypes(selectedTripTypes.filter((t) => t !== id));
+  };
+
+  const handleCategorySelect = (e) => {
+    const value = parseInt(e.target.value);
+    setSelectedCategory(value || null);
   };
 
   const handleSubmit = async (e) => {
@@ -108,12 +117,12 @@ const AddTrips = () => {
       tag_ids: selectedTags,
       trip_type_ids: selectedTripTypes,
       status,
-      media: mediaFiles, 
-     
+      media: mediaFiles,
+      category_id: selectedCategory,
     };
 
     console.log("Submitting trip data:", data);
-    const result = await TripServices.add(data); 
+    const result = await TripServices.add(data);
 
     setLoading(false);
 
@@ -244,6 +253,19 @@ const AddTrips = () => {
               </div>
             </div>
 
+            <select
+              value={selectedCategory || ""}
+              onChange={handleCategorySelect}
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Select a category</option>
+              {category.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.title}
+                </option>
+              ))}
+            </select>
+
             {/* Status */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
@@ -289,6 +311,7 @@ const AddTrips = () => {
               onChange={handleMediaChange}
               className="mb-4 w-full max-w-md"
               multiple
+              required
             />
             <label className="block text-sm font-semibold text-gray-700 mb-3">
               Media Preview
@@ -327,4 +350,3 @@ const AddTrips = () => {
 };
 
 export default AddTrips;
- 
