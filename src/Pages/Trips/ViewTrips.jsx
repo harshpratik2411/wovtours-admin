@@ -21,7 +21,6 @@ const ViewTrips = () => {
   const { id } = useParams();
   const [trip, setTrip] = useState(null);
   const [loading, setLoading] = useState(true);
-  // const [tag, setTag] = useState(null);
 
   useEffect(() => {
     const fetchTrip = async () => {
@@ -163,7 +162,7 @@ const ViewTrips = () => {
 
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Tags:</span>
-                {trip.tags.map((tag, index) => (
+                {trip.tags.map((tags, index) => (
                   <span key={index}>{renderField(tag.title)}</span>
                 ))}
               </div>

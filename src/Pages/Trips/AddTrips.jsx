@@ -15,6 +15,8 @@ const AddTrips = () => {
   const [loading, setLoading] = useState(false);
   const [tagList, setTagList] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [tripTypeList, setTripTypeList] = useState([]);
+  const [selectedTripTypes, setSelectedTripTypes] = useState([]);
 
   const { showAlert } = useAlert();
   const navigate = useNavigate();
@@ -34,6 +36,14 @@ const AddTrips = () => {
       } catch (err) {
         console.error("Failed to fetch tags", err);
       }
+
+      try {
+        const tripTypeRes = await TripTypeServices.getAll("", "", 1, "");
+        console.log("Trip Types fetched successfully 1:", tripTypeRes.TripTypes);
+        setTripTypeList(tripTypeRes.TripTypes || []);
+      } catch (err) {
+        console.error("Failed to fetch trip types", err);
+      }
     };
 
     fetchData();
@@ -45,14 +55,29 @@ const AddTrips = () => {
   };
 
   const handleTagSelect = (e) => {
-    const value = e.target.value;
-    if (value && !selectedTags.includes(value)) {
-      setSelectedTags([...selectedTags, value]);
-    }
-  };
+  const value = parseInt(e.target.value); // convert to number
+  if (value && !selectedTags.includes(value)) {
+    setSelectedTags([...selectedTags, value]);
+  }
+};
+
 
   const removeTag = (id) => {
     setSelectedTags(selectedTags.filter((t) => t !== id));
+  };
+
+  const handleTripTypeSelect = (e) => {
+    const value = parseInt(e.target.value);
+    console.log("Selected Trip Type:", value);
+    console.log("Type of Selected Trip Type:", typeof(value));
+    
+    if (value && !selectedTripTypes.includes(value)) {
+      setSelectedTripTypes([...selectedTripTypes, value]);
+    }
+  };
+
+  const removeTripType = (id) => {
+    setSelectedTripTypes(selectedTripTypes.filter((t) => t !== id));
   };
 
   const handleSubmit = async (e) => {
@@ -68,12 +93,14 @@ const AddTrips = () => {
     const data = {
       title,
       description,
-      tag: selectedTags,
+      tags: selectedTags,
+      tripType: selectedTripTypes,
       status,
       media: mediaFiles,
     };
 
-    const result = await TripServices.add(data);
+    console.log("Submitting trip data:", data);
+    const result = await TripServices.add(data); 
 
     setLoading(false);
 
@@ -143,26 +170,65 @@ const AddTrips = () => {
 
               {/* Selected Tags */}
               <div className="flex flex-wrap mt-3 gap-2">
-  {selectedTags.map((tagId) => {
-    const tag = tagList.find((t) => String(t.id) === String(tagId));
-    return (
-      <span
-        key={tagId}
-        className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full flex items-center gap-2"
-      >
-        {tag ? tag.title : 'Unknown Tag'}
-        <button
-          type="button"
-          onClick={() => removeTag(tagId)}
-          className="text-red-500 hover:text-red-700 font-bold ml-1"
-        >
-          ×
-        </button>
-      </span>
-    );
-  })}
-</div>
+                {selectedTags.map((tagId) => {
+                  const tag = tagList.find((t) => t.id === tagId);
+                  return (
+                    <span
+                      key={tagId}
+                      className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full flex items-center gap-2"
+                    >
+                      {tag ? tag.title : "Unknown Tag"}
+                      <button
+                        type="button"
+                        onClick={() => removeTag(tagId)}
+                        className="text-red-500 hover:text-red-700 font-bold ml-1"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
 
+            {/* Trip Type Selection (Multi-Select) */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Trip Type
+              </label>
+              <select
+                onChange={handleTripTypeSelect}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select a trip type</option>
+                {tripTypeList.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.title}
+                  </option>
+                ))}
+              </select>
+
+              {/* Selected Trip Types */}
+              <div className="flex flex-wrap mt-3 gap-2">
+                {selectedTripTypes.map((typeId) => {
+                  const type = tripTypeList.find((t) => t.id === typeId);
+                  return (
+                    <span
+                      key={typeId}
+                      className="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full flex items-center gap-2"
+                    >
+                      {type ? type.title : "Unknown Type"}
+                      <button
+                        type="button"
+                        onClick={() => removeTripType(typeId)}
+                        className="text-red-500 hover:text-red-700 font-bold ml-1"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Status */}
@@ -248,3 +314,4 @@ const AddTrips = () => {
 };
 
 export default AddTrips;
+ 

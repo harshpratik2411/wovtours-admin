@@ -15,18 +15,10 @@ class TripTypeServices {
       }
 
       const data = await response.json();
+      console.log("Trip Types fetched successfully:",  data.results);
 
       return {
-        TripTypes: data.results.map((tripType) => ({
-          id: tripType.id,
-          title: tripType.title,
-          description: tripType.description,
-          parent_id: tripType.parent_id,
-          media_url: tripType.media_url,
-          status: tripType.status,
-          created_at: tripType.created_at,
-          updated_at: tripType.updated_at,
-        })),
+        TripTypes: data.results,
         totalCount: data.count,
         totalPages: Math.ceil(data.count / 10),
         currentPage: page,

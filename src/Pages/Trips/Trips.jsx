@@ -254,12 +254,13 @@ const Trips = () => {
                     <td className="py-6">
                       <p className="font-medium text-gray-800">{trip.title}</p>
                     </td>
+
                     <td className="py-6">
                       <p className="font-medium ml-3  text-gray-800">
                         {trip.description}
                       </p>
                     </td>
-                    <td className="py-6">
+                     <td className="py-6">
                       <p className="font-medium ml-6   text-gray-800">
                         {trip.category?.title ?? "none"}
                       </p>

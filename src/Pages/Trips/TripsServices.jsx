@@ -119,7 +119,7 @@ class TripServices {
       if (data[key] !== undefined && data[key] !== null) {
         if (key === "media" && Array.isArray(data[key])) {
           data[key].forEach((file) => {
-            formData.append("media", file); // append each file individually
+            formData.append("media", file);
           });
         } else {
           formData.append(key, data[key]);
