@@ -5,7 +5,8 @@ import Sidebar from "../../Components/Siderbar/Sidebar";
 import { useAlert } from "../../Context/AlertContext/AlertContext";
 import TripServices from "./TripsServices";
 import TagServices from "../../Pages/Tags/TagServices";
-import TripTypeServices from "../../Pages/TripType/TripTypeServices";
+import TripTypeServices from "../../Pages/TripType/TripTypeServices"; 
+import CategoryServices from '../../Pages/Category/CategoryServices'
 
 const AddTrips = () => {
   const [title, setTitle] = useState("");
@@ -16,7 +17,10 @@ const AddTrips = () => {
   const [tagList, setTagList] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [tripTypeList, setTripTypeList] = useState([]);
-  const [selectedTripTypes, setSelectedTripTypes] = useState([]);
+  const [selectedTripTypes, setSelectedTripTypes] = useState([]); 
+  const [category, setCategory] = useState([]);
+  const [selectedcategory, setSelectedCategory] = useState([]);
+
 
   const { showAlert } = useAlert();
   const navigate = useNavigate();
@@ -44,6 +48,14 @@ const AddTrips = () => {
       } catch (err) {
         console.error("Failed to fetch trip types", err);
       }
+    
+      // try {
+      //   const CategoriesRes = await CategoryServices.getAll("", "", 1, "");
+      //   console.log("Trip Types fetched successfully 1:", CategoriesRes.Categories);
+      //   setTripTypeList(CategoriesRes.Categories || []);
+      // } catch (err) {
+      //   console.error("Failed to fetch categories types", err);
+      // }
     };
 
     fetchData();
@@ -93,10 +105,11 @@ const AddTrips = () => {
     const data = {
       title,
       description,
-      tags: selectedTags,
-      tripType: selectedTripTypes,
+      tag_ids: selectedTags,
+      trip_type_ids: selectedTripTypes,
       status,
-      media: mediaFiles,
+      media: mediaFiles, 
+     
     };
 
     console.log("Submitting trip data:", data);

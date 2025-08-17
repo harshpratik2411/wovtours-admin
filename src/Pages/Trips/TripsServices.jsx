@@ -137,7 +137,7 @@ class TripServices {
 
     if (APIService.isUnauthenticated(response.status)) {
       await APIService.refreshToken();
-      return this.add(data);
+      return await this.add(data);
     }
 
     if (APIService.isError(response.status)) {

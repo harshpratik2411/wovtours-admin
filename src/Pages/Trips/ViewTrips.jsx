@@ -64,49 +64,50 @@ const ViewTrips = () => {
   }
 
   const renderMedia = () => {
-    if (!trip.media_urls || trip.media_urls.length === 0) {
-      return (
-        <img
-          src="/placeholder.jpg"
-          alt="Placeholder"
-          className="rounded-lg shadow-md max-h-[400px] w-full border"
-        />
-      );
-    }
-
+  if (!trip.media_urls || trip.media_urls.length === 0) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-        {trip.media_urls.map((url, index) => {
-          const isVideo = /\.(mp4|webm|ogg)$/i.test(url);
-          const isImage = /\.(jpeg|jpg|gif|png|webp)$/i.test(url);
-
-          return (
-            <div
-              key={index}
-              className="rounded-lg overflow-hidden shadow-md aspect-[4/3] w-full border bg-black flex items-center justify-center"
-            >
-              {isVideo ? (
-                <video controls className="object-cover w-full h-full">
-                  <source src={url} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              ) : isImage ? (
-                <img
-                  src={url}
-                  alt={`Media ${index + 1}`}
-                  className="object-cover w-full h-full"
-                />
-              ) : (
-                <div className="text-gray-500 text-sm">
-                  Unsupported file type
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
+      <img
+        src="/placeholder.jpg"
+        alt="Placeholder"
+        className="rounded-lg shadow-md max-h-[400px] w-full border"
+      />
     );
-  };
+  }
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+      {trip.media_urls.map((mediaObj, index) => {
+        const media = mediaObj.media;
+        const isVideo = /\.(mp4|webm|ogg)$/i.test(media);
+        const isImage = /\.(jpeg|jpg|gif|png|webp)$/i.test(media);
+
+        return (
+          <div
+            key={index}
+            className="rounded-lg overflow-hidden shadow-md aspect-[4/3] w-full border bg-black flex items-center justify-center"
+          >
+            {isVideo ? (
+              <video controls className="object-cover w-full h-full">
+                <source src={media} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            ) : isImage ? (
+              <img
+                src={media}
+                alt={`Media ${index + 1}`}
+                className="object-cover w-full h-full"
+              />
+            ) : (
+              <div className="text-gray-500 text-sm">
+                Unsupported file type
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
 
   return (
     <>
@@ -163,7 +164,7 @@ const ViewTrips = () => {
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Tags:</span>
                 {trip.tags.map((tags, index) => (
-                  <span key={index}>{renderField(tag.title)}</span>
+                  <span key={index}>{renderField(tags.title)}</span>
                 ))}
               </div>
 
