@@ -140,19 +140,23 @@ const ViewTrips = () => {
                 <span className="font-semibold w-40">Description:</span>
                 <span>{renderField(trip.description)}</span>
               </div>
-              
-             <div className="flex gap-3">
-  <span className="font-semibold w-40">Category:</span>
-  <span>{trip.category?.title || "None"}</span>
-</div>
-             <div className="flex gap-3">
-  <span className="font-semibold w-40">Destination:</span>
-  <span>{trip.destination?.title || "None"}</span>
-</div>
-             <div className="flex gap-3">
-  <span className="font-semibold w-40">pricing Category:</span>
-  <span>{trip.pricing_category.title || "None"}</span>
-</div>
+
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Category:</span>
+                <span>{trip.category?.title || "None"}</span>
+              </div>
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Destination:</span>
+                <span>{trip.destination?.title || "None"}</span>
+              </div>
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">pricing Category:</span>
+                <span>{trip.pricing_category.title || "None"}</span>
+              </div>
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Difficulty:</span>
+                <span>{trip.difficulty.title || "None"}</span>
+              </div>
 
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Highlights:</span>
@@ -194,8 +198,7 @@ const ViewTrips = () => {
                   <span key={index}>{renderField(category.title)}</span>
                 ))}
               </div> */}
-            
-           
+
               {/* <div className="flex gap-3">
                 <span className="font-semibold w-40">Trip Activity:</span>
                 {trip.trip_activity.map((activity, index) => (

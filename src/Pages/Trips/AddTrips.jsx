@@ -9,6 +9,7 @@ import TripTypeServices from "../../Pages/TripType/TripTypeServices";
 import CategoryServices from "../../Pages/Category/CategoryServices";
 import DestinationServices from "../../Pages/Destinations/DestinationServices";
 import PricingCatServices from "../../Pages/PricingCategory/PricingCatServices";
+import DifficultiesServices from '../../Pages/Difficulties/DifficultiesServices'; 
 
 const AddTrips = () => {
   const [title, setTitle] = useState("");
@@ -25,7 +26,10 @@ const AddTrips = () => {
   const [destinationList, setDestinationList] = useState([]);
   const [selectedDestination, setSelectedDestination] = useState(null);
   const [pricingCategories, setPricingCategories] = useState([]);
-  const [selectedPricingCategory, setSelectedPricingCategory] = useState(null);
+  const [selectedPricingCategory, setSelectedPricingCategory] = useState(null); 
+  const [difficulties, setDifficulties] = useState([]);
+const [selectedDifficulty, setSelectedDifficulty] = useState(null);
+
 
   const { showAlert } = useAlert();
   const navigate = useNavigate();
@@ -81,10 +85,18 @@ const AddTrips = () => {
           pricingCatRes.PricingCategory
         );
         setPricingCategories(pricingCatRes.PricingCategory|| []); 
-        log("Pricing Categories fetched successfully:", pricingCatRes.PricingCategory);
+        console.log("Pricing Categories fetched successfully:", pricingCatRes.PricingCategory);
       } catch (err) {
         console.error("Failed to fetch pricing categories", err);
-      }
+      } 
+      try {
+  const difficultyRes = await DifficultiesServices.getAll("", "", 1, "","");
+  console.log("Difficulties fetched:", difficultyRes.difficulties);
+  setDifficulties(difficultyRes.difficulties || []);
+} catch (err) {
+  console.error("Failed to fetch difficulties", err);
+}
+
     };
 
     fetchData();
@@ -131,7 +143,12 @@ const AddTrips = () => {
   const handlePricingCategorySelect = (e) => {
     const value = parseInt(e.target.value);
     setSelectedPricingCategory(value || null);
-  };
+  }; 
+  const handleDifficultySelect = (e) => {
+  const value = (e.target.value);
+  setSelectedDifficulty(value || null);
+};
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -152,7 +169,8 @@ const AddTrips = () => {
       media: mediaFiles,
       category_id: selectedCategory,
       destination_id: selectedDestination,
-     pricing_category_id: selectedPricingCategory,
+     pricing_category_id: selectedPricingCategory, 
+     difficulty_id: selectedDifficulty,
     };
 
     console.log("Submitting trip data:", data);
@@ -337,6 +355,25 @@ const AddTrips = () => {
                 ))}
               </select>
             </div>
+ 
+              {/* Difficulty Selection */}
+<div>
+  <label className="block text-sm font-semibold text-gray-700 mb-1">
+    Difficulty
+  </label>
+  <select
+    value={selectedDifficulty || ""}
+    onChange={handleDifficultySelect}
+    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+  >
+    <option value="">Select a difficulty</option>
+    {difficulties.map((d) => (
+      <option key={d.id} value={d.id}>
+        {d.title}
+      </option>
+    ))}
+  </select>
+</div>
 
             {/* Status */}
             <div>

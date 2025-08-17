@@ -38,7 +38,7 @@ const UpdateDifficulties = () => {
       }
 
       setFormData({
-        name: difficulty.name || '',
+        name: difficulty.title || '',
         description: difficulty.desc || '',
         status: difficulty.status || 'Inactive', 
         level: difficulty.level || "",
@@ -58,7 +58,7 @@ const UpdateDifficulties = () => {
   const handleSubmit = async (e) => {
   e.preventDefault()
   const updateData = {
-    title: formData.name,
+    title: formData.title,
     description: formData.description,
     status: formData.status,
     level: formData.level,
@@ -112,7 +112,7 @@ const UpdateDifficulties = () => {
                   type="text"
                   name="name" 
                   maxLength={50}
-                  value={formData.name}
+                  value={formData.title}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
                  required

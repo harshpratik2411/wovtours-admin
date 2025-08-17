@@ -252,7 +252,7 @@ const Difficulties = () => {
                DifficultyList.map((Difficulty) => (
                   <tr key={Difficulty.id} className="border-b  hover:bg-gray-50">
                     <td className="py-6">
-                      <p className="font-medium text-gray-800">{Difficulty.name}</p>
+                      <p className="font-medium text-gray-800">{Difficulty.title}</p>
                     </td>
                     <td className="py-6">
                       <p className="font-medium ml-3 text-gray-800">{Difficulty.level}</p>

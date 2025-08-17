@@ -10,18 +10,19 @@ class DifficultiesServices {
 
     try {
       const response = await fetch(url);
+      console.log("🟦 Difficulty API RAW RESPONSE:", response.data);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
-      console.log("🟦 API RAW RESPONSE:", data);
+      console.log("🟦 Difficulty API RAW RESPONSE:", data);
 
       return {
         difficulties: data.results.map((difficulty) => ({
           id: difficulty.id,
-          name: difficulty.title,
+          title: difficulty.title,
           desc: difficulty.description,
           status: difficulty.status, 
           level: difficulty.level,
@@ -56,7 +57,7 @@ class DifficultiesServices {
 
       return {
         id: difficulty.id,
-        name: difficulty.title,
+        title: difficulty.title,
         desc: difficulty.description,
         status: difficulty.status, 
          level: difficulty.level,

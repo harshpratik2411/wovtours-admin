@@ -75,7 +75,7 @@ const Viewdifficulty = () => {
             <div className="space-y-6">
               <div>
                 <span className="font-semibold block mb-1">Difficulty Name:</span>
-                <span>{Difficulty.name}</span>
+                <span>{Difficulty.title}</span>
               </div>
 
               <div>
