@@ -8,6 +8,8 @@ import TagServices from "../../Pages/Tags/TagServices";
 import TripTypeServices from "../../Pages/TripType/TripTypeServices";
 import CategoryServices from "../../Pages/Category/CategoryServices";
 import DestinationServices from "../../Pages/Destinations/DestinationServices";
+import PricingCatServices from "../../Pages/PricingCategory/PricingCatServices";
+
 const AddTrips = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -22,6 +24,8 @@ const AddTrips = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [destinationList, setDestinationList] = useState([]);
   const [selectedDestination, setSelectedDestination] = useState(null);
+  const [pricingCategories, setPricingCategories] = useState([]);
+  const [selectedPricingCategory, setSelectedPricingCategory] = useState(null);
 
   const { showAlert } = useAlert();
   const navigate = useNavigate();
@@ -70,6 +74,17 @@ const AddTrips = () => {
       } catch (err) {
         console.error("Failed to fetch destinations", err);
       }
+      try {
+        const pricingCatRes = await PricingCatServices.getAll("", "", 1, "");
+        console.log(
+          "Pricing Categories fetched:",
+          pricingCatRes.PricingCategory
+        );
+        setPricingCategories(pricingCatRes.PricingCategory|| []); 
+        log("Pricing Categories fetched successfully:", pricingCatRes.PricingCategory);
+      } catch (err) {
+        console.error("Failed to fetch pricing categories", err);
+      }
     };
 
     fetchData();
@@ -109,10 +124,14 @@ const AddTrips = () => {
     const value = parseInt(e.target.value);
     setSelectedCategory(value || null);
   };
-        const handleDestinationSelect = (e) => {
-  const value = parseInt(e.target.value);
-  setSelectedDestination(value || null);
-};
+  const handleDestinationSelect = (e) => {
+    const value = parseInt(e.target.value);
+    setSelectedDestination(value || null);
+  };
+  const handlePricingCategorySelect = (e) => {
+    const value = parseInt(e.target.value);
+    setSelectedPricingCategory(value || null);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -131,8 +150,9 @@ const AddTrips = () => {
       trip_type_ids: selectedTripTypes,
       status,
       media: mediaFiles,
-      category_id: selectedCategory, 
-       destination_id: selectedDestination,
+      category_id: selectedCategory,
+      destination_id: selectedDestination,
+     pricing_category_id: selectedPricingCategory,
     };
 
     console.log("Submitting trip data:", data);
@@ -279,26 +299,44 @@ const AddTrips = () => {
                 </option>
               ))}
             </select>
-              
-               {/* Destination Selection */}
-<div>
-  <label className="block text-sm font-semibold text-gray-700 mb-1">
-    Destination
-  </label>
-  <select
-    value={selectedDestination || ""}
-    onChange={handleDestinationSelect}
-    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-  >
-    <option value="">Select a destination</option>
-    {destinationList.map((d) => (
-      <option key={d.id} value={d.id}>
-        {d.title}
-      </option>
-    ))}
-  </select>
-</div>
 
+            {/* Destination Selection */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Destination
+              </label>
+              <select
+                value={selectedDestination || ""}
+                onChange={handleDestinationSelect}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select a destination</option>
+                {destinationList.map((d) => (
+                  <option key={d.id} value={d.id}>
+                    {d.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Pricing Category Selection */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Pricing Category
+              </label>
+              <select
+                value={selectedPricingCategory || ""}
+                onChange={handlePricingCategorySelect}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select a pricing category</option>
+                {pricingCategories.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.title}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             {/* Status */}
             <div>
