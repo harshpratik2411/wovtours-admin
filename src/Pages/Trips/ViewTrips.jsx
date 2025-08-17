@@ -145,6 +145,10 @@ const ViewTrips = () => {
   <span className="font-semibold w-40">Category:</span>
   <span>{trip.category?.title || "None"}</span>
 </div>
+             <div className="flex gap-3">
+  <span className="font-semibold w-40">Destination:</span>
+  <span>{trip.destination?.title || "None"}</span>
+</div>
 
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Highlights:</span>

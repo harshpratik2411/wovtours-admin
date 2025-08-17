@@ -7,7 +7,7 @@ import TripServices from "./TripsServices";
 import TagServices from "../../Pages/Tags/TagServices";
 import TripTypeServices from "../../Pages/TripType/TripTypeServices";
 import CategoryServices from "../../Pages/Category/CategoryServices";
-
+import DestinationServices from "../../Pages/Destinations/DestinationServices";
 const AddTrips = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -20,6 +20,8 @@ const AddTrips = () => {
   const [selectedTripTypes, setSelectedTripTypes] = useState([]);
   const [category, setCategory] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [destinationList, setDestinationList] = useState([]);
+  const [selectedDestination, setSelectedDestination] = useState(null);
 
   const { showAlert } = useAlert();
   const navigate = useNavigate();
@@ -61,6 +63,13 @@ const AddTrips = () => {
       } catch (err) {
         console.error("Failed to fetch categories types", err);
       }
+      try {
+        const destinationRes = await DestinationServices.getAll("", "", 1, "");
+        console.log("Destinations fetched:", destinationRes.Destinations);
+        setDestinationList(destinationRes.Destinations || []);
+      } catch (err) {
+        console.error("Failed to fetch destinations", err);
+      }
     };
 
     fetchData();
@@ -100,6 +109,10 @@ const AddTrips = () => {
     const value = parseInt(e.target.value);
     setSelectedCategory(value || null);
   };
+        const handleDestinationSelect = (e) => {
+  const value = parseInt(e.target.value);
+  setSelectedDestination(value || null);
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -118,7 +131,8 @@ const AddTrips = () => {
       trip_type_ids: selectedTripTypes,
       status,
       media: mediaFiles,
-      category_id: selectedCategory,
+      category_id: selectedCategory, 
+       destination_id: selectedDestination,
     };
 
     console.log("Submitting trip data:", data);
@@ -265,6 +279,26 @@ const AddTrips = () => {
                 </option>
               ))}
             </select>
+              
+               {/* Destination Selection */}
+<div>
+  <label className="block text-sm font-semibold text-gray-700 mb-1">
+    Destination
+  </label>
+  <select
+    value={selectedDestination || ""}
+    onChange={handleDestinationSelect}
+    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+  >
+    <option value="">Select a destination</option>
+    {destinationList.map((d) => (
+      <option key={d.id} value={d.id}>
+        {d.title}
+      </option>
+    ))}
+  </select>
+</div>
+
 
             {/* Status */}
             <div>
