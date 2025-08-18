@@ -334,33 +334,34 @@ const Trips = () => {
                 className="bg-white px-4 py-5 rounded-xl shadow-md border w-full"
                 data-aos="fade-up"
               >
-                {trip.media_urls && trip.media_urls.length > 0 ? (
-                  /\.(jpeg|jpg|gif|png|webp)$/i.test(trip.media_urls[0]) ? (
-                    <img
-                      src={trip.media_urls[0]}
-                      alt={trip.title}
-                      className="w-full h-48 object-cover rounded-md mb-4"
-                    />
-                  ) : /\.(mp4|webm|ogg)$/i.test(trip.media_urls[0]) ? (
-                    <video
-                      src={trip.media_urls[0]}
-                      controls
-                      className="w-full h-48 object-cover rounded-md mb-4"
-                    />
-                  ) : (
-                    <img
-                      src="/placeholder.jpg"
-                      alt="Unsupported file"
-                      className="w-full h-48 object-cover rounded-md mb-4"
-                    />
-                  )
-                ) : (
-                  <img
-                    src="/placeholder.jpg"
-                    alt="No media"
-                    className="w-full h-48 object-cover rounded-md mb-4"
-                  />
-                )}
+               {trip.media_urls && trip.media_urls.length > 0 ? (
+          /\.(jpeg|jpg|gif|png|webp)$/i.test(trip.media_urls[0].media) ? (
+            <img
+              src={trip.media_urls[0].media}
+              alt={trip.title}
+              className="w-full h-48 object-cover rounded-md mb-4"
+            />
+          ) : /\.(mp4|webm|ogg)$/i.test(trip.media_urls[0].media) ? (
+            <video
+              src={trip.media_urls[0].media}
+              controls
+              className="w-full h-48 object-cover rounded-md mb-4"
+            />
+          ) : (
+            <img
+              src="/placeholder.jpg"
+              alt="Unsupported file"
+              className="w-full h-48 object-cover rounded-md mb-4"
+            />
+          )
+        ) : (
+          <img
+            src="/placeholder.jpg"
+            alt="No media"
+            className="w-full h-48 object-cover rounded-md mb-4"
+          />
+        )}
+
 
                 <div className="flex justify-between items-start mb-2">
                   <div>

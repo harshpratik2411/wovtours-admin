@@ -277,7 +277,8 @@ const handleCategorySelect = (e) => {
               >
                 <option value="">Select a tag</option>
                 {tagList.map((t) => (
-                  <option key={t.id} value={t.id}>
+                  <option key={t.id} value={t.id}> 
+                   
                     {t.title}
                   </option>
                 ))}
