@@ -130,7 +130,7 @@ class TripServices {
     let response = await fetch(url, {
       method: "POST",
       headers: {
-        Authorization: LocalStorage.getAccesToken(), // No Content-Type here
+        Authorization: LocalStorage.getAccesToken(),
       },
       body: formData,
     });

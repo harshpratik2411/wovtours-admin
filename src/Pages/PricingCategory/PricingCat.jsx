@@ -224,7 +224,7 @@ const PricingCat = () => {
         PricingCatList.map((PricingCat) => (
           <tr key={PricingCat.id} className="border-b hover:bg-gray-50">
             <td className="py-6">
-              <p className="font-medium text-gray-800">{PricingCat.name}</p>
+              <p className="font-medium text-gray-800">{PricingCat.title}</p>
             </td>
             <td className="py-6">
               <p className="font-medium text-gray-800">{PricingCat.desc}</p>

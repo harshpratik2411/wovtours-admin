@@ -58,7 +58,7 @@ class PricingCatServices {
 
       return {
         id: PricingCat .id,
-        name: PricingCat .title,
+        title: PricingCat .title,
         desc: PricingCat .description,
         status: PricingCat .status,
         start_age:PricingCat.start_age,

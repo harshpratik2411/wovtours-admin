@@ -126,15 +126,29 @@ const ViewTrips = () => {
 
           <div className="grid lg:grid-cols-2 gap-8 text-gray-700 text-xs lg:text-lg mb-10">
             <div className="space-y-4">
-              <div className="flex gap-3">
-                <span className="font-semibold w-40">ID:</span>
-                <span>{trip.id}</span>
-              </div>
+             <div className="flex gap-3">
+  <span className="font-semibold w-40">Trip Title:</span>
+  <span>{trip.title || "Untitled"}</span>
+</div>
 
-              <div className="flex gap-3">
-                <span className="font-semibold w-40">Title:</span>
-                <span>{trip.title}</span>
-              </div>
+             <div className="flex gap-3">
+  <span className="font-semibold w-40">Tags:</span>
+  <div className="flex flex-wrap gap-2">
+    {trip.tags?.length ? (
+      trip.tags.map((tag, index) => (
+        <span
+          key={index}
+        
+        >
+          {renderField(tag.title)}
+        </span>
+      ))
+    ) : (
+      <span>None</span>
+    )}
+  </div>
+</div>
+
 
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Description:</span>

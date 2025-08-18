@@ -221,9 +221,9 @@ const Tags = () => {
                 tagList.map((tag) => (
                   <tr key={tag.id} className="border-b  hover:bg-gray-50">
                     <td className="py-6">
-                      <p className="font-medium text-gray-800">{tag.name}</p>
+                      <p className="font-medium text-gray-800">{tag.title}</p>
                     </td>
-                    <td className="py-4  text-gray-700">{tag.desc}</td>
+                    <td className="py-4  text-gray-700">{tag.description}</td>
                     <td className="py-4">
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(
