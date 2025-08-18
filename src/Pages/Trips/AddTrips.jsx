@@ -10,6 +10,7 @@ import CategoryServices from "../../Pages/Category/CategoryServices";
 import DestinationServices from "../../Pages/Destinations/DestinationServices";
 import PricingCatServices from "../../Pages/PricingCategory/PricingCatServices";
 import DifficultiesServices from '../../Pages/Difficulties/DifficultiesServices'; 
+import ActivityServices from '../../Pages/Activities/ActivityServices';
 
 const AddTrips = () => {
   const [title, setTitle] = useState("");
@@ -28,7 +29,10 @@ const AddTrips = () => {
   const [pricingCategories, setPricingCategories] = useState([]);
   const [selectedPricingCategory, setSelectedPricingCategory] = useState(null); 
   const [difficulties, setDifficulties] = useState([]);
-const [selectedDifficulty, setSelectedDifficulty] = useState(null);
+const [selectedDifficulty, setSelectedDifficulty] = useState(null); 
+const [activityList, setActivityList] = useState([]);
+const [selectedActivities, setSelectedActivities] = useState([]);
+
 
 
   const { showAlert } = useAlert();
@@ -96,6 +100,14 @@ const [selectedDifficulty, setSelectedDifficulty] = useState(null);
 } catch (err) {
   console.error("Failed to fetch difficulties", err);
 }
+ 
+try {
+  const activityRes = await ActivityServices.getAll("", "", 1, "");
+  console.log("Activities fetched:", activityRes.Activities);
+  setActivityList(activityRes.Activities || []);
+} catch (err) {
+  console.error("Failed to fetch activities", err);
+}
 
     };
 
@@ -148,6 +160,16 @@ const [selectedDifficulty, setSelectedDifficulty] = useState(null);
   const value = (e.target.value);
   setSelectedDifficulty(value || null);
 };
+  const handleActivitySelect = (e) => {
+  const value = parseInt(e.target.value);
+  if (value && !selectedActivities.includes(value)) {
+    setSelectedActivities([...selectedActivities, value]);
+  }
+};
+
+const removeActivity = (id) => {
+  setSelectedActivities(selectedActivities.filter((a) => a !== id));
+};
 
 
   const handleSubmit = async (e) => {
@@ -164,7 +186,8 @@ const [selectedDifficulty, setSelectedDifficulty] = useState(null);
       title,
       description,
       tag_ids: selectedTags,
-      trip_type_ids: selectedTripTypes,
+      trip_type_ids: selectedTripTypes, 
+      trip_activity_ids: selectedActivities,
       status,
       media: mediaFiles,
       category_id: selectedCategory,
@@ -373,7 +396,47 @@ const [selectedDifficulty, setSelectedDifficulty] = useState(null);
       </option>
     ))}
   </select>
+</div> 
+
+<div>
+  <label className="block text-sm font-semibold text-gray-700 mb-1">
+    Activities
+  </label>
+  <select
+    onChange={handleActivitySelect}
+    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+  >
+    <option value="">Select an activity</option>
+    {activityList.map((a) => (
+      <option key={a.id} value={a.id}>
+        {a.title}
+      </option>
+    ))}
+  </select>
+
+  {/* Selected Activities */}
+  <div className="flex flex-wrap mt-3 gap-2">
+    {selectedActivities.map((activityId) => {
+      const activity = activityList.find((a) => a.id === activityId);
+      return (
+        <span
+          key={activityId}
+          className="bg-yellow-100 text-yellow-800 text-sm font-medium px-3 py-1 rounded-full flex items-center gap-2"
+        >
+          {activity ? activity.title : "Unknown Activity"}
+          <button
+            type="button"
+            onClick={() => removeActivity(activityId)}
+            className="text-red-500 hover:text-red-700 font-bold ml-1"
+          >
+            ×
+          </button>
+        </span>
+      );
+    })}
+  </div>
 </div>
+
 
             {/* Status */}
             <div>

@@ -191,20 +191,14 @@ const ViewTrips = () => {
                   <span key={index}>{renderField(trip_type.title)}</span>
                 ))}
               </div>
-
-              {/* <div className="flex gap-3">
-                <span className="font-semibold w-40">Trip Types:</span>
-                {trip.category.map((category, index) => (
-                  <span key={index}>{renderField(category.title)}</span>
-                ))}
-              </div> */}
-
-              {/* <div className="flex gap-3">
+              <div className="flex gap-3">
                 <span className="font-semibold w-40">Trip Activity:</span>
-                {trip.trip_activity.map((activity, index) => (
-                  <span key={index}>{renderField(activity.title)}</span>
+                {trip.trip_activity.map((trip_activity, index) => (
+                  <span key={index}>{renderField(trip_activity.title)}</span>
                 ))}
-              </div> */}
+              </div>
+
+             
 
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Created At:</span>
