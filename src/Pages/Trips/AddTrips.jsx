@@ -9,8 +9,8 @@ import TripTypeServices from "../../Pages/TripType/TripTypeServices";
 import CategoryServices from "../../Pages/Category/CategoryServices";
 import DestinationServices from "../../Pages/Destinations/DestinationServices";
 import PricingCatServices from "../../Pages/PricingCategory/PricingCatServices";
-import DifficultiesServices from '../../Pages/Difficulties/DifficultiesServices'; 
-import ActivityServices from '../../Pages/Activities/ActivityServices';
+import DifficultiesServices from "../../Pages/Difficulties/DifficultiesServices";
+import ActivityServices from "../../Pages/Activities/ActivityServices";
 
 const AddTrips = () => {
   const [title, setTitle] = useState("");
@@ -27,13 +27,13 @@ const AddTrips = () => {
   const [destinationList, setDestinationList] = useState([]);
   const [selectedDestination, setSelectedDestination] = useState(null);
   const [pricingCategories, setPricingCategories] = useState([]);
-  const [selectedPricingCategory, setSelectedPricingCategory] = useState(null); 
+  const [selectedPricingCategory, setSelectedPricingCategory] = useState(null);
   const [difficulties, setDifficulties] = useState([]);
-const [selectedDifficulty, setSelectedDifficulty] = useState(null); 
-const [activityList, setActivityList] = useState([]);
-const [selectedActivities, setSelectedActivities] = useState([]);
-
-
+  const [selectedDifficulty, setSelectedDifficulty] = useState(null);
+  const [activityList, setActivityList] = useState([]);
+  const [selectedActivities, setSelectedActivities] = useState([]);
+  const [includes, setIncludes] = useState([""]);
+  const [excludes, setExcludes] = useState([""]);
 
   const { showAlert } = useAlert();
   const navigate = useNavigate();
@@ -88,27 +88,35 @@ const [selectedActivities, setSelectedActivities] = useState([]);
           "Pricing Categories fetched:",
           pricingCatRes.PricingCategory
         );
-        setPricingCategories(pricingCatRes.PricingCategory|| []); 
-        console.log("Pricing Categories fetched successfully:", pricingCatRes.PricingCategory);
+        setPricingCategories(pricingCatRes.PricingCategory || []);
+        console.log(
+          "Pricing Categories fetched successfully:",
+          pricingCatRes.PricingCategory
+        );
       } catch (err) {
         console.error("Failed to fetch pricing categories", err);
-      } 
+      }
       try {
-  const difficultyRes = await DifficultiesServices.getAll("", "", 1, "","");
-  console.log("Difficulties fetched:", difficultyRes.difficulties);
-  setDifficulties(difficultyRes.difficulties || []);
-} catch (err) {
-  console.error("Failed to fetch difficulties", err);
-}
- 
-try {
-  const activityRes = await ActivityServices.getAll("", "", 1, "");
-  console.log("Activities fetched:", activityRes.Activities);
-  setActivityList(activityRes.Activities || []);
-} catch (err) {
-  console.error("Failed to fetch activities", err);
-}
+        const difficultyRes = await DifficultiesServices.getAll(
+          "",
+          "",
+          1,
+          "",
+          ""
+        );
+        console.log("Difficulties fetched:", difficultyRes.difficulties);
+        setDifficulties(difficultyRes.difficulties || []);
+      } catch (err) {
+        console.error("Failed to fetch difficulties", err);
+      }
 
+      try {
+        const activityRes = await ActivityServices.getAll("", "", 1, "");
+        console.log("Activities fetched:", activityRes.Activities);
+        setActivityList(activityRes.Activities || []);
+      } catch (err) {
+        console.error("Failed to fetch activities", err);
+      }
     };
 
     fetchData();
@@ -155,22 +163,52 @@ try {
   const handlePricingCategorySelect = (e) => {
     const value = parseInt(e.target.value);
     setSelectedPricingCategory(value || null);
-  }; 
+  };
   const handleDifficultySelect = (e) => {
-  const value = (e.target.value);
-  setSelectedDifficulty(value || null);
-};
+    const value = e.target.value;
+    setSelectedDifficulty(value || null);
+  };
   const handleActivitySelect = (e) => {
-  const value = parseInt(e.target.value);
-  if (value && !selectedActivities.includes(value)) {
-    setSelectedActivities([...selectedActivities, value]);
-  }
-};
+    const value = parseInt(e.target.value);
+    if (value && !selectedActivities.includes(value)) {
+      setSelectedActivities([...selectedActivities, value]);
+    }
+  };
 
-const removeActivity = (id) => {
-  setSelectedActivities(selectedActivities.filter((a) => a !== id));
-};
+  const removeActivity = (id) => {
+    setSelectedActivities(selectedActivities.filter((a) => a !== id));
+  };
 
+  const handleIncludeChange = (index, value) => {
+    const updatedIncludes = [...includes];
+    updatedIncludes[index] = value;
+    setIncludes(updatedIncludes);
+
+    // Add new field if last one is not empty
+    if (index === includes.length - 1 && value.trim() !== "") {
+      setIncludes([...updatedIncludes, ""]);
+    }
+  };
+
+  const handleExcludeChange = (index, value) => {
+    const updatedExcludes = [...excludes];
+    updatedExcludes[index] = value;
+    setExcludes(updatedExcludes);
+
+    if (index === excludes.length - 1 && value.trim() !== "") {
+      setExcludes([...updatedExcludes, ""]);
+    }
+  };
+
+  const removeInclude = (index) => {
+    const updatedIncludes = includes.filter((_, i) => i !== index);
+    setIncludes(updatedIncludes.length ? updatedIncludes : [""]);
+  };
+
+  const removeExclude = (index) => {
+    const updatedExcludes = excludes.filter((_, i) => i !== index);
+    setExcludes(updatedExcludes.length ? updatedExcludes : [""]);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -186,14 +224,16 @@ const removeActivity = (id) => {
       title,
       description,
       tag_ids: selectedTags,
-      trip_type_ids: selectedTripTypes, 
+      trip_type_ids: selectedTripTypes,
       trip_activity_ids: selectedActivities,
       status,
       media: mediaFiles,
       category_id: selectedCategory,
       destination_id: selectedDestination,
-     pricing_category_id: selectedPricingCategory, 
-     difficulty_id: selectedDifficulty,
+      pricing_category_id: selectedPricingCategory,
+      difficulty_id: selectedDifficulty,
+      includes: includes.filter((i) => i.trim() !== ""),
+      excludes: excludes.filter((e) => e.trim() !== ""),
     };
 
     console.log("Submitting trip data:", data);
@@ -378,65 +418,116 @@ const removeActivity = (id) => {
                 ))}
               </select>
             </div>
- 
-              {/* Difficulty Selection */}
-<div>
-  <label className="block text-sm font-semibold text-gray-700 mb-1">
-    Difficulty
-  </label>
-  <select
-    value={selectedDifficulty || ""}
-    onChange={handleDifficultySelect}
-    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-  >
-    <option value="">Select a difficulty</option>
-    {difficulties.map((d) => (
-      <option key={d.id} value={d.id}>
-        {d.title}
-      </option>
-    ))}
-  </select>
-</div> 
 
-<div>
-  <label className="block text-sm font-semibold text-gray-700 mb-1">
-    Activities
-  </label>
-  <select
-    onChange={handleActivitySelect}
-    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-  >
-    <option value="">Select an activity</option>
-    {activityList.map((a) => (
-      <option key={a.id} value={a.id}>
-        {a.title}
-      </option>
-    ))}
-  </select>
+            {/* Difficulty Selection */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Difficulty
+              </label>
+              <select
+                value={selectedDifficulty || ""}
+                onChange={handleDifficultySelect}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select a difficulty</option>
+                {difficulties.map((d) => (
+                  <option key={d.id} value={d.id}>
+                    {d.title}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-  {/* Selected Activities */}
-  <div className="flex flex-wrap mt-3 gap-2">
-    {selectedActivities.map((activityId) => {
-      const activity = activityList.find((a) => a.id === activityId);
-      return (
-        <span
-          key={activityId}
-          className="bg-yellow-100 text-yellow-800 text-sm font-medium px-3 py-1 rounded-full flex items-center gap-2"
-        >
-          {activity ? activity.title : "Unknown Activity"}
-          <button
-            type="button"
-            onClick={() => removeActivity(activityId)}
-            className="text-red-500 hover:text-red-700 font-bold ml-1"
-          >
-            ×
-          </button>
-        </span>
-      );
-    })}
-  </div>
-</div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Activities
+              </label>
+              <select
+                onChange={handleActivitySelect}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select an activity</option>
+                {activityList.map((a) => (
+                  <option key={a.id} value={a.id}>
+                    {a.title}
+                  </option>
+                ))}
+              </select>
 
+              {/* Selected Activities */}
+              <div className="flex flex-wrap mt-3 gap-2">
+                {selectedActivities.map((activityId) => {
+                  const activity = activityList.find(
+                    (a) => a.id === activityId
+                  );
+                  return (
+                    <span
+                      key={activityId}
+                      className="bg-yellow-100 text-yellow-800 text-sm font-medium px-3 py-1 rounded-full flex items-center gap-2"
+                    >
+                      {activity ? activity.title : "Unknown Activity"}
+                      <button
+                        type="button"
+                        onClick={() => removeActivity(activityId)}
+                        className="text-red-500 hover:text-red-700 font-bold ml-1"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Includes
+              </label>
+              {includes.map((inc, index) => (
+                <div key={index} className="flex gap-2 items-center mb-2">
+                  <input
+                    type="text"
+                    value={inc}
+                    onChange={(e) => handleIncludeChange(index, e.target.value)}
+                    placeholder="Enter include item"
+                    className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  {includes.length > 1 && inc.trim() !== "" && (
+                    <button
+                      type="button"
+                      onClick={() => removeInclude(index)}
+                      className="text-red-600 font-bold px-2"
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="mt-4">
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Excludes
+              </label>
+              {excludes.map((exc, index) => (
+                <div key={index} className="flex gap-2 items-center mb-2">
+                  <input
+                    type="text"
+                    value={exc}
+                    onChange={(e) => handleExcludeChange(index, e.target.value)}
+                    placeholder="Enter exclude item"
+                    className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  {excludes.length > 1 && exc.trim() !== "" && (
+                    <button
+                      type="button"
+                      onClick={() => removeExclude(index)}
+                      className="text-red-600 font-bold px-2"
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
 
             {/* Status */}
             <div>
