@@ -227,7 +227,7 @@ const PricingCat = () => {
               <p className="font-medium text-gray-800">{PricingCat.title}</p>
             </td>
             <td className="py-6">
-              <p className="font-medium text-gray-800">{PricingCat.desc}</p>
+              <p className="font-medium text-gray-800">{PricingCat.description}</p>
             </td>
             <td className="py-4">
               <span
@@ -326,7 +326,7 @@ const PricingCat = () => {
                 </div>
                 <div className="mt-4 ml-1 space-y-2 text-sm text-gray-700">
                   <p>
-                    <span className="font-bold">Description:</span> {PricingCat.desc}
+                    <span className="font-bold">Description:</span> {PricingCat.description}
                   </p>
                   <p>
                     <span className="font-bold">Created At:</span>{" "}

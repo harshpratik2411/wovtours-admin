@@ -8,7 +8,11 @@ class TripServices {
       `api/admin/trip/?search=${search}&ordering=${orderBy}&page=${page}&status=${status}`;
 
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        headers: {
+          Authorization: LocalStorage.getAccesToken(),
+        },
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

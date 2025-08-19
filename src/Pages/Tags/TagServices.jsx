@@ -9,7 +9,11 @@ class TagServices {
       `api/admin/tags/?search=${search}&ordering=${orderBy}&page=${page}&status=${status}`;
 
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        headers: {
+          Authorization: LocalStorage.getAccesToken(),
+        },
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -18,18 +22,10 @@ class TagServices {
       const data = await response.json();
       console.log("🟦 API RAW RESPONSE:", data);
 
-      // ✅ Return full object, not just array
       return {
-        tags: data.results.map((tag) => ({
-          id: tag.id,
-          title: tag.title,
-          description: tag.description,
-          status: tag.status,
-          created_at: tag.created_at,
-          updated_at: tag.updated_at,
-        })),
+        tags: data.results,
         totalCount: data.count,
-        totalPages: Math.ceil(data.count / 10), // adjust if page size is different
+        totalPages: Math.ceil(data.count / 10),
         currentPage: page,
       };
     } catch (error) {

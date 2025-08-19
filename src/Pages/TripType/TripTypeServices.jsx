@@ -5,10 +5,14 @@ class TripTypeServices {
   static async getAll(search, orderBy, page, status) {
     const url =
       APIService.baseUrl +
-      `api/admin/trip-type/?search=${search}&ordering=${orderBy}&page=${page}&status=${status}`;
-
-    try {
-      const response = await fetch(url);
+      `api/admin/trip-type/?search=${search}&ordering=${orderBy}&page=${page}&status=${status}`; 
+      
+ try {
+      const response = await fetch(url, {
+        headers: {
+          Authorization: LocalStorage.getAccesToken(),
+        },
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

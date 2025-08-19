@@ -7,8 +7,12 @@ class BannerServices {
       APIService.baseUrl +
       `api/admin/banner/?search=${search}&ordering=${orderBy}&page=${page}&status=${status}`;
 
-    try {
-      const response = await fetch(url); 
+     try {
+      const response = await fetch(url, {
+        headers: {
+          Authorization: LocalStorage.getAccesToken(),
+        },
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -17,15 +21,7 @@ class BannerServices {
       const data = await response.json();
 
       return {
-        Banners: data.results.map((banner) => ({
-          id: banner.id,
-          title: banner.title,
-          banner_type: banner.banner_type,
-          media_url: banner.media_url,
-          status: banner.status,
-          created_at: banner.created_at,
-          updated_at: banner.updated_at,
-        })),
+        Banners: data.results,
         totalCount: data.count,
         totalPages: Math.ceil(data.count / 10),
         currentPage: page,

@@ -150,7 +150,7 @@ const AddPricingCat = () => {
                   }`}
                   disabled={loading}
                 >
-                  {loading ? "Adding Tag..." : "Add Tag"}
+                  {loading ? "Adding PricingCategory..." : "Add PricingCategory"}
                 </button>
               </div>
             </form>

@@ -19,17 +19,7 @@ class PricingCatServices {
       console.log("🟦 API RAW RESPONSE:", data);
 
       return {
-        PricingCategory: data.results.map((PricingCat) => ({
-          id: PricingCat.id,
-          title: PricingCat.title,
-          desc: PricingCat.description,
-          status: PricingCat.status,
-          start_age:PricingCat.start_age,
-          end_age:PricingCat.end_age,
-          created_at: PricingCat.created_at,
-          updated_at: PricingCat.updated_at, 
-          
-        })),
+        PricingCategory: data.results,
         totalCount: data.count,
         totalPages: Math.ceil(data.count / 10),
         currentPage: page,

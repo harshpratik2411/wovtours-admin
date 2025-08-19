@@ -206,7 +206,7 @@ const TripType = () => {
       <th className="py-2 w-[10%]">Image</th>
       <th className="py-2 w-[10%]">Title</th>
       <th className="py-2 pl-3 w-[20%]">Description</th>
-      <th className="py-2 w-[10%]">Parent</th>
+      <th className="py-2  w-[10%]">Parent </th>
       <th className="py-2 w-[10%]">Status</th>
       <th className="py-2 w-[20%]">Created At</th>
       <th className="py-2 w-[15%]">Updated At</th>

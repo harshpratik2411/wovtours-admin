@@ -6,10 +6,14 @@ class CategoryServices {
     const url =
       APIService.baseUrl +
       `api/admin/category/?search=${search}&ordering=${orderBy}&page=${page}&status=${status}`;
-
+   
     try {
-      const response = await fetch(url);
-
+      const response = await fetch(url, {
+        headers: {
+          Authorization: LocalStorage.getAccesToken(),
+        }
+      });
+  
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -17,16 +21,7 @@ class CategoryServices {
       const data = await response.json();
 
       return {
-        Categories: data.results.map((category) => ({
-          id: category.id,
-          title: category.title,
-          description: category.description,
-          parent_id: category.parent_id,
-          media_url: category.media_url,
-          status: category.status,
-          created_at: category.created_at,
-          updated_at: category.updated_at,
-        })),
+        Categories: data.results,
         totalCount: data.count,
         totalPages: Math.ceil(data.count / 10),
         currentPage: page,

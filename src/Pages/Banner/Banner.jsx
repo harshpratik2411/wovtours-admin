@@ -205,11 +205,10 @@ const Banner = () => {
     <tr>
       <th className="py-2 w-[10%]">Image</th>
       <th className="py-2 w-[10%]">Title</th>
-      <th className="py-2 pl-3 w-[10%]">Banner </th>
-       <th className="py-2 w-[10%]"></th>
+      <th className="py-2 pl-3 w-[20%]">Banner </th>
       <th className="py-2 w-[10%]">Status</th>
-      <th className="py-2 w-[20%]">Created At</th>
-      <th className="py-2 w-[15%]">Updated At</th>
+      <th className="py-2 pl-3 w-[20%]">Created At</th>
+      <th className="py-2 pl-3 w-[15%]">Updated At</th>
       <th className="py-2 w-[10%] text-right">Actions</th>
     </tr>
   </thead>
@@ -258,9 +257,7 @@ const Banner = () => {
           <td className="py-6">
             <p className="font-medium ml-3   text-gray-800">{banner.banner_type}</p>
           </td>
-          <td className="py-6">
-            <p className="font-medium ml-6 text-gray-800">{banner.media_id}</p>
-          </td>
+         
           <td className="py-4">
             <span
               className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(

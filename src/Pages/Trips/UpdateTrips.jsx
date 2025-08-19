@@ -601,4 +601,3 @@ const handleCategorySelect = (e) => {
 };
 
 export default UpdateTrips;
-

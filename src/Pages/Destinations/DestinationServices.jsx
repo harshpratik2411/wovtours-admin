@@ -17,16 +17,7 @@ class DestinationServices {
       const data = await response.json();
 
       return {
-        Destinations: data.results.map((destination) => ({
-          id: destination.id,
-          title: destination.title,
-          description: destination.description,
-          parent_id: destination.parent_id,
-          media_url: destination.media_url,
-          status: destination.status,
-          created_at: destination.created_at,
-          updated_at: destination.updated_at,
-        })),
+        Destinations: data.results,
         totalCount: data.count,
         totalPages: Math.ceil(data.count / 10),
         currentPage: page,
@@ -47,7 +38,12 @@ class DestinationServices {
     console.log("URL called", url);
 
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        headers: {
+          Authorization: LocalStorage.getAccesToken(),
+        },
+      });
+
 
       if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);

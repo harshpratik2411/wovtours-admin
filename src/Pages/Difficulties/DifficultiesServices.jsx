@@ -3,13 +3,16 @@ import LocalStorage from "../LocalStorage";
 import AuthService from "../AuthService";
 
 class DifficultiesServices {
-  static async getAll(search, orderBy, page, status,level) {
+  static async getAll(search, orderBy, page, status, level) {
     const url =
       APIService.baseUrl +
       `api/admin/difficulty/?search=${search}&ordering=${orderBy}&page=${page}&status=${status}&level=${level}`;
-
-    try {
-      const response = await fetch(url);
+ try {
+      const response = await fetch(url, {
+        headers: {
+          Authorization: LocalStorage.getAccesToken(),
+        },
+      });
       console.log("🟦 Difficulty API RAW RESPONSE:", response.data);
 
       if (!response.ok) {
@@ -20,17 +23,9 @@ class DifficultiesServices {
       console.log("🟦 Difficulty API RAW RESPONSE:", data);
 
       return {
-        difficulties: data.results.map((difficulty) => ({
-          id: difficulty.id,
-          title: difficulty.title,
-          desc: difficulty.description,
-          status: difficulty.status, 
-          level: difficulty.level,
-          created_at: difficulty.created_at,
-          updated_at: difficulty.updated_at,
-        })),
+        difficulties: data.results,
         totalCount: data.count,
-        totalPages: Math.ceil(data.count / 10), 
+        totalPages: Math.ceil(data.count / 10),
         currentPage: page,
       };
     } catch (error) {
@@ -59,8 +54,8 @@ class DifficultiesServices {
         id: difficulty.id,
         title: difficulty.title,
         desc: difficulty.description,
-        status: difficulty.status, 
-         level: difficulty.level,
+        status: difficulty.status,
+        level: difficulty.level,
         created_at: difficulty.created_at,
         updated_at: difficulty.updated_at,
       };
@@ -87,7 +82,7 @@ class DifficultiesServices {
 
       if (APIService.isUnauthenticated(response.status)) {
         await APIService.refreshToken();
-        return this.add(data); // Make sure to return recursive call
+        return this.add(data);
       }
 
       if (APIService.isError(response.status)) {

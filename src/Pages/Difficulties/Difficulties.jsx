@@ -257,7 +257,7 @@ const Difficulties = () => {
                     <td className="py-6">
                       <p className="font-medium ml-3 text-gray-800">{Difficulty.level}</p>
                     </td>
-                    <td className="py-4  text-gray-700">{Difficulty.desc}</td>
+                    <td className="py-4  text-gray-700">{Difficulty.description}</td>
                     <td className="py-4">
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(
@@ -346,7 +346,7 @@ const Difficulties = () => {
                 </div>
                 <div className="mt-4 ml-1 space-y-2 text-sm text-gray-700">
                   <p>
-                    <span className="font-bold">Description:</span> {difficulty.desc}
+                    <span className="font-bold">Description:</span> {difficulty.description}
                   </p>
                   <p>
                     <span className="font-bold">Created At:</span>{" "}

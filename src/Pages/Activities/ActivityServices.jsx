@@ -27,15 +27,7 @@ class ActivityServices {
       const data = await response.json();
 
       return {
-        Activities: data.results.map((activity) => ({
-          id: activity.id,
-          title: activity.title,
-          description: activity.description,
-          media_url: activity.media_url,
-          status: activity.status,
-          created_at: activity.created_at,
-          updated_at: activity.updated_at,
-        })),
+        Activities: data.results,
         totalCount: data.count,
         totalPages: Math.ceil(data.count / 10),
         currentPage: page,
