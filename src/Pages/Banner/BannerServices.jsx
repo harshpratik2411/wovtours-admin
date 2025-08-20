@@ -12,7 +12,7 @@ class BannerServices {
         headers: {
           Authorization: LocalStorage.getAccesToken(),
         },
-      });
+      }); 
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

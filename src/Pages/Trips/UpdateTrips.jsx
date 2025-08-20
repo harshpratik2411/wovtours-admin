@@ -42,53 +42,90 @@ const UpdateTrips = () => {
   const [excludes, setExcludes] = useState([""]);
 
   useEffect(() => {
-   const fetchTrip = async () => {
-  try {
-    const res = await TripServices.getAll("", "", 1, ""); // Optional pagination or query params
-    const allTrips = res?.Trips || [];
+    const fetchTrip = async () => {
+      try {
+        const res = await TripServices.getAll("", "", 1, ""); // Optional pagination or query params
+        const allTrips = res?.Trips || [];
 
-    const trip = allTrips.find((t) => t.id === parseInt(id));
+        const trip = allTrips.find((t) => t.id === parseInt(id));
+        console.log("Fetched Trip:", trip);
 
-    if (trip) {
-      setTitle(trip.title || "");
-      setDescription(trip.description || "");
-      setStatus(trip.status || "Active");
-      setSelectedTags(trip.tag_ids || []);
-      setSelectedTripTypes(trip.trip_type_ids || []);
-      setSelectedActivities(trip.trip_activity_ids || []);
-      setSelectedCategory(trip.category_id || null);
-      setSelectedDestination(trip.destination_id || null);
-      setSelectedPricingCategory(trip.pricing_category_id || null);
-      setSelectedDifficulty(trip.difficulty_id || null);
-      setIncludes(trip.includes?.length ? trip.includes : [""]);
-      setExcludes(trip.excludes?.length ? trip.excludes : [""]);
-     setExistingMedia(
-  trip.media_urls?.map((item) => item.media) || []
-);
+        if (trip) {
+          setTitle(trip.title || "");
+          setDescription(trip.description || "");
+          setStatus(trip.status || "Active");
 
-    } else {
-      showAlert("Trip not found");
-    }
-  } catch (err) {
-    console.error("Error fetching trip", err);
-    showAlert("Failed to load trip data");
-  
-};
+          //Multiple tags 
 
+           
+          for (const type of trip.trip_types || []) {
+            if (!selectedTripTypes.includes(type.id)) {
+              setSelectedTripTypes((prev) => [type.id]);
+            }
+          }
+           for (const tag of trip.tags || []) {
+            if (!selectedTags.includes(tag.id)) {
+              setSelectedTags((prev) => [tag.id]);
+            }
+          } 
+
+          //single category
+          if (trip.category != null && selectedCategory === null) {
+            setSelectedCategory(trip.category.id);
+          }
+
+          if (trip.destination != null && selectedDestination === null) {
+            setSelectedDestination(trip.destination.id);
+          }
+
+          if (trip.difficulty != null && selectedDifficulty === null) {
+            setSelectedDifficulty(trip.difficulty.id);
+          }
+
+          if (
+            trip.pricing_category != null &&
+            selectedPricingCategory === null
+          ) {
+            setSelectedPricingCategory(trip.pricing_category.id);
+          }
+
+          for (const activity of trip.trip_activity || []) {
+            if (!selectedActivities.includes(activity.id)) {
+              setSelectedActivities((prev) => [activity.id]);
+            }
+          }
+
+          setIncludes(trip.includes?.length ? trip.includes : [""]);
+          setExcludes(trip.excludes?.length ? trip.excludes : [""]);
+          setExistingMedia(trip.media_urls?.map((item) => item.media) || []);
+        } else {
+          showAlert("Trip not found");
+        }
+      } catch (err) {
+        console.error("Error fetching trip", err);
+        showAlert("Failed to load trip data");
+      }
     };
 
     const fetchMeta = async () => {
       try {
-        const [tags, tripTypes, categories, destinations, pricing, difficulties, activities] =
-          await Promise.all([
-            TagServices.getAll("", "", 1, ""),
-            TripTypeServices.getAll("", "", 1, ""),
-            CategoryServices.getAll("", "", 1, ""),
-            DestinationServices.getAll("", "", 1, ""),
-            PricingCatServices.getAll("", "", 1, ""),
-            DifficultiesServices.getAll("", "", 1, "", ""),
-            ActivityServices.getAll("", "", 1, "")
-          ]);
+        const [
+          tags,
+          tripTypes,
+          categories,
+          destinations,
+          pricing,
+          difficulties,
+          activities,
+        ] = await Promise.all([
+          TagServices.getAll("", "", 1, ""),
+          TripTypeServices.getAll("", "", 1, ""),
+          CategoryServices.getAll("", "", 1, ""),
+          DestinationServices.getAll("", "", 1, ""),
+          PricingCatServices.getAll("", "", 1, ""),
+          DifficultiesServices.getAll("", "", 1, "", ""),
+          ActivityServices.getAll("", "", 1, ""),
+        ]);
 
         setTagList(tags?.tags || []);
         setTripTypeList(tripTypes?.TripTypes || []);
@@ -105,44 +142,44 @@ const UpdateTrips = () => {
     fetchTrip();
     fetchMeta();
   }, [id, showAlert]);
- 
-    const handleMediaChange = (e) => {
+
+  const handleMediaChange = (e) => {
     const files = Array.from(e.target.files);
     setMediaFiles((prev) => [...prev, ...files]);
   };
 
-   const handleTagSelect = (e) => {
-  const value = parseInt(e.target.value);
-  if (value && !selectedTags.includes(value)) {
-    setSelectedTags([...selectedTags, value]);
-  }
-};
+  const handleTagSelect = (e) => {
+    const value = parseInt(e.target.value);
+    if (value && !selectedTags.includes(value)) {
+      setSelectedTags([...selectedTags, value]);
+    }
+  };
   const handleTripTypeSelect = (e) => {
-  const value = parseInt(e.target.value);
-  if (value && !selectedTripTypes.includes(value)) {
-    setSelectedTripTypes([...selectedTripTypes, value]);
-  }
-};
+    const value = parseInt(e.target.value);
+    if (value && !selectedTripTypes.includes(value)) {
+      setSelectedTripTypes([...selectedTripTypes, value]);
+    }
+  };
 
-const handleActivitySelect = (e) => {
-  const value = parseInt(e.target.value);
-  if (value && !selectedActivities.includes(value)) {
-    setSelectedActivities([...selectedActivities, value]);
-  }
-};
+  const handleActivitySelect = (e) => {
+    const value = parseInt(e.target.value);
+    if (value && !selectedActivities.includes(value)) {
+      setSelectedActivities([...selectedActivities, value]);
+    }
+  };
 
-const handleCategorySelect = (e) => {
-  setSelectedCategory(parseInt(e.target.value));
-};
- const handlePricingCategorySelect = (e) => {
-  setSelectedPricingCategory(parseInt(e.target.value));
-};
- const handleDestinationSelect = (e) => {
-  setSelectedDestination(parseInt(e.target.value));
-};
- const handleDifficultySelect = (e) => {
-  setSelectedDifficulty(parseInt(e.target.value));
-};
+  const handleCategorySelect = (e) => {
+    setSelectedCategory(parseInt(e.target.value));
+  };
+  const handlePricingCategorySelect = (e) => {
+    setSelectedPricingCategory(parseInt(e.target.value));
+  };
+  const handleDestinationSelect = (e) => {
+    setSelectedDestination(parseInt(e.target.value));
+  };
+  const handleDifficultySelect = (e) => {
+    setSelectedDifficulty(parseInt(e.target.value));
+  };
 
   const removeTag = (id) => {
     setSelectedTags(selectedTags.filter((t) => t !== id));
@@ -277,8 +314,7 @@ const handleCategorySelect = (e) => {
               >
                 <option value="">Select a tag</option>
                 {tagList.map((t) => (
-                  <option key={t.id} value={t.id}> 
-                   
+                  <option key={t.id} value={t.id}>
                     {t.title}
                   </option>
                 ))}
@@ -346,19 +382,23 @@ const handleCategorySelect = (e) => {
                 })}
               </div>
             </div>
-
-            <select
-              value={selectedCategory || ""}
-              onChange={handleCategorySelect}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">Select a category</option>
-              {category.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.title}
-                </option>
-              ))}
-            </select>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Category
+              </label>
+              <select
+                value={selectedCategory || ""}
+                onChange={handleCategorySelect}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select a category</option>
+                {category.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.title}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             {/* Destination Selection */}
             <div>
@@ -557,7 +597,7 @@ const handleCategorySelect = (e) => {
             <label className="block text-sm font-semibold text-gray-700 mb-3">
               Media Preview
             </label>
-            {(existingMedia.length > 0 || mediaFiles.length > 0) ? (
+            {existingMedia.length > 0 || mediaFiles.length > 0 ? (
               <div className="w-full max-w-md grid grid-cols-2 gap-4 overflow-auto max-h-96">
                 {/* Existing media */}
                 {existingMedia.map((fileUrl, idx) => (
