@@ -20,10 +20,9 @@ const UpdateTrips = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("Active");
-  const [mediaFiles, setMediaFiles] = useState([]);
-  const [existingMedia, setExistingMedia] = useState([]);
+  const [mediaFiles, setMediaFiles] = useState([]); // New media
+const [existingMedia, setExistingMedia] = useState([]); // Already uploaded media from backend
   const [loading, setLoading] = useState(false);
-
   const [tagList, setTagList] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [tripTypeList, setTripTypeList] = useState([]);
@@ -44,7 +43,7 @@ const UpdateTrips = () => {
   useEffect(() => {
     const fetchTrip = async () => {
       try {
-        const res = await TripServices.getAll("", "", 1, ""); // Optional pagination or query params
+        const res = await TripServices.getAll("", "", 1, ""); 
         const allTrips = res?.Trips || [];
 
         const trip = allTrips.find((t) => t.id === parseInt(id));
@@ -65,7 +64,8 @@ const UpdateTrips = () => {
           }
            for (const tag of trip.tags || []) {
             if (!selectedTags.includes(tag.id)) {
-              setSelectedTags((prev) => [tag.id]);
+              setSelectedTags((prev) => [tag.id]); 
+              log("Selected Tags:", selectedTags);
             }
           } 
 
@@ -143,10 +143,11 @@ const UpdateTrips = () => {
     fetchMeta();
   }, [id, showAlert]);
 
-  const handleMediaChange = (e) => {
-    const files = Array.from(e.target.files);
-    setMediaFiles((prev) => [...prev, ...files]);
-  };
+
+const handleMediaChange = (e) => {
+  const files = Array.from(e.target.files);
+  setMediaFiles((prev) => [...prev, ...files]);
+};
 
   const handleTagSelect = (e) => {
     const value = parseInt(e.target.value);
@@ -220,47 +221,58 @@ const UpdateTrips = () => {
     }
     setExcludes(updated);
   };
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  if (!title.trim()) {
+    showAlert("Title is required");
+    return;
+  }
 
-    if (!title.trim()) {
-      showAlert("Title is required");
-      return;
-    }
+  setLoading(true);
 
-    setLoading(true);
+  const data = {
+    title,
+    description,
+    status,
+    category_id: selectedCategory,
+    destination_id: selectedDestination,
+    pricing_category_id: selectedPricingCategory,
+    difficulty_id: selectedDifficulty,
+  };
 
-    const data = {
-      title,
-      description,
-      tag_ids: selectedTags,
-      trip_type_ids: selectedTripTypes,
-      trip_activity_ids: selectedActivities,
-      status,
-      media: mediaFiles,
-      category_id: selectedCategory,
-      destination_id: selectedDestination,
-      pricing_category_id: selectedPricingCategory,
-      difficulty_id: selectedDifficulty,
-      includes: includes.filter((i) => i.trim() !== ""),
-      excludes: excludes.filter((e) => e.trim() !== ""),
-    };
+  // Arrays
+  selectedTags.forEach((tag, i) => (data[`tag_ids[${i}]`] = tag));
+  selectedTripTypes.forEach((type, i) => (data[`trip_type_ids[${i}]`] = type));
+  selectedActivities.forEach((act, i) => (data[`trip_activity_ids[${i}]`] = act));
+  includes
+    .filter((i) => i.trim())
+    .forEach((inc, i) => (data[`includes[${i}]`] = inc));
+  excludes
+    .filter((e) => e.trim())
+    .forEach((exc, i) => (data[`excludes[${i}]`] = exc));
 
-    try {
-      const result = await TripServices.update(id, data);
-      setLoading(false);
+  // Only add media if files were selected
+  if (mediaFiles.length > 0) {
+    mediaFiles.forEach((file, i) => data[`media`] = file); 
+  }
 
-      if (result) {
-        showAlert("Trip updated successfully!");
-        navigate("/trips");
-      }
-    } catch (error) {
-      setLoading(false);
-      console.error("Update failed", error);
+  try {
+    const result = await TripServices.update(id, data, mediaFiles.length > 0);
+    setLoading(false);
+
+    if (result) {
+      showAlert("Trip updated successfully!");
+      navigate("/trips");
+    } else {
       showAlert("Failed to update trip");
     }
-  };
+  } catch (error) {
+    setLoading(false);
+    console.error("Update error", error);
+    showAlert("An error occurred while updating the trip.");
+  }
+};
 
   return (
     <>
@@ -286,7 +298,6 @@ const UpdateTrips = () => {
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Enter title"
                 className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
               />
             </div>
 

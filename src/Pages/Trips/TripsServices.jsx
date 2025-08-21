@@ -37,24 +37,31 @@ class TripServices {
     }
   }
 
-  static async get(id) {
-    const url = APIService.baseUrl + `api/admin/trip/${id}/`;
-    console.log("URL called", url);
+static async get(id) {
+  const url = APIService.baseUrl + `api/admin/trip/${id}/`;
+  console.log("URL called", url);
 
-    try {
-      const response = await fetch(url);
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Authorization': LocalStorage.getAccesToken(), // Make sure this returns the full "Bearer ..." string if needed
+        'Content-Type': 'application/json',
+      },
+    });
 
-      if (!response.ok)
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok)
+      throw new Error(`HTTP error! status: ${response.status}`);
 
-      const trip = await response.json();
+    const trip = await response.json();
 
-      return trip;
-    } catch (error) {
-      console.error("Failed to fetch trip:", error);
-      return null;
-    }
+    return trip;
+  } catch (error) {
+    console.error("Failed to fetch trip:", error);
+    return null;
   }
+}
+
 
   static async update(id, data, mediaChanged = false) {
     console.log("Update API called");
