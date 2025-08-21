@@ -7,17 +7,23 @@ class BannerServices {
       APIService.baseUrl +
       `api/admin/banner/?search=${search}&ordering=${orderBy}&page=${page}&status=${status}`;
 
-     try {
+    try {
       const response = await fetch(url, {
         headers: {
           Authorization: LocalStorage.getAccesToken(),
         },
-      }); 
+      });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (APIService.isUnauthenticated(response.status)) {
+        await APIService.refreshToken();
+        return this.getAll(search, orderBy, page, status);
       }
 
+      if (APIService.isError(response.status)) {
+        const errorData = await response.json();
+        alert(errorData["error"]);
+        return null;
+      }
       const data = await response.json();
 
       return {
@@ -26,6 +32,7 @@ class BannerServices {
         totalPages: Math.ceil(data.count / 10),
         currentPage: page,
       };
+
     } catch (error) {
       console.error("Failed to fetch banners:", error);
       return {
@@ -48,8 +55,18 @@ class BannerServices {
         },
       }); 
 
-      if (!response.ok)
-        throw new Error(`HTTP error! status: ${response.status}`);
+     
+       if (APIService.isUnauthenticated(response.status)) {
+        await APIService.refreshToken();
+        return this.get(id);
+      }
+
+      if (APIService.isError(response.status)) {
+        const errorData = await response.json();
+        alert(errorData["error"]);
+        return null;
+      }
+
 
       const banner = await response.json();
 
@@ -190,4 +207,3 @@ class BannerServices {
 }
 
 export default BannerServices;
- 

@@ -13,9 +13,16 @@ class DestinationServices {
           Authorization: LocalStorage.getAccesToken(),
         },
       });
+  
+       if (APIService.isUnauthenticated(response.status)) {
+        await APIService.refreshToken();
+        return this.getAll(search, orderBy, page, status);
+      }
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (APIService.isError(response.status)) {
+        const errorData = await response.json();
+        alert(errorData["error"]);
+        return null;
       }
 
       const data = await response.json();
@@ -48,8 +55,17 @@ class DestinationServices {
         },
       });
 
-      if (!response.ok)
-        throw new Error(`HTTP error! status: ${response.status}`);
+       
+       if (APIService.isUnauthenticated(response.status)) {
+        await APIService.refreshToken();
+        return this.get(id);
+      }
+
+      if (APIService.isError(response.status)) {
+        const errorData = await response.json();
+        alert(errorData["error"]);
+        return null;
+      }
 
       const destination = await response.json();
 

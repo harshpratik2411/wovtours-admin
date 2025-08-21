@@ -13,10 +13,17 @@ class TagServices {
         headers: {
           Authorization: LocalStorage.getAccesToken(),
         },
-      });
+      }); 
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+     if (APIService.isUnauthenticated(response.status)) {
+        await APIService.refreshToken();
+        return this.getAll(search, orderBy, page, status);
+      }
+
+      if (APIService.isError(response.status)) {
+        const errorData = await response.json();
+        alert(errorData["error"]);
+        return null;
       }
 
       const data = await response.json();
@@ -49,8 +56,17 @@ class TagServices {
           Authorization: LocalStorage.getAccesToken(),
         },
       });
-      if (!response.ok)
-        throw new Error(`HTTP error! status: ${response.status}`);
+        
+       if (APIService.isUnauthenticated(response.status)) {
+        await APIService.refreshToken();
+        return this.get(id);
+      }
+
+      if (APIService.isError(response.status)) {
+        const errorData = await response.json();
+        alert(errorData["error"]);
+        return null;
+      }
 
       const tag = await response.json();
 
@@ -74,10 +90,11 @@ class TagServices {
       const response = await fetch(url, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: LocalStorage.getAccesToken(),
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data), 
+
+        
       });
       if (APIService.isUnauthenticated(response.status)) {
         await APIService.refreshToken();

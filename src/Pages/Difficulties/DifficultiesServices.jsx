@@ -13,11 +13,17 @@ class DifficultiesServices {
           Authorization: LocalStorage.getAccesToken(),
         },
       });
-      console.log("🟦 Difficulty API RAW RESPONSE:", response.data);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (APIService.isUnauthenticated(response.status)) {
+        await APIService.refreshToken();
+        return this.getAll(search, orderBy, page, status,level);
       }
+
+      if (APIService.isError(response.status)) {
+        const errorData = await response.json();
+        alert(errorData["error"]);
+        return null;
+      }
+
 
       const data = await response.json();
       console.log("🟦 Difficulty API RAW RESPONSE:", data);
@@ -50,8 +56,16 @@ class DifficultiesServices {
           Authorization: LocalStorage.getAccesToken(),
         },
       });
-      if (!response.ok)
-        throw new Error(`HTTP error! status: ${response.status}`);
+       if (APIService.isUnauthenticated(response.status)) {
+        await APIService.refreshToken();
+        return this.get(id);
+      }
+
+      if (APIService.isError(response.status)) {
+        const errorData = await response.json();
+        alert(errorData["error"]);
+        return null;
+      }
 
       const difficulty = await response.json();
 

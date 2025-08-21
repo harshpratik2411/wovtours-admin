@@ -7,12 +7,23 @@ class PricingCatServices {
     const url =
       APIService.baseUrl +
       `api/admin/pricing-category/?search=${search}&ordering=${orderBy}&page=${page}&status=${status}&level=${level}`;
+      
+ try {
+      const response = await fetch(url, {
+        headers: {
+          Authorization: LocalStorage.getAccesToken(),
+        },
+      }); 
 
-    try {
-      const response = await fetch(url);
+     if (APIService.isUnauthenticated(response.status)) {
+        await APIService.refreshToken();
+        return this.getAll(search, orderBy, page, status);
+      }
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (APIService.isError(response.status)) {
+        const errorData = await response.json();
+        alert(errorData["error"]);
+        return null;
       }
 
       const data = await response.json();
@@ -46,9 +57,17 @@ class PricingCatServices {
         },
       });
 
-      if (!response.ok)
-        throw new Error(`HTTP error! status: ${response.status}`);
+        
+       if (APIService.isUnauthenticated(response.status)) {
+        await APIService.refreshToken();
+        return this.get(id);
+      }
 
+      if (APIService.isError(response.status)) {
+        const errorData = await response.json();
+        alert(errorData["error"]);
+        return null;
+      }
       const PricingCat = await response.json();
 
       return PricingCat;
