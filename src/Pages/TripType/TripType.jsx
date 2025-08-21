@@ -255,12 +255,13 @@ const TripType = () => {
           <td className="py-6">
             <p className="font-medium text-gray-800">{tripType.title}</p>
           </td>
-          <td className="py-6 pl-3">
+          <td className="py-6 pl-3"> 
+             <label className="Description"></label>
             <p className="font-medium text-gray-800">{tripType.description}</p>
           </td>
           <td className="py-6">
             <p className="font-medium text-gray-800">
-              {tripType.parent_id ?? 'none'}
+              {tripType.parent_title ?? 'none'}
             </p>
           </td>
           <td className="py-4">
@@ -364,9 +365,12 @@ const TripType = () => {
 )}
 
         <div className="flex justify-between items-start mb-2">
-          <div>
+          <div> 
             <h2 className="text-lg font-semibold text-gray-800">
               {tripType.title}
+            </h2>
+            <h2 className="text-lg font-semibold text-gray-800">
+              {tripType.description}
             </h2>
           <strong className="text-sm text-gray-700">Status:</strong> 
             <p    

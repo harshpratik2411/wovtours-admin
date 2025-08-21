@@ -72,7 +72,7 @@ const ViewActivity = () => {
   <img
     src={activity.media_url || "/placeholder.jpg"}
     alt={activity.title}
-    className="rounded-lg shadow-md max-h-[400px] w-full  border"
+    className="rounded-lg object-cover  shadow-md max-h-[400px] w-full  border"
   />
 </div>
 
@@ -107,9 +107,9 @@ const ViewActivity = () => {
             </div>
 
             <div className="flex items-start lg:items-center gap-3 mt-4 lg:mt-0">
-              <span className="font-semibold mt-1">Status:</span>
+              <span className="font-semibold -mt-1">Status:</span>
               <span
-                className={`lg:px-4 px-2 py-2 -mt-1 rounded-full lg:text-sm  font-medium ${StatusClassMap.getClass(
+                className={`lg:px-4 px-2 py-2  -mt-1 rounded-full lg:text-sm  font-medium ${StatusClassMap.getClass(
                   activity.status
                 )}`}
               >

@@ -108,8 +108,8 @@ const ViewDestination = () => {
               </div>
 
               <div className="flex gap-3">
-                <span className="font-semibold w-40">Parent Id:</span>
-                <span>{destination.parent_id || "N/A"}</span>
+                <span className="font-semibold w-40">Parent :</span>
+                <span>{destination.parent_title || "N/A"}</span>
               </div>
 
               <div className="flex gap-3">

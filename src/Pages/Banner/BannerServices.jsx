@@ -42,7 +42,11 @@ class BannerServices {
     console.log("URL called", url);
 
     try {
-      const response = await fetch(url); // No Authorization header for GET
+      const response = await fetch(url, {
+        headers: {
+          Authorization: LocalStorage.getAccesToken(),
+        },
+      }); 
 
       if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);

@@ -205,9 +205,9 @@ const Activity = () => {
     <tr>
       <th className="py-2 w-[10%]">Image</th>
       <th className="py-2 w-[10%]">Title</th>
-      <th className="py-2 w-[15%]">Description</th>
-       <th className="py-2 w-[5%]"></th>
-      <th className="py-2 w-[10%]">Status</th>
+      <th className="py-2 w-[20%]">Description</th>
+      
+      <th className="py-2 pl-2 w-[10%]">Status</th>
       <th className="py-2 w-[20%]">Created At</th>
       <th className="py-2 w-[15%]">Updated At</th>
       <th className="py-2 w-[10%] text-right">Actions</th>
@@ -236,9 +236,7 @@ const Activity = () => {
           <td className="py-6">
             <p className="font-medium ml-6  text-gray-800">{activity.description}</p>
           </td>
-          <td className="py-6">
-            <p className="font-medium ml-6 text-gray-800">{activity.media_id}</p>
-          </td>
+         
           <td className="py-4">
             <span
               className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(

@@ -8,7 +8,11 @@ class DestinationServices {
       `api/admin/destination/?search=${search}&ordering=${orderBy}&page=${page}&status=${status}`;
 
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        headers: {
+          Authorization: LocalStorage.getAccesToken(),
+        },
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -44,22 +48,12 @@ class DestinationServices {
         },
       });
 
-
       if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
 
       const destination = await response.json();
 
-      return {
-        id: destination.id,
-        title: destination.title,
-        description: destination.description,
-        parent_id: destination.parent_id,
-        media_url: destination.media_url,
-        status: destination.status,
-        created_at: destination.created_at,
-        updated_at: destination.updated_at,
-      };
+      return destination;
     } catch (error) {
       console.error("Failed to fetch destination:", error);
       return null;
@@ -188,4 +182,3 @@ class DestinationServices {
 }
 
 export default DestinationServices;
-     

@@ -7,7 +7,7 @@ class DifficultiesServices {
     const url =
       APIService.baseUrl +
       `api/admin/difficulty/?search=${search}&ordering=${orderBy}&page=${page}&status=${status}&level=${level}`;
- try {
+    try {
       const response = await fetch(url, {
         headers: {
           Authorization: LocalStorage.getAccesToken(),
@@ -44,21 +44,18 @@ class DifficultiesServices {
     console.log("URL called", url);
 
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: LocalStorage.getAccesToken(),
+        },
+      });
       if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
 
       const difficulty = await response.json();
 
-      return {
-        id: difficulty.id,
-        title: difficulty.title,
-        desc: difficulty.description,
-        status: difficulty.status,
-        level: difficulty.level,
-        created_at: difficulty.created_at,
-        updated_at: difficulty.updated_at,
-      };
+      return difficulty;
     } catch (error) {
       console.error("Failed to fetch difficulty:", error);
       return null;

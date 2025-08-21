@@ -75,7 +75,7 @@ const ViewPricingCat = () => {
             <div className="space-y-6">
               <div>
                 <span className="font-semibold block mb-1">Pricing-Category Name:</span>
-                <span>{PricingCat.name}</span>
+                <span>{PricingCat.title}</span>
               </div>
 
               <div>
@@ -115,7 +115,7 @@ const ViewPricingCat = () => {
               <h3 className="text-xl font-semibold text-gray-800">Pricing-Category Description</h3>
             </div>
             <p className="text-gray-600 text-left leading-relaxed">
-              {PricingCat.desc || 'No description provided.'}
+              {PricingCat.description || 'No description provided.'}
             </p>
           </div>
         </div>

@@ -35,34 +35,29 @@ class PricingCatServices {
     }
   }
 
-   static async get(id) {
+  static async get(id) {
     const url = APIService.baseUrl + `api/admin/pricing-category/${id}/`;
     console.log("URL called", url);
 
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        headers: {
+          Authorization: LocalStorage.getAccesToken(),
+        },
+      });
+
       if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
 
       const PricingCat = await response.json();
 
-      return {
-        id: PricingCat .id,
-        title: PricingCat .title,
-        desc: PricingCat .description,
-        status: PricingCat .status,
-        start_age:PricingCat.start_age,
-        end_age:PricingCat.end_age,
-        created_at:PricingCat.created_at,
-        updated_at: PricingCat.updated_at, 
-        
-      };
+      return PricingCat;
     } catch (error) {
       console.error("Failed to fetch pricing category:", error);
       return null;
     }
   }
-static async update(id, data) {
+  static async update(id, data) {
     console.log("Update API called");
 
     const url = APIService.baseUrl + `api/admin/pricing-category/${id}/`;
@@ -90,7 +85,7 @@ static async update(id, data) {
       return null;
     }
   }
-     static async add(data) {
+  static async add(data) {
     const url = APIService.baseUrl + "api/admin/pricing-category/";
     console.log("Data = ", data);
 

@@ -43,23 +43,18 @@ class TripTypeServices {
     console.log("URL called", url);
 
     try {
-      const response = await fetch(url); // No Authorization header for GET
+      const response = await fetch(url, {
+        headers: {
+          Authorization: LocalStorage.getAccesToken(),
+        },
+      });
 
       if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
 
       const tripType = await response.json();
 
-      return {
-        id: tripType.id,
-        title: tripType.title,
-        description: tripType.description,
-        parent_id: tripType.parent_id,
-        media_url: tripType.media_url,
-        status: tripType.status,
-        created_at: tripType.created_at,
-        updated_at: tripType.updated_at,
-      };
+      return tripType;
     } catch (error) {
       console.error("Failed to fetch trip type:", error);
       return null;
@@ -71,7 +66,7 @@ class TripTypeServices {
 
     const url = APIService.baseUrl + `api/admin/trip-type/${id}/`;
 
-    try {
+    try { 
       let requestOptions;
 
       if (mediaChanged) {
@@ -96,7 +91,6 @@ class TripTypeServices {
         requestOptions = {
           method: "PUT",
           headers: {
-            "Content-Type": "application/json",
             Authorization: LocalStorage.getAccesToken(),
           },
           body: JSON.stringify(filteredData),
@@ -167,7 +161,6 @@ class TripTypeServices {
       let response = await fetch(url, {
         method: "DELETE",
         headers: {
-          "Content-Type": "application/json",
           Authorization: LocalStorage.getAccesToken(),
         },
       });

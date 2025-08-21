@@ -13,44 +13,36 @@ import FilterOptions from "../../Services/FilterOptions";
 import StatusClassMap from "../../Services/StatusClassMap";
 import DestinationServices from "./DestinationServices";
 
-
 const Destination = () => {
   const [activeMenu, setActiveMenu] = useState(null);
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
- const [DestinationList, setDestinationList] = useState([]);
+  const [DestinationList, setDestinationList] = useState([]);
   const [status, setStatus] = useState("");
   const [orderBy, setOrderBy] = useState("");
   const [selectedSortLabel, setSelectedSortLabel] = useState("Sort By");
   const [loading, setLoading] = useState(true);
-  const [totalPages, setTotalPages] = useState(1); 
+  const [totalPages, setTotalPages] = useState(1);
 
   const navigate = useNavigate();
- 
-  
 
   function apiCall(
     search = searchText,
     order = orderBy,
     page = currentPage,
-    currentStatus = status ,
-     
-
+    currentStatus = status
   ) {
     setLoading(true);
 
-  DestinationServices.getAll(search, order, page, currentStatus)
+    DestinationServices.getAll(search, order, page, currentStatus)
       .then((response) => {
-      
-
-     setDestinationList(response.Destinations);
-        setTotalPages(response.totalPages); 
+        setDestinationList(response.Destinations);
+        setTotalPages(response.totalPages);
         setCurrentPage(response.currentPage);
         setLoading(false);
       })
       .catch((err) => {
-      
         setDestinationList([]);
         setTotalPages(1);
         setLoading(false);
@@ -84,13 +76,13 @@ const Destination = () => {
     setOrderBy(newOrder);
     setSelectedSortLabel(option);
     setSortMenuOpen(false);
-    apiCall(searchText, newOrder, currentPage, status,);
+    apiCall(searchText, newOrder, currentPage, status);
   };
 
   const clearSearch = () => {
     setSearchText("");
     apiCall("", orderBy, currentPage, status);
-  }; 
+  };
 
   const getStatusClass = (status) => StatusClassMap.getClass(status);
 
@@ -99,7 +91,7 @@ const Destination = () => {
       <Navbar />
       <Sidebar />
       <h1 className="text-3xl font-bold -mt-10 text-center lg:ml-32 mb-10">
-       Destinations
+        Destinations
       </h1>
       <div className="bg-white  p-4 sm:p-6 lg:ml-72 rounded-xl shadow-md font-rubik w-full max-w-6xl mx-auto -mt-2 mb-12">
         {/* Search, Sort, Filter, Add */}
@@ -162,29 +154,33 @@ const Destination = () => {
 
             {/* Status Filter */}
             <select
-  value={status}
-  onChange={async (e) => {
-    const newStatus = e.target.value;
-    const newPage = 1;
+              value={status}
+              onChange={async (e) => {
+                const newStatus = e.target.value;
+                const newPage = 1;
 
-    const result = await apiCall(searchText, orderBy, newPage, newStatus);
+                const result = await apiCall(
+                  searchText,
+                  orderBy,
+                  newPage,
+                  newStatus
+                );
 
-   
-    if (!result || result.length === 0) {
-      setCurrentPage(1); 
-    } else {
-      setCurrentPage(newPage); 
-    }
+                if (!result || result.length === 0) {
+                  setCurrentPage(1);
+                } else {
+                  setCurrentPage(newPage);
+                }
 
-    setStatus(newStatus); 
-  }}
-  className="border text-sm text-gray-600 bg-white px-3 py-1 rounded w-full sm:w-auto focus:outline-none"
->
-  <option value="">All Status</option>
-  <option value="Active">Active</option>
-  <option value="Inactive">Inactive</option>
-</select>
-          </div> 
+                setStatus(newStatus);
+              }}
+              className="border text-sm text-gray-600 bg-white px-3 py-1 rounded w-full sm:w-auto focus:outline-none"
+            >
+              <option value="">All Status</option>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
 
           {/* Add Button */}
           <button
@@ -195,236 +191,247 @@ const Destination = () => {
           </button>
         </div>
         {/* Table View */}
-      <div className="overflow-x-auto hidden sm:block">
- <table className="min-w-full text-left text-sm">
-  <thead className="text-gray-500 font-rubik uppercase border-b">
-    <tr>
-      <th className="py-2 w-[10%]">Image</th>
-      <th className="py-2 w-[10%]">Title</th>
-      <th className="py-2 pl-3 w-[20%]">Description </th>
-       <th className="py-2  w-[10%]">Parent ID</th>
-      <th className="py-2 w-[10%]">Status</th>
-      <th className="py-2 w-[15%]">Created At</th>
-      <th className="py-2 w-[15%]">Updated At</th>
-      <th className="py-2 w-[10%] text-right">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {loading ? (
-      <tr>
-        <td colSpan="8" className="text-center text-lg py-20 text-gray-500">
-          Loading...
-        </td>
-      </tr>
-    ) :   DestinationList.length > 0 ? (
-    DestinationList.map((destination) => (
-      <tr key={destination.id} className="border-b hover:bg-gray-50">
-        <td className="py-4">
-          {destination.media_url ? (
-            destination.media_url.match(/\.(jpeg|jpg|gif|png|webp)$/i) ? (
-              <img
-                src={destination.media_url}
-                alt={destination.title}
-                className="h-14 w-20 object-cover rounded-md"
-              />
-            ) : destination.media_url.match(/\.(mp4|webm|ogg)$/i) ? (
-              <video
-                src={destination.media_url}
-                className="h-14 w-20 object-cover rounded-md"
-                controls
-              />
-            ) : (
-              <img
-                src="/placeholder.jpg"
-                alt="Unsupported file"
-                className="h-14 w-20 object-cover rounded-md"
-              />
-            )
-          ) : (
-            <img
-              src="/placeholder.jpg"
-              alt="No media"
-              className="h-14 w-20 object-cover rounded-md"
-            />
-          )}
-          </td>
-          <td className="py-6">
-            <p className="font-medium text-gray-800">{destination.title}</p>
-          </td>
-          <td className="py-6">
-            <p className="font-medium ml-3  text-gray-800">{destination.description}</p>
-          </td>
-         <td className="py-6">
-  <p className="font-medium ml-6   text-gray-800">
-    {destination.parent_id ?? 'none'}
-  </p>
-</td>
+        <div className="overflow-x-auto hidden sm:block">
+          <table className="min-w-full text-left text-sm">
+            <thead className="text-gray-500 font-rubik uppercase border-b">
+              <tr>
+                <th className="py-2 w-[10%]">Image</th>
+                <th className="py-2 w-[10%]">Title</th>
+                <th className="py-2 pl-3 w-[20%]">Description </th>
+                <th className="py-2  w-[10%]">Parent </th>
+                <th className="py-2 w-[10%]">Status</th>
+                <th className="py-2 w-[15%]">Created At</th>
+                <th className="py-2 w-[15%]">Updated At</th>
+                <th className="py-2 w-[10%] text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr>
+                  <td
+                    colSpan="8"
+                    className="text-center text-lg py-20 text-gray-500"
+                  >
+                    Loading...
+                  </td>
+                </tr>
+              ) : DestinationList.length > 0 ? (
+                DestinationList.map((destination) => (
+                  <tr
+                    key={destination.id}
+                    className="border-b hover:bg-gray-50"
+                  >
+                    <td className="py-4">
+                      {destination.media_url ? (
+                        destination.media_url.match(
+                          /\.(jpeg|jpg|gif|png|webp)$/i
+                        ) ? (
+                          <img
+                            src={destination.media_url}
+                            alt={destination.title}
+                            className="h-14 w-20 object-cover rounded-md"
+                          />
+                        ) : destination.media_url.match(
+                            /\.(mp4|webm|ogg)$/i
+                          ) ? (
+                          <video
+                            src={destination.media_url}
+                            className="h-14 w-20 object-cover rounded-md"
+                            controls
+                          />
+                        ) : (
+                          <img
+                            src="/placeholder.jpg"
+                            alt="Unsupported file"
+                            className="h-14 w-20 object-cover rounded-md"
+                          />
+                        )
+                      ) : (
+                        <img
+                          src="/placeholder.jpg"
+                          alt="No media"
+                          className="h-14 w-20 object-cover rounded-md"
+                        />
+                      )}
+                    </td>
+                    <td className="py-6">
+                      <p className="font-medium text-gray-800">
+                        {destination.title}
+                      </p>
+                    </td>
+                    <td className="py-6">
+                      <p className="font-medium ml-3  text-gray-800">
+                        {destination.description}
+                      </p>
+                    </td>
+                    <td className="py-6">
+                      <p className="font-medium ml-6   text-gray-800">
+                        {destination.parent_title ?? "none"}
+                      </p>
+                    </td>
 
-          <td className="py-4">
-            <span
-              className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(
-                destination.status
-              )}`}
-            >
-              {destination.status}
-            </span>
-          </td>
-          <td className="py-4 text-gray-700">
-            {DateFormatter.formatDate(destination.created_at)}
-          </td>
-          <td className="py-4 text-gray-700">
-            {DateFormatter.formatDate(destination.updated_at)}
-          </td>
-          <td className="py-4 text-right">
-            <div className="relative inline-block">
-              <button
-                onClick={() => toggleMenu(destination.id)}
-                className="text-gray-600 hover:text-black menu-toggle"
-              >
-                <BsThreeDotsVertical size={18} />
-              </button>
-              {activeMenu === destination.id && (
-                <div className="dropdown-menu absolute right-0 -top-[4rem] z-10 bg-white border rounded shadow w-32">
-                  <button
-                    onClick={() =>
-                      navigate(`/destinations/view/${destination.id}`)
-                    }
-                    className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
+                    <td className="py-4">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(
+                          destination.status
+                        )}`}
+                      >
+                        {destination.status}
+                      </span>
+                    </td>
+                    <td className="py-4 text-gray-700">
+                      {DateFormatter.formatDate(destination.created_at)}
+                    </td>
+                    <td className="py-4 text-gray-700">
+                      {DateFormatter.formatDate(destination.updated_at)}
+                    </td>
+                    <td className="py-4 text-right">
+                      <div className="relative inline-block">
+                        <button
+                          onClick={() => toggleMenu(destination.id)}
+                          className="text-gray-600 hover:text-black menu-toggle"
+                        >
+                          <BsThreeDotsVertical size={18} />
+                        </button>
+                        {activeMenu === destination.id && (
+                          <div className="dropdown-menu absolute right-0 -top-[4rem] z-10 bg-white border rounded shadow w-32">
+                            <button
+                              onClick={() =>
+                                navigate(`/destinations/view/${destination.id}`)
+                              }
+                              className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
+                            >
+                              <FaEye size={14} /> View
+                            </button>
+                            <button
+                              onClick={() =>
+                                navigate(
+                                  `/destinations/update/${destination.id}`
+                                )
+                              }
+                              className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
+                            >
+                              <FaEdit size={14} /> Update
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan="8"
+                    className="text-center text-3xl py-40 font-semibold text-gray-600"
                   >
-                    <FaEye size={14} /> View
-                  </button>
-                  <button
-                    onClick={() =>
-                      navigate(`/destinations/update/${destination.id}`)
-                    }
-                    className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
-                  >
-                    <FaEdit size={14} /> Update
-                  </button>
-                </div>
+                    No data found
+                  </td>
+                </tr>
               )}
-            </div>
-          </td>
-        </tr>
-      ))
-    ) : (
-      <tr>
-        <td
-          colSpan="8"
-          className="text-center text-3xl py-40 font-semibold text-gray-600"
-        >
-          No data found
-        </td>
-      </tr>
-    )}
-  </tbody>
-</table>
-
-
-</div>
-
+            </tbody>
+          </table>
+        </div>
 
         {/* Mobile View */}
-<div className="block sm:hidden space-y-5 flex-col items-center justify-center">
-  {!loading && DestinationList && DestinationList.length > 0 ? (
-    DestinationList.map(( 
-      destination  
-    ) => ( 
-      <div 
-        key={destination.id}
-        className="bg-white px-4 py-5 rounded-xl shadow-md border w-full"
-        data-aos="fade-up"
-      > 
-         {destination.media_url ? (
-  destination.media_url.match(/\.(jpeg|jpg|gif|png|webp)$/i) ? (
-    <img
-      src={destination.media_url}
-      alt={destination.title}
-      className="w-full h-48 object-cover rounded-md mb-4"
-    />
-  ) : destination.media_url.match(/\.(mp4|webm|ogg)$/i) ? (
-    <video
-      src={destination.media_url}
-      controls
-      className="w-full h-48 object-cover rounded-md mb-4"
-    />
-  ) : (
-    <img
-      src="/placeholder.jpg"
-      alt="Unsupported file"
-      className="w-full h-48 object-cover rounded-md mb-4"
-    />
-  )
-) : (
-  <img
-    src="/placeholder.jpg"
-    alt="No media"
-    className="w-full h-48 object-cover rounded-md mb-4"
-/>
-)}
+        <div className="block sm:hidden space-y-5 flex-col items-center justify-center">
+          {!loading && DestinationList && DestinationList.length > 0 ? (
+            DestinationList.map((destination) => (
+              <div
+                key={destination.id}
+                className="bg-white px-4 py-5 rounded-xl shadow-md border w-full"
+                data-aos="fade-up"
+              >
+                {destination.media_url ? (
+                  destination.media_url.match(/\.(jpeg|jpg|gif|png|webp)$/i) ? (
+                    <img
+                      src={destination.media_url}
+                      alt={destination.title}
+                      className="w-full h-48 object-cover rounded-md mb-4"
+                    />
+                  ) : destination.media_url.match(/\.(mp4|webm|ogg)$/i) ? (
+                    <video
+                      src={destination.media_url}
+                      controls
+                      className="w-full h-48 object-cover rounded-md mb-4"
+                    />
+                  ) : (
+                    <img
+                      src="/placeholder.jpg"
+                      alt="Unsupported file"
+                      className="w-full h-48 object-cover rounded-md mb-4"
+                    />
+                  )
+                ) : (
+                  <img
+                    src="/placeholder.jpg"
+                    alt="No media"
+                    className="w-full h-48 object-cover rounded-md mb-4"
+                  />
+                )}
 
-        <div className="flex justify-between items-start mb-2">
-          <div>
-            <h2 className="text-lg font-semibold text-gray-800">
-              {destination.title}
-            </h2>
-          <strong className="text-sm text-gray-700">Status:</strong> 
-            <p    
-              className={`text-xs ml-2 inline-block mt-1 px-2 py-1 rounded-full font-medium ${getStatusClass(
-                destination.status
-              )}`}
-            >   
-              
-            
-              {destination.status}
-            </p>
-          </div>
-          <button
-            onClick={() => toggleMenu(destination.id)}
-            className="text-gray-600 menu-toggle"
-          >
-            <BsThreeDotsVertical size={20} />
-          </button>
+                <div className="flex justify-between items-start mb-2">
+                  <div>
+                    <h2 className="text-lg font-semibold text-gray-800">
+                      {destination.title}
+                    </h2>
+                    <strong className="text-sm text-gray-700">Status:</strong>
+                    <p
+                      className={`text-xs ml-2 inline-block mt-1 px-2 py-1 rounded-full font-medium ${getStatusClass(
+                        destination.status
+                      )}`}
+                    >
+                      {destination.status}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => toggleMenu(destination.id)}
+                    className="text-gray-600 menu-toggle"
+                  >
+                    <BsThreeDotsVertical size={20} />
+                  </button>
+                </div>
+
+                <div className="text-sm text-gray-700 space-y-2 mt-2">
+                  <p>
+                    <span className="font-bold">Created At:</span>{" "}
+                    {DateFormatter.formatDate(destination.created_at)}
+                  </p>
+                  <p>
+                    <span className="font-bold">Updated At:</span>{" "}
+                    {DateFormatter.formatDate(destination.updated_at)}
+                  </p>
+                </div>
+
+                {activeMenu === destination.id && (
+                  <div className="mt-3 dropdown-menu bg-white border rounded shadow w-full z-10">
+                    <button
+                      onClick={() =>
+                        navigate(`/categories/view/${destination.id}`)
+                      }
+                      className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
+                    >
+                      <FaEye size={14} /> View
+                    </button>
+                    <button
+                      onClick={() =>
+                        navigate(`/categories/update/${destination.id}`)
+                      }
+                      className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
+                    >
+                      <FaEdit size={14} /> Update
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))
+          ) : (
+            <div className="text-center font-semibold text-gray-600 py-10">
+              No data found
+            </div>
+          )}
         </div>
 
-        <div className="text-sm text-gray-700 space-y-2 mt-2">
-         
-          <p>
-            <span className="font-bold">Created At:</span>{" "}
-            {DateFormatter.formatDate(destination.created_at)}
-          </p>
-          <p>
-            <span className="font-bold">Updated At:</span>{" "}
-            {DateFormatter.formatDate(destination.updated_at)}
-          </p>
-        </div>
-
-        {activeMenu === destination.id && (
-          <div className="mt-3 dropdown-menu bg-white border rounded shadow w-full z-10">
-            <button
-              onClick={() => navigate(`/categories/view/${destination.id}`)}
-              className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
-            >
-              <FaEye size={14} /> View
-            </button>
-            <button
-              onClick={() => navigate(`/categories/update/${destination.id}`)}
-              className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
-            >
-              <FaEdit size={14} /> Update
-            </button>
-          </div>
-        )}
-      </div>
-    ))
-  ) : (
-    <div className="text-center font-semibold text-gray-600 py-10">
-      No data found
-    </div>
-  )}
-</div>
-
-           
         {totalPages > 1 && (
           <div className="mt-2 flex  justify-center items-center space-x-2">
             {[...Array(totalPages)].map((_, idx) => (

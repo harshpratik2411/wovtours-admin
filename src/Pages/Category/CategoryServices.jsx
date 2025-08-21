@@ -6,18 +6,24 @@ class CategoryServices {
     const url =
       APIService.baseUrl +
       `api/admin/category/?search=${search}&ordering=${orderBy}&page=${page}&status=${status}`;
-   
+
     try {
       const response = await fetch(url, {
         headers: {
           Authorization: LocalStorage.getAccesToken(),
-        }
+        },
       });
-  
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+
+      if (APIService.isUnauthenticated(response.status)) {
+        await APIService.refreshToken();
+        return this.getAll(search, orderBy, page, status);
       }
 
+      if (APIService.isError(response.status)) {
+        const errorData = await response.json();
+        alert(errorData["error"]);
+        return null;
+      }
       const data = await response.json();
 
       return {
@@ -42,23 +48,27 @@ class CategoryServices {
     console.log("URL called", url);
 
     try {
-      const response = await fetch(url); // No Authorization header for GET
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: LocalStorage.getAccesToken(),
+        },
+      });
 
-      if (!response.ok)
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (APIService.isUnauthenticated(response.status)) {
+        await APIService.refreshToken();
+        return this.get(id);
+      }
+
+      if (APIService.isError(response.status)) {
+        const errorData = await response.json();
+        alert(errorData["error"]);
+        return null;
+      }
 
       const category = await response.json();
 
-      return {
-        id: category.id,
-        title: category.title,
-        description: category.description,
-        parent_id: category.parent_id,
-        media_url: category.media_url,
-        status: category.status,
-        created_at: category.created_at,
-        updated_at: category.updated_at,
-      };
+      return category;
     } catch (error) {
       console.error("Failed to fetch category:", error);
       return null;

@@ -107,7 +107,7 @@ const ViewTag = () => {
               <h3 className="text-xl font-semibold text-gray-800">Tag Description</h3>
             </div>
             <p className="text-gray-600 text-left leading-relaxed">
-              {tag.desc || 'No description provided.'}
+              {tag.description || 'No description provided.'}
             </p>
           </div>
         </div>

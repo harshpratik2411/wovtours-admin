@@ -111,7 +111,7 @@ const Viewdifficulty = () => {
               <h3 className="text-xl font-semibold text-gray-800">Difficulty Description</h3>
             </div>
             <p className="text-gray-600 text-left leading-relaxed">
-              {Difficulty.desc || 'No description provided.'}
+              {Difficulty.description || 'No description provided.'}
             </p>
           </div>
         </div>

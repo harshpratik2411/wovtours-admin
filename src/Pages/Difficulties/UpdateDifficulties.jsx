@@ -39,7 +39,7 @@ const UpdateDifficulties = () => {
 
       setFormData({
         name: difficulty.title || '',
-        description: difficulty.desc || '',
+        description: difficulty.description || '',
         status: difficulty.status || 'Inactive', 
         level: difficulty.level || "",
       })

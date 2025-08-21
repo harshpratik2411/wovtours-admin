@@ -44,20 +44,17 @@ class TagServices {
     console.log("URL called", url);
 
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        headers: {
+          Authorization: LocalStorage.getAccesToken(),
+        },
+      });
       if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
 
       const tag = await response.json();
 
-      return {
-        id: tag.id,
-        name: tag.title,
-        desc: tag.description,
-        status: tag.status,
-        created_at: tag.created_at,
-        updated_at: tag.updated_at,
-      };
+      return tag;
     } catch (error) {
       console.error("Failed to fetch tags:", error);
       return {

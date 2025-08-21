@@ -39,7 +39,7 @@ const UpdatePricingCat = () => {
 
       setFormData({
         name:PricingCat.name || '',
-        description:PricingCat.desc || '',
+        description:PricingCat.description || '',
         status:PricingCat.status || 'Inactive', 
         start_age:PricingCat.start_age || '',
         end_age:PricingCat.end_age || '',

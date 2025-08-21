@@ -37,31 +37,29 @@ class TripServices {
     }
   }
 
-static async get(id) {
-  const url = APIService.baseUrl + `api/admin/trip/${id}/`;
-  console.log("URL called", url);
+  static async get(id) {
+    const url = APIService.baseUrl + `api/admin/trip/${id}/`;
+    console.log("URL called", url);
 
-  try {
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Authorization': LocalStorage.getAccesToken(), // Make sure this returns the full "Bearer ..." string if needed
-        'Content-Type': 'application/json',
-      },
-    });
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: LocalStorage.getAccesToken(),
+        },
+      });
 
-    if (!response.ok)
-      throw new Error(`HTTP error! status: ${response.status}`);
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
 
-    const trip = await response.json();
+      const trip = await response.json();
 
-    return trip;
-  } catch (error) {
-    console.error("Failed to fetch trip:", error);
-    return null;
+      return trip;
+    } catch (error) {
+      console.error("Failed to fetch trip:", error);
+      return null;
+    }
   }
-}
-
 
   static async update(id, data, mediaChanged = false) {
     console.log("Update API called");
@@ -93,7 +91,6 @@ static async get(id) {
         requestOptions = {
           method: "PUT",
           headers: {
-            "Content-Type": "application/json",
             Authorization: LocalStorage.getAccesToken(),
           },
           body: JSON.stringify(filteredData),
@@ -120,76 +117,75 @@ static async get(id) {
   }
 
   static async add(data) {
-  const url = APIService.baseUrl + "api/admin/trip/";
-  console.log("Data = ", data);
-
-  try {
-    const formData = new FormData();
-
-    for (const key in data) {
-      if (data[key] !== undefined && data[key] !== null) {
-        if (key === "media" && Array.isArray(data[key])) {
-          data[key].forEach((file) => {
-            formData.append("media", file);
-          });
-        } else {
-          formData.append(key, data[key]);
-        }
-      }
-    }
-
-    let response = await fetch(url, {
-      method: "POST",
-      headers: {
-        Authorization: LocalStorage.getAccesToken(),
-      },
-      body: formData,
-    });
-
-    if (APIService.isUnauthenticated(response.status)) {
-      await APIService.refreshToken();
-      return await this.add(data);
-    }
-
-    if (APIService.isError(response.status)) {
-      const errorData = await response.json();
-      alert(errorData["error"]);
-      return null;
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Failed to add trip:", error);
-    return null;
-  }
-}
-
-
-  static async delete(id) {
-    const url = APIService.baseUrl + `api/admin/trip/${id}/`;
+    const url = APIService.baseUrl + "api/admin/trip/";
+    console.log("Data = ", data);
 
     try {
+      const formData = new FormData();
+
+      for (const key in data) {
+        if (data[key] !== undefined && data[key] !== null) {
+          if (key === "media" && Array.isArray(data[key])) {
+            data[key].forEach((file) => {
+              formData.append("media", file);
+            });
+          } else {
+            formData.append(key, data[key]);
+          }
+        }
+      }
+
       let response = await fetch(url, {
-        method: "DELETE",
+        method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: LocalStorage.getAccesToken(),
         },
+        body: formData,
       });
 
       if (APIService.isUnauthenticated(response.status)) {
         await APIService.refreshToken();
-        return this.delete(id);
-      } else if (APIService.isDeleted(response.status)) {
-        return true;
+        return await this.add(data);
       }
 
-      return false;
+      if (APIService.isError(response.status)) {
+        const errorData = await response.json();
+        alert(errorData["error"]);
+        return null;
+      }
+
+      return await response.json();
     } catch (error) {
-      console.error(`Failed to delete trip with id ${id}:`, error);
-      return false;
+      console.error("Failed to add trip:", error);
+      return null;
     }
   }
+
+  //   static async delete(id) {
+  //     const url = APIService.baseUrl + `api/admin/trip/${id}/`;
+
+  //     try {
+  //       let response = await fetch(url, {
+  //         method: "DELETE",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: LocalStorage.getAccesToken(),
+  //         },
+  //       });
+
+  //       if (APIService.isUnauthenticated(response.status)) {
+  //         await APIService.refreshToken();
+  //         return this.delete(id);
+  //       } else if (APIService.isDeleted(response.status)) {
+  //         return true;
+  //       }
+
+  //       return false;
+  //     } catch (error) {
+  //       console.error(`Failed to delete trip with id ${id}:`, error);
+  //       return false;
+  //     }
+  //   }
 }
 
 export default TripServices;
