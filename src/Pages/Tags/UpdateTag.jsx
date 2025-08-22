@@ -37,8 +37,8 @@ const UpdateTag = () => {
       }
 
       setFormData({
-        name: tag.name || '',
-        description: tag.desc || '',
+        title: tag.title || '',
+        description: tag.description || '',
         status: tag.status || 'Inactive',
       })
       setLoading(false)
@@ -56,7 +56,7 @@ const UpdateTag = () => {
   const handleSubmit = async (e) => {
   e.preventDefault()
   const updateData = {
-    title: formData.name,
+    title: formData.title,
     description: formData.description,
     status: formData.status,
   }
@@ -110,7 +110,7 @@ const UpdateTag = () => {
                   type="text"
                   name="name" 
                   maxLength={50}
-                  value={formData.name}
+                  value={formData.title}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
                  required

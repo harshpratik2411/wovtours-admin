@@ -116,15 +116,16 @@ class TagServices {
   static async update(id, data) {
     console.log("Update API called");
     const url = APIService.baseUrl + `api/admin/tags/${id}/`;
-    try {
+    try { 
+
       let response = await fetch(url, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: LocalStorage.getAccesToken(),
         },
-        body: JSON.stringify(data),
-      });
+        body: JSON.stringify(data), 
+      }); 
       console.log("Response = ", response.status);
 
       if (APIService.isUnauthenticated(response.status)) {
