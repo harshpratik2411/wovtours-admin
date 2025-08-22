@@ -206,7 +206,7 @@ const Categories = () => {
       <th className="py-2 w-[10%]">Image</th>
       <th className="py-2 w-[10%]">Title</th>
       <th className="py-2 pl-3 w-[20%]">Description </th>
-       <th className="py-2  w-[10%]">Parent ID</th>
+       <th className="py-2  w-[10%]">Parent</th>
       <th className="py-2 w-[10%]">Status</th>
       <th className="py-2 w-[15%]">Created At</th>
       <th className="py-2 w-[15%]">Updated At</th>
@@ -260,7 +260,7 @@ const Categories = () => {
           </td>
          <td className="py-6">
   <p className="font-medium ml-6   text-gray-800">
-    {category.parent_id ?? 'none'}
+    {category.parent_title ?? 'none'}
   </p>
 </td>
 
@@ -367,58 +367,67 @@ const Categories = () => {
 />
 )}
 
-        <div className="flex justify-between items-start mb-2">
-          <div>
-            <h2 className="text-lg font-semibold text-gray-800">
-              {category.title}
-            </h2>
-          <strong className="text-sm text-gray-700">Status:</strong> 
-            <p    
-              className={`text-xs ml-2 inline-block mt-1 px-2 py-1 rounded-full font-medium ${getStatusClass(
-                category.status
-              )}`}
-            >   
-              
-            
-              {category.status}
-            </p>
-          </div>
-          <button
-            onClick={() => toggleMenu(category.id)}
-            className="text-gray-600 menu-toggle"
-          >
-            <BsThreeDotsVertical size={20} />
-          </button>
-        </div>
+<div className="flex justify-between items-start mb-2">
+  <div>
+    <p className= " text-sm text-gray-800">
+      <span className="font-semibold">Title:</span>
+      <span className="ml-2 text-md font-medium">{category.title}</span>
+    </p>
+    <p className="text-sm text-gray-800">
+      <span className="font-semibold">Description:</span>
+      <span className="ml-2 text-md font-medium">{category.description}</span>
+    </p>
+    <p className="text-sm text-gray-800">
+      <span className="font-semibold">Parent:</span>
+      <span className="ml-2 text-md font-medium">{category.parent_title || "none"}</span>
+    </p>
 
-        <div className="text-sm text-gray-700 space-y-2 mt-2">
-         
-          <p>
-            <span className="font-bold">Created At:</span>{" "}
-            {DateFormatter.formatDate(category.created_at)}
-          </p>
-          <p>
-            <span className="font-bold">Updated At:</span>{" "}
-            {DateFormatter.formatDate(category.updated_at)}
-          </p>
-        </div>
+    <strong className="text-sm text-gray-700">Status:</strong>
+    <p
+      className={`text-xs ml-2 inline-block mt-1 px-2 py-1 rounded-full font-medium ${getStatusClass(
+        category.status
+      )}`}
+    >
+      {category.status}
+    </p>
+  </div>
+  <button
+    onClick={() => toggleMenu(category.id)}
+    className="text-gray-600 menu-toggle"
+  >
+    <BsThreeDotsVertical size={20} />
+  </button>
+</div>
 
-        {activeMenu === category.id && (
-          <div className="mt-3 dropdown-menu bg-white border rounded shadow w-full z-10">
-            <button
-              onClick={() => navigate(`/categories/view/${category.id}`)}
-              className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
-            >
-              <FaEye size={14} /> View
-            </button>
-            <button
-              onClick={() => navigate(`/categories/update/${category.id}`)}
-              className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
-            >
-              <FaEdit size={14} /> Update
-            </button>
-          </div>
-        )}
+<div className="text-sm text-gray-700 space-y-2 mt-2">
+  <p>
+    <span className="font-bold">Created At:</span>{" "}
+    {DateFormatter.formatDate(category.created_at)}
+  </p>
+  <p>
+    <span className="font-bold">Updated At:</span>{" "}
+    {DateFormatter.formatDate(category.updated_at)}
+  </p>
+</div>
+
+{activeMenu === category.id && (
+  <div className="mt-3 dropdown-menu bg-white border rounded shadow w-full z-10">
+    <button
+      onClick={() => navigate(`/categories/view/${category.id}`)}
+      className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
+    >
+      <FaEye size={14} /> View
+    </button>
+    <button
+      onClick={() => navigate(`/categories/update/${category.id}`)}
+      className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
+    >
+      <FaEdit size={14} /> Update
+    </button>
+  </div>
+)}
+
+
       </div>
     ))
   ) : (

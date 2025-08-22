@@ -111,8 +111,8 @@ const ViewCategory = () => {
                 <span>{category.description || "N/A"}</span>
               </div>
               <div className="flex gap-3">
-                <span className="font-semibold w-40">Parent Id:</span>
-                <span>{category.parent_id || "N/A"}</span>
+                <span className="font-semibold w-40">Parent :</span>
+                <span>{category.parent_title || "N/A"}</span>
               </div>
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Created At:</span>
