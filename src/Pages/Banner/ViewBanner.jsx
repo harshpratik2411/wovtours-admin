@@ -107,7 +107,7 @@ const ViewBanner = () => {
               </div>
 
               <div className="flex gap-3">
-                <span className="font-semibold w-40">Description:</span>
+                <span className="font-semibold w-40">Banner Type:</span>
                 <span>{banner.banner_type || "N/A"}</span>
               </div>
               <div className="flex gap-3">

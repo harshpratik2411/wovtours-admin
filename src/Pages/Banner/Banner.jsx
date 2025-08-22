@@ -359,58 +359,62 @@ const Banner = () => {
 />
 )}
 
-        <div className="flex justify-between items-start mb-2">
-          <div>
-            <h2 className="text-lg font-semibold text-gray-800">
-              {banner.title}
-            </h2>
-          <strong className="text-sm text-gray-700">Status:</strong> 
-            <p    
-              className={`text-xs ml-2 inline-block mt-1 px-2 py-1 rounded-full font-medium ${getStatusClass(
-                banner.status
-              )}`}
-            >   
-              
-            
-              {banner.status}
-            </p>
-          </div>
-          <button
-            onClick={() => toggleMenu(banner.id)}
-            className="text-gray-600 menu-toggle"
-          >
-            <BsThreeDotsVertical size={20} />
-          </button>
-        </div>
+       <div className="flex justify-between items-start mb-2">
+  <div>
+    <p className="text-sm mt-2 text-gray-800">
+      <span className="font-semibold">Title:</span>
+      <span className="ml-2 text-md font-medium">{banner.title}</span>
+    </p>
+    <p className="text-sm mt-2 text-gray-800">
+      <span className="font-semibold">Banner Type:</span>
+      <span className="ml-2 text-md font-medium">{banner.banner_type}</span>
+    </p>
 
-        <div className="text-sm text-gray-700 space-y-2 mt-2">
-         
-          <p>
-            <span className="font-bold">Created At:</span>{" "}
-            {DateFormatter.formatDate(banner.created_at)}
-          </p>
-          <p>
-            <span className="font-bold">Updated At:</span>{" "}
-            {DateFormatter.formatDate(banner.updated_at)}
-          </p>
-        </div>
+    <strong className="text-sm  text-gray-700">Status:</strong>
+    <p
+      className={`text-xs ml-2 mt-2 inline-block  px-2 py-1 rounded-full font-medium ${getStatusClass(
+        banner.status
+      )}`}
+    >
+      {banner.status}
+    </p>
+  </div>
+  <button
+    onClick={() => toggleMenu(banner.id)}
+    className="text-gray-600 menu-toggle"
+  >
+    <BsThreeDotsVertical size={20} />
+  </button>
+</div>
 
-        {activeMenu === banner.id && (
-          <div className="mt-3 dropdown-menu bg-white border rounded shadow w-full z-10">
-            <button
-              onClick={() => navigate(`/banners/view/${banner.id}`)}
-              className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
-            >
-              <FaEye size={14} /> View
-            </button>
-            <button
-              onClick={() => navigate(`/banners/update/${banner.id}`)}
-              className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
-            >
-              <FaEdit size={14} /> Update
-            </button>
-          </div>
-        )}
+<div className="text-sm text-gray-700 space-y-2 mt-2">
+  <p>
+    <span className="font-bold">Created At:</span>{" "}
+    {DateFormatter.formatDate(banner.created_at)}
+  </p>
+  <p>
+    <span className="font-bold">Updated At:</span>{" "}
+    {DateFormatter.formatDate(banner.updated_at)}
+  </p>
+</div>
+
+{activeMenu === banner.id && (
+  <div className="mt-3 dropdown-menu bg-white border rounded shadow w-full z-10">
+    <button
+      onClick={() => navigate(`/banners/view/${banner.id}`)}
+      className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
+    >
+      <FaEye size={14} /> View
+    </button>
+    <button
+      onClick={() => navigate(`/banners/update/${banner.id}`)}
+      className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
+    >
+      <FaEdit size={14} /> Update
+    </button>
+  </div>
+)}
+
       </div>
     ))
   ) : (

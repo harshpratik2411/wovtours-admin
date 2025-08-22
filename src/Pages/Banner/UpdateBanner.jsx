@@ -90,7 +90,7 @@ const UpdateBanner = () => {
   }
 
   if (loading) return <p className="text-center mt-20">Loading...</p>
-  if (notFound) return <p className="text-center mt-20 text-red-500">Activity not found.</p>
+  if (notFound) return <p className="text-center mt-20 text-red-500">Banner not found.</p>
 
   return (
     <>

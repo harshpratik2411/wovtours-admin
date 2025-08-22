@@ -17,7 +17,7 @@ const UpdateDifficulties = () => {
    const { showAlert } = useAlert();
 
   const [formData, setFormData] = useState({
-    name: '',
+    title: '',
     description: '',
     status: 'Active',
     level: '',
@@ -38,7 +38,7 @@ const UpdateDifficulties = () => {
       }
 
       setFormData({
-        name: difficulty.title || '',
+        title: difficulty.title || '',
         description: difficulty.description || '',
         status: difficulty.status || 'Inactive', 
         level: difficulty.level || "",
