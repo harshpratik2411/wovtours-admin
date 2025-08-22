@@ -370,59 +370,66 @@ const Destination = () => {
                   />
                 )}
 
-                <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <h2 className="text-lg font-semibold text-gray-800">
-                      {destination.title}
-                    </h2>
-                    <strong className="text-sm text-gray-700">Status:</strong>
-                    <p
-                      className={`text-xs ml-2 inline-block mt-1 px-2 py-1 rounded-full font-medium ${getStatusClass(
-                        destination.status
-                      )}`}
-                    >
-                      {destination.status}
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => toggleMenu(destination.id)}
-                    className="text-gray-600 menu-toggle"
-                  >
-                    <BsThreeDotsVertical size={20} />
-                  </button>
-                </div>
+                <div className="flex  justify-between items-start mb-2">
+  <div>
+    <p className="text-sm mt-2 text-gray-800">
+      <span className="font-semibold">Title:</span>
+      <span className="ml-2  text-md">{destination.title}</span>
+    </p>
+    <p className="text-sm mt-2 text-gray-800">
+      <span className="font-semibold">Description:</span>
+      <span className="ml-2 text-md">{destination.description}</span>
+    </p>
+    <p className="text-sm mt-2 text-gray-800">
+      <span className="font-semibold">Parent:</span>
+      <span className="ml-2 text-md">{destination.parent_title || "none"}</span>
+    </p>
 
-                <div className="text-sm text-gray-700 space-y-2 mt-2">
-                  <p>
-                    <span className="font-bold">Created At:</span>{" "}
-                    {DateFormatter.formatDate(destination.created_at)}
-                  </p>
-                  <p>
-                    <span className="font-bold">Updated At:</span>{" "}
-                    {DateFormatter.formatDate(destination.updated_at)}
-                  </p>
-                </div>
+    <strong className="text-sm text-gray-700">Status:</strong>
+    <p
+      className={`text-xs ml-2 inline-block mt-1 px-2 py-1 rounded-full font-medium ${getStatusClass(
+        destination.status
+      )}`}
+    >
+      {destination.status}
+    </p>
+  </div>
+  <button
+    onClick={() => toggleMenu(destination.id)}
+    className="text-gray-600 menu-toggle"
+  >
+    <BsThreeDotsVertical size={20} />
+  </button>
+</div>
 
-                {activeMenu === destination.id && (
-                  <div className="mt-3 dropdown-menu bg-white border rounded shadow w-full z-10">
-                    <button
-                      onClick={() =>
-                        navigate(`/categories/view/${destination.id}`)
-                      }
-                      className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
-                    >
-                      <FaEye size={14} /> View
-                    </button>
-                    <button
-                      onClick={() =>
-                        navigate(`/categories/update/${destination.id}`)
-                      }
-                      className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
-                    >
-                      <FaEdit size={14} /> Update
-                    </button>
-                  </div>
-                )}
+<div className="text-sm text-gray-700 space-y-2 mt-2">
+  <p>
+    <span className="font-bold">Created At:</span>{" "}
+    {DateFormatter.formatDate(destination.created_at)}
+  </p>
+  <p>
+    <span className="font-bold">Updated At:</span>{" "}
+    {DateFormatter.formatDate(destination.updated_at)}
+  </p>
+</div>
+
+{activeMenu === destination.id && (
+  <div className="mt-3 dropdown-menu bg-white border rounded shadow w-full z-10">
+    <button
+      onClick={() => navigate(`/categories/view/${destination.id}`)}
+      className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
+    >
+      <FaEye size={14} /> View
+    </button>
+    <button
+      onClick={() => navigate(`/categories/update/${destination.id}`)}
+      className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
+    >
+      <FaEdit size={14} /> Update
+    </button>
+  </div>
+)}
+
               </div>
             ))
           ) : (

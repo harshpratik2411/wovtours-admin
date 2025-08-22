@@ -336,50 +336,55 @@ const TripType = () => {
         className="bg-white px-4 py-5 rounded-xl shadow-md border w-full"
         data-aos="fade-up"
       >
-         {tripType.media_url ? (
-  tripType.media_url.match(/\.(jpeg|jpg|gif|png|webp)$/i) ? (
-    <img
-      src={tripType.media_url}
-      alt={tripType.title}
-      className="w-full h-48 object-cover rounded-md mb-4"
-    />
-  ) : tripType.media_url.match(/\.(mp4|webm|ogg)$/i) ? (
-    <video
-      src={tripType.media_url}
-      controls
-      className="w-full h-48 object-cover rounded-md mb-4"
-    />
-  ) : (
-    <img
-      src="/placeholder.jpg"
-      alt="Unsupported file"
-      className="w-full h-48 object-cover rounded-md mb-4"
-    />
-  )
-) : (
-  <img
-    src="/placeholder.jpg"
-    alt="No media"
-    className="w-full h-48 object-cover rounded-md mb-4"
-/>
-)}
+        {tripType.media_url ? (
+          tripType.media_url.match(/\.(jpeg|jpg|gif|png|webp)$/i) ? (
+            <img
+              src={tripType.media_url}
+              alt={tripType.title}
+              className="w-full h-48 object-cover rounded-md mb-4"
+            />
+          ) : tripType.media_url.match(/\.(mp4|webm|ogg)$/i) ? (
+            <video
+              src={tripType.media_url}
+              controls
+              className="w-full h-48 object-cover rounded-md mb-4"
+            />
+          ) : (
+            <img
+              src="/placeholder.jpg"
+              alt="Unsupported file"
+              className="w-full h-48 object-cover rounded-md mb-4"
+            />
+          )
+        ) : (
+          <img
+            src="/placeholder.jpg"
+            alt="No media"
+            className="w-full h-48 object-cover rounded-md mb-4"
+          />
+        )}
 
         <div className="flex justify-between items-start mb-2">
-          <div> 
-            <h2 className="text-lg font-semibold text-gray-800">
-              {tripType.title}
-            </h2>
-            <h2 className="text-lg font-semibold text-gray-800">
-              {tripType.description}
-            </h2>
-          <strong className="text-sm text-gray-700">Status:</strong> 
-            <p    
+          <div>
+            <p className="text-sm mt-2 text-gray-800">
+              <span className="font-semibold">Title:</span>
+              <span className="ml-2 text-md">{tripType.title}</span>
+            </p>
+            <p className="text-sm mt-2 text-gray-800">
+              <span className="font-semibold">Description:</span>
+              <span className="ml-2 text-md">{tripType.description}</span>
+            </p>
+            <p className="text-sm mt-2 text-gray-800">
+              <span className="font-semibold">Parent:</span>
+              <span className="ml-2 text-md">{tripType.parent_title || "none"}</span>
+            </p>
+
+            <strong className="text-sm text-gray-700">Status:</strong>
+            <p
               className={`text-xs ml-2 inline-block mt-1 px-2 py-1 rounded-full font-medium ${getStatusClass(
                 tripType.status
               )}`}
-            >   
-              
-            
+            >
               {tripType.status}
             </p>
           </div>
@@ -392,7 +397,6 @@ const TripType = () => {
         </div>
 
         <div className="text-sm text-gray-700 space-y-2 mt-2">
-         
           <p>
             <span className="font-bold">Created At:</span>{" "}
             {DateFormatter.formatDate(tripType.created_at)}
@@ -412,7 +416,7 @@ const TripType = () => {
               <FaEye size={14} /> View
             </button>
             <button
-              onClick={() => navigate(`/banners/update/${banner.id}`)}
+              onClick={() => navigate(`/tripTypes/update/${tripType.id}`)}
               className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
             >
               <FaEdit size={14} /> Update
@@ -422,11 +426,10 @@ const TripType = () => {
       </div>
     ))
   ) : (
-    <div className="text-center font-semibold text-gray-600 py-10">
-      No data found
-    </div>
+    <p className="text-center text-gray-500">No Trip Types Found</p>
   )}
 </div>
+
 
            
         {totalPages > 1 && (
