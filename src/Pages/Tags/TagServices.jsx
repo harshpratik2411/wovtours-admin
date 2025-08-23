@@ -13,11 +13,13 @@ class TagServices {
         headers: {
           Authorization: LocalStorage.getAccesToken(),
         },
-      }); 
+      });
 
-     if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.getAll(search, orderBy, page, status);
+      if (APIService.isUnauthenticated(response.status)) {
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.getAll(search, orderBy, page, status);
+        }
       }
 
       if (APIService.isError(response.status)) {
@@ -56,10 +58,12 @@ class TagServices {
           Authorization: LocalStorage.getAccesToken(),
         },
       });
-        
-       if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.get(id);
+
+      if (APIService.isUnauthenticated(response.status)) {
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.get(id);
+        }
       }
 
       if (APIService.isError(response.status)) {
@@ -92,17 +96,20 @@ class TagServices {
         headers: {
           Authorization: LocalStorage.getAccesToken(),
         },
-        body: JSON.stringify(data), 
-
-        
+        body: JSON.stringify(data),
       });
+
       if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        this.add(data);
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.add(search, orderBy, page, status);
+        }
       }
+
       if (APIService.isError(response.status)) {
-        //todo:
-        alert(response.json()["error"]);
+        const errorData = await response.json();
+        alert(errorData["error"]);
+        return null;
       }
 
       return await response.json();
@@ -116,21 +123,22 @@ class TagServices {
   static async update(id, data) {
     console.log("Update API called");
     const url = APIService.baseUrl + `api/admin/tags/${id}/`;
-    try { 
-
+    try {
       let response = await fetch(url, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: LocalStorage.getAccesToken(),
         },
-        body: JSON.stringify(data), 
-      }); 
+        body: JSON.stringify(data),
+      });
       console.log("Response = ", response.status);
 
       if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        this.update(id, data);
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          this.update(id, data);
+        }
       }
 
       return await response.json();
@@ -153,10 +161,10 @@ class TagServices {
       console.log("Response = ", response.status);
 
       if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        this.delete(id);
-      } else if (APIService.isDeleted(response.status)) {
-        return true;
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.delete(id);
+        }
       }
     } catch (error) {
       console.error(`Failed to delete tag with id ${id}:`, error);

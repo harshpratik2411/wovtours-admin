@@ -14,16 +14,16 @@ class DifficultiesServices {
         },
       });
       if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.getAll(search, orderBy, page, status,level);
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.getAll(search, orderBy, page, status, level);
+        }
       }
-
       if (APIService.isError(response.status)) {
         const errorData = await response.json();
         alert(errorData["error"]);
         return null;
       }
-
 
       const data = await response.json();
       console.log("🟦 Difficulty API RAW RESPONSE:", data);
@@ -56,9 +56,12 @@ class DifficultiesServices {
           Authorization: LocalStorage.getAccesToken(),
         },
       });
-       if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.get(id);
+
+      if (APIService.isUnauthenticated(response.status)) {
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.get(id);
+        }
       }
 
       if (APIService.isError(response.status)) {
@@ -92,8 +95,10 @@ class DifficultiesServices {
       });
 
       if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.add(data);
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.add(data);
+        }
       }
 
       if (APIService.isError(response.status)) {
@@ -128,8 +133,10 @@ class DifficultiesServices {
       console.log("Response = ", response.status);
 
       if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.update(id, data); // Return recursive call
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.update(id, data);
+        }
       }
 
       return await response.json();
@@ -154,12 +161,11 @@ class DifficultiesServices {
 
       console.log("Response = ", response.status);
 
-      if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.delete(id); // Return recursive call
-      } else if (APIService.isDeleted(response.status)) {
-        return true;
-      }
+        if (APIService.isUnauthenticated(response.status)) {
+  const hasRefreshed = await APIService.refreshToken();
+  if (hasRefreshed === true) {
+    return this.delete(id);
+  } }
 
       return false;
     } catch (error) {

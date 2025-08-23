@@ -14,9 +14,12 @@ class TripTypeServices {
         },
       });
 
+      
       if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.getAll(search, orderBy, page, status);
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.getAll(search, orderBy, page, status);
+        }
       }
 
       if (APIService.isError(response.status)) {
@@ -55,9 +58,12 @@ class TripTypeServices {
           Authorization: LocalStorage.getAccesToken(),
         },
       });
- if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.get(id);
+
+      if (APIService.isUnauthenticated(response.status)) {
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.get(id);
+        }
       }
 
       if (APIService.isError(response.status)) {
@@ -110,13 +116,14 @@ class TripTypeServices {
         };
       }
 
-      let response = await fetch(url, requestOptions);
+      let response = await fetch(url, requestOptions); 
 
-      if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.update(id, data, mediaChanged);
+ if (APIService.isUnauthenticated(response.status)) {
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.update(id, data, mediaChanged);
+        }
       }
-
       if (!response.ok) {
         console.error("Failed to update trip type:", await response.text());
         return false;
@@ -147,11 +154,13 @@ class TripTypeServices {
           Authorization: LocalStorage.getAccesToken(),
         },
         body: formData,
-      });
+      }); 
 
-      if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.add(data);
+ if (APIService.isUnauthenticated(response.status)) {
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.add(data);
+        }
       }
 
       if (APIService.isError(response.status)) {
@@ -178,13 +187,11 @@ class TripTypeServices {
         },
       });
 
-      if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.delete(id);
-      } else if (APIService.isDeleted(response.status)) {
-        return true;
-      }
-
+        if (APIService.isUnauthenticated(response.status)) {
+  const hasRefreshed = await APIService.refreshToken();
+  if (hasRefreshed === true) {
+    return this.delete(id);
+  } } 
       return false;
     } catch (error) {
       console.error(`Failed to delete trip type with id ${id}:`, error);

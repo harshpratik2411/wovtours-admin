@@ -7,17 +7,19 @@ class PricingCatServices {
     const url =
       APIService.baseUrl +
       `api/admin/pricing-category/?search=${search}&ordering=${orderBy}&page=${page}&status=${status}&level=${level}`;
-      
- try {
+
+    try {
       const response = await fetch(url, {
         headers: {
           Authorization: LocalStorage.getAccesToken(),
         },
-      }); 
+      });
 
-     if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.getAll(search, orderBy, page, status);
+      if (APIService.isUnauthenticated(response.status)) {
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.getAll(search, orderBy, page, status);
+        }
       }
 
       if (APIService.isError(response.status)) {
@@ -57,12 +59,12 @@ class PricingCatServices {
         },
       });
 
-        
-       if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.get(id);
+      if (APIService.isUnauthenticated(response.status)) {
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.get(id);
+        }
       }
-
       if (APIService.isError(response.status)) {
         const errorData = await response.json();
         alert(errorData["error"]);
@@ -94,8 +96,10 @@ class PricingCatServices {
       console.log("Response = ", response.status);
 
       if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.update(id, data);
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.update(id, data);
+        }
       }
 
       return await response.json();
@@ -119,8 +123,10 @@ class PricingCatServices {
       });
 
       if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.add(data);
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.add(data);
+        }
       }
 
       if (APIService.isError(response.status)) {
@@ -149,12 +155,12 @@ class PricingCatServices {
 
       console.log("Response = ", response.status);
 
-      if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.delete(id);
-      } else if (APIService.isDeleted(response.status)) {
-        return true;
-      }
+      
+        if (APIService.isUnauthenticated(response.status)) {
+  const hasRefreshed = await APIService.refreshToken();
+  if (hasRefreshed === true) {
+    return this.delete(id);
+  } }
 
       return false;
     } catch (error) {

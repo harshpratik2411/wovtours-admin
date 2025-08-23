@@ -80,7 +80,7 @@ class TripServices {
     }
   }
 
-  static async update(id, data, mediaChanged = false) {
+  static async update(id, data, mediaChanged = false, ) {
     console.log("Update API called");
 
     const url = APIService.baseUrl + `api/admin/trip/${id}/`;
@@ -171,20 +171,7 @@ class TripServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.add(search, orderBy, page, status);
-        }
-      }
-
-      if (APIService.isError(response.status)) {
-        const errorData = await response.json();
-        alert(errorData["error"]);
-        return null;
-      }
-
-      if (APIService.isUnauthenticated(response.status)) {
-        const hasRefreshed = await APIService.refreshToken();
-        if (hasRefreshed === true) {
-          return await this.add(data);
+          return this.add(data);
         }
       }
 

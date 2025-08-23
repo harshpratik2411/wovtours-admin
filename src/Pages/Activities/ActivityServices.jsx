@@ -15,9 +15,11 @@ class ActivityServices {
         },
       });
 
-       if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.getAll(search, orderBy, page, status,level);
+      if (APIService.isUnauthenticated(response.status)) {
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.getAll(search, orderBy, page, status, level);
+        }
       }
 
       if (APIService.isError(response.status)) {
@@ -57,24 +59,17 @@ class ActivityServices {
       });
 
       if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.get(id);
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.get(id);
+        }
       }
 
       if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
 
       const activity = await response.json();
-
-      return {
-        id: activity.id,
-        title: activity.title,
-        description: activity.description,
-        media_url: activity.media_url,
-        status: activity.status,
-        created_at: activity.created_at,
-        updated_at: activity.updated_at,
-      };
+      return activity;
     } catch (error) {
       console.error("Failed to fetch activity:", error);
       return null;
@@ -121,13 +116,10 @@ class ActivityServices {
       let response = await fetch(url, requestOptions);
 
       if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.update(id, data, mediaChanged);
-      }
-
-      if (!response.ok) {
-        console.error("Failed to update activity:", await response.text());
-        return false;
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.update(id, data, (mediaChanged = false));
+        }
       }
 
       return await response.json();
@@ -156,10 +148,11 @@ class ActivityServices {
         },
         body: formData,
       });
-
       if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.add(data);
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.add(data);
+        }
       }
 
       if (APIService.isError(response.status)) {
@@ -188,10 +181,10 @@ class ActivityServices {
       });
 
       if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.delete(id);
-      } else if (APIService.isDeleted(response.status)) {
-        return true;
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.delete(id);
+        }
       }
 
       return false;
