@@ -364,10 +364,15 @@ const Trips = () => {
 
 
                 <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <h2 className="text-lg font-semibold text-gray-800 mb-2">
-                      {trip.title}
-                    </h2>
+                  <div> 
+                   <div className="flex items-center mb-2">
+                      <strong className="text-sm text-gray-700 mr-2">
+                        Title:
+                      </strong>
+                      <p className="text-sm text-gray-800">
+                        {trip.title}
+                      </p>
+                    </div>
 
                     {/* Description line */}
                     <div className="flex items-center mb-2">

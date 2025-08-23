@@ -70,15 +70,8 @@ class BannerServices {
 
       const banner = await response.json();
 
-      return {
-        id: banner.id,
-        title: banner.title,
-        banner_type: banner.banner_type,
-        media_url: banner.media_url,
-        status: banner.status,
-        created_at: banner.created_at,
-        updated_at: banner.updated_at,
-      };
+      return  banner;
+           
     } catch (error) {
       console.error("Failed to fetch banner:", error);
       return null;

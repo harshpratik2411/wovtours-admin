@@ -2,6 +2,7 @@ import LocalStorage from "./LocalStorage";
 
 class APIService {
   static baseUrl = "https://api-stage.wovtours.com/";
+  // static baseUrl = "http://127.0.0.1:8082/";
 
   static isUnauthenticated(status) {
     return status === 401;
@@ -19,10 +20,9 @@ class APIService {
     return status <= 300;
   }
 
-  static async refreshToken() {
-    
+  static async  refreshToken() {
     const url = this.baseUrl + "auth/jwt/refresh/";
-    console.log("URL = ",url);
+    console.log("URL = ", url);
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -33,13 +33,15 @@ class APIService {
         refresh: LocalStorage.get(LocalStorage.refreshToken),
       }),
     });
-    console.log("response.status = ",response.status);
-    if (APIService.isSuccess(response.status)) {
+    console.log("response.status = ", response.status);
+    if (APIService.isUnauthenticated(response.status)) {
+      LocalStorage.logout();
+      return false;
+    } else if (APIService.isSuccess(response.status)) {
       const auth = await response.json();
-      console.log("auth = ",auth);
-      
-
+      console.log("auth = ", auth);
       LocalStorage.set(LocalStorage.accesToken, auth.access);
+      return true;
     }
   }
 }

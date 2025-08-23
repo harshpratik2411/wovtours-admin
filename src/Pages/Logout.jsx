@@ -1,21 +1,19 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import APIService from "./APIServices";
+import LocalStorage from "./LocalStorage";
 
 const Logout = () => {
   const navigate = useNavigate();
   const [showConfirm, setShowConfirm] = useState(false);
 
-  const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated");
-    navigate("/login");
-  };
-
   const openConfirm = () => setShowConfirm(true);
   const closeConfirm = () => setShowConfirm(false);
 
   const confirmLogout = () => {
-    handleLogout();
     closeConfirm();
+    LocalStorage.logout();
+    
   };
 
   return (

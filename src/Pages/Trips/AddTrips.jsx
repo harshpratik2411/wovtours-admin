@@ -165,7 +165,7 @@ const AddTrips = () => {
     setSelectedPricingCategory(value || null);
   };
   const handleDifficultySelect = (e) => {
-    const value = e.target.value;
+    const value = parseInt(e.target.value);
     setSelectedDifficulty(value || null);
   };
   const handleActivitySelect = (e) => {

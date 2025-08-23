@@ -1,0 +1,23 @@
+[
+  {
+    "Question": "How to add a new trip?",
+    "Answer": "To add a new trip, navigate to the 'Trips' section and click on 'Add Trip'. Fill in the required details and submit the form."
+  },
+  {
+    "Question": "How to edit an existing trip?",
+    "Answer": "To edit an existing trip, go to the 'Trips' section, select the trip you want to edit, and click on the 'Edit' button. Make the necessary changes and save."
+  },
+  {
+    "Question": "How to delete a trip?",
+    "Answer": "To delete a trip, navigate to the 'Trips' section, select the trip you wish to delete, and click on the 'Delete' button. Confirm the deletion when prompted."
+  },
+  {
+    "Question": "What are the different trip statuses?",
+    "Answer": "The different trip statuses include 'Draft', 'Published', and 'Archived'. You can set the status while adding or editing a trip."
+  },
+  {
+    "Question": "How to manage trip tags?",
+    "Answer": "Trip tags can be managed in the 'Tags' section. You can add new tags, edit existing ones, or delete tags as needed."
+  }
+]
+       

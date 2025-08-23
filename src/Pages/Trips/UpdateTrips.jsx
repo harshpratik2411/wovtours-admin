@@ -65,7 +65,6 @@ const [existingMedia, setExistingMedia] = useState([]); // Already uploaded medi
            for (const tag of trip.tags || []) {
             if (!selectedTags.includes(tag.id)) {
               setSelectedTags((prev) => [tag.id]); 
-              log("Selected Tags:", selectedTags);
             }
           } 
 

@@ -13,10 +13,12 @@ class TripServices {
           Authorization: LocalStorage.getAccesToken(),
         },
       });
-    
-        if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.getAll(search, orderBy, page, status);
+
+      if (APIService.isUnauthenticated(response.status)) {
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.getAll(search, orderBy, page, status);
+        }
       }
 
       if (APIService.isError(response.status)) {
@@ -57,8 +59,10 @@ class TripServices {
       });
 
       if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.get(id);
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.get(id);
+        }
       }
 
       if (APIService.isError(response.status)) {
@@ -115,8 +119,10 @@ class TripServices {
       let response = await fetch(url, requestOptions);
 
       if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.update(id, data, mediaChanged);
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.update(id, data, mediaChanged);
+        }
       }
 
       if (!response.ok) {
@@ -139,14 +145,16 @@ class TripServices {
       const formData = new FormData();
 
       for (const key in data) {
-        if (data[key] !== undefined && data[key] !== null) {
-          if (key === "media" && Array.isArray(data[key])) {
-            data[key].forEach((file) => {
-              formData.append("media", file);
-            });
-          } else {
-            formData.append(key, data[key]);
-          }
+        const value = data[key];
+
+        if (value === undefined || value === null) continue;
+
+        if (key === "media" && Array.isArray(value)) {
+          value.forEach((file) => formData.append("media", file));
+        } else if (Array.isArray(value)) {
+          value.forEach((item) => formData.append(key, item));
+        } else {
+          formData.append(key, value);
         }
       }
 
@@ -157,10 +165,27 @@ class TripServices {
         },
         body: formData,
       });
+      // console.log("Response = ", await response.json());
+      // console.log("Response = ",response);
 
       if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return await this.add(data);
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return this.add(search, orderBy, page, status);
+        }
+      }
+
+      if (APIService.isError(response.status)) {
+        const errorData = await response.json();
+        alert(errorData["error"]);
+        return null;
+      }
+
+      if (APIService.isUnauthenticated(response.status)) {
+        const hasRefreshed = await APIService.refreshToken();
+        if (hasRefreshed === true) {
+          return await this.add(data);
+        }
       }
 
       if (APIService.isError(response.status)) {
@@ -176,31 +201,6 @@ class TripServices {
     }
   }
 
-  //   static async delete(id) {
-  //     const url = APIService.baseUrl + `api/admin/trip/${id}/`;
-
-  //     try {
-  //       let response = await fetch(url, {
-  //         method: "DELETE",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: LocalStorage.getAccesToken(),
-  //         },
-  //       });
-
-  //       if (APIService.isUnauthenticated(response.status)) {
-  //         await APIService.refreshToken();
-  //         return this.delete(id);
-  //       } else if (APIService.isDeleted(response.status)) {
-  //         return true;
-  //       }
-
-  //       return false;
-  //     } catch (error) {
-  //       console.error(`Failed to delete trip with id ${id}:`, error);
-  //       return false;
-  //     }
-  //   }
 }
 
 export default TripServices;

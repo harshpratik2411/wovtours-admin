@@ -18,5 +18,10 @@ class LocalStorage {
   static remove(key) {
     localStorage.removeItem(key);
   }
+
+  static logout(){
+    localStorage.removeItem(LocalStorage.isAuthenticated);
+    navigate("/login");
+  }
 }
 export default LocalStorage;
