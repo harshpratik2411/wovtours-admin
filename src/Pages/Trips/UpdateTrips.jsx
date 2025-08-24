@@ -38,7 +38,10 @@ const [existingMedia, setExistingMedia] = useState([]); // Already uploaded medi
   const [activityList, setActivityList] = useState([]);
   const [selectedActivities, setSelectedActivities] = useState([]);
   const [includes, setIncludes] = useState([""]);
-  const [excludes, setExcludes] = useState([""]);
+  const [excludes, setExcludes] = useState([""]); 
+  const [oldPrice, setOldPrice] = useState("");
+const [newPrice, setNewPrice] = useState("");
+
 
   useEffect(() => {
     const fetchTrip = async () => {
@@ -54,7 +57,9 @@ const [existingMedia, setExistingMedia] = useState([]); // Already uploaded medi
           setDescription(trip.description || "");
           setStatus(trip.status || "Active");
 
-          //Multiple tags 
+          setOldPrice(trip.old_price || "");
+          setNewPrice(trip.new_price || "");
+
 
            
           for (const type of trip.trip_types || []) {
@@ -237,7 +242,9 @@ const handleSubmit = async (e) => {
     category_id: selectedCategory,
     destination_id: selectedDestination,
     pricing_category_id: selectedPricingCategory,
-    difficulty_id: selectedDifficulty,
+    difficulty_id: selectedDifficulty, 
+    old_price: parseFloat(oldPrice) || 0,
+    new_price: parseFloat(newPrice) || 0,
   };
 
   // Arrays
@@ -556,7 +563,42 @@ const handleSubmit = async (e) => {
                   )}
                 </div>
               ))}
-            </div>
+            </div>  
+
+          {/* Old Price (Update) */}
+<div>
+  <label className="block text-sm font-semibold text-gray-700 mb-1">
+    Old Price
+  </label>
+  <div className="relative">
+    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">₹</span>
+    <input
+      type="number"
+      value={oldPrice}
+      onChange={(e) => setOldPrice(e.target.value)}
+      placeholder="Enter old price"
+      className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+  </div>
+</div>
+
+{/* New Price (Update) */}
+<div>
+  <label className="block text-sm font-semibold text-gray-700 mb-1">
+    New Price
+  </label>
+  <div className="relative">
+    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">₹</span>
+    <input
+      type="number"
+      value={newPrice}
+      onChange={(e) => setNewPrice(e.target.value)}
+      placeholder="Enter new price"
+      className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+  </div>
+</div>
+
 
             {/* Status */}
             <div>

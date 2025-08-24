@@ -33,7 +33,10 @@ const AddTrips = () => {
   const [activityList, setActivityList] = useState([]);
   const [selectedActivities, setSelectedActivities] = useState([]);
   const [includes, setIncludes] = useState([""]);
-  const [excludes, setExcludes] = useState([""]);
+  const [excludes, setExcludes] = useState([""]); 
+  const [oldPrice, setOldPrice] = useState("");
+const [newPrice, setNewPrice] = useState("");
+
 
   const { showAlert } = useAlert();
   const navigate = useNavigate();
@@ -233,7 +236,9 @@ const AddTrips = () => {
       pricing_category_id: selectedPricingCategory,
       difficulty_id: selectedDifficulty,
       includes: includes.filter((i) => i.trim() !== ""),
-      excludes: excludes.filter((e) => e.trim() !== ""),
+      excludes: excludes.filter((e) => e.trim() !== ""), 
+     old_price: parseFloat(oldPrice) || 0,
+     new_price: parseFloat(newPrice) || 0,
     };
 
     console.log("Submitting trip data:", data);
@@ -545,6 +550,43 @@ const AddTrips = () => {
             </div>
 
             {/* Buttons */}
+{/* Old Price */}
+<div>
+  <label className="block text-sm font-semibold text-gray-700 mb-1">
+    Old Price
+  </label>
+  <div className="relative">
+    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">₹</span>
+    <input
+      type="number"
+      step="0.01"
+      value={oldPrice}
+      onChange={(e) => setOldPrice(e.target.value)}
+      placeholder="Enter old price"
+      className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+  </div>
+</div>
+
+{/* New Price */}
+<div>
+  <label className="block text-sm font-semibold text-gray-700 mb-1">
+    New Price
+  </label>
+  <div className="relative">
+    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">₹</span>
+    <input
+      type="number"
+      step="0.01"
+      value={newPrice}
+      onChange={(e) => setNewPrice(e.target.value)}
+      placeholder="Enter new price"
+      className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      required
+    />
+  </div>
+</div>
+
             <div className="flex gap-4">
               <button
                 type="submit"
@@ -552,7 +594,7 @@ const AddTrips = () => {
                 className={`bg-primary text-white lg:px-6 px-3 lg:py-3 py-2 rounded-lg font-semibold transition duration-200 ${
                   loading ? "opacity-60 cursor-not-allowed" : "hover:opacity-90"
                 }`}
-              >
+                >
                 {loading ? "Adding Trip..." : "Add Trip"}
               </button>
 
@@ -560,11 +602,14 @@ const AddTrips = () => {
                 type="button"
                 onClick={() => navigate("/trips")}
                 className="border lg:px-6 px-3 lg:py-3 py-2 rounded-lg font-semibold hover:bg-gray-100 transition"
-              >
+                >
                 Cancel
               </button>
-            </div>
-          </form>
+            </div> 
+                </form> 
+            {/* Old Price */}
+ {/* Old Price */}
+
 
           {/* Media Upload Preview */}
           <div className="flex-1 flex flex-col items-center justify-center p-4 border rounded-lg">
@@ -612,4 +657,4 @@ const AddTrips = () => {
   );
 };
 
-export default AddTrips;
+export default AddTrips;   
