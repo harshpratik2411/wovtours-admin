@@ -41,7 +41,10 @@ const [existingMedia, setExistingMedia] = useState([]); // Already uploaded medi
   const [excludes, setExcludes] = useState([""]); 
   const [oldPrice, setOldPrice] = useState("");
 const [newPrice, setNewPrice] = useState(""); 
-const [highlights, setHighlights] = useState([""]);
+const [highlights, setHighlights] = useState([""]);  
+const [duration, setDuration] = useState("");
+const [durationUnit, setDurationUnit] = useState("days"); // or "nights"
+
 
 
 
@@ -61,7 +64,10 @@ const [highlights, setHighlights] = useState([""]);
 
           setOldPrice(trip.old_price || "");
           setNewPrice(trip.new_price || "");
-          setHighlights(trip.highlights?.length ? trip.highlights : [""]);
+          setHighlights(trip.highlights?.length ? trip.highlights : [""]); 
+          setDuration(trip.duration || "");
+         setDurationUnit(trip.duration_unit || "days");
+
 
 
 
@@ -202,6 +208,7 @@ const handleMediaChange = (e) => {
     setSelectedActivities(selectedActivities.filter((a) => a !== id));
   };
 
+
   const removeInclude = (index) => {
     const updatedIncludes = includes.filter((_, i) => i !== index);
     setIncludes(updatedIncludes.length ? updatedIncludes : [""]);
@@ -263,7 +270,10 @@ const handleSubmit = async (e) => {
     pricing_category_id: selectedPricingCategory,
     difficulty_id: selectedDifficulty, 
     old_price: parseFloat(oldPrice) || 0,
-    new_price: parseFloat(newPrice) || 0,
+    new_price: parseFloat(newPrice) || 0, 
+    duration: parseInt(duration) || 0,
+duration_unit: durationUnit,
+   
   };
 
   // Arrays
@@ -614,6 +624,37 @@ const handleSubmit = async (e) => {
                 </div>
               ))}
             </div>  
+ 
+  
+           {/* Duration */}
+<div>
+  <label className="block text-sm font-semibold text-gray-700 mb-1">
+    Duration
+  </label>
+  <input
+    type="number"
+    value={duration}
+    onChange={(e) => setDuration(e.target.value)}
+    placeholder="Enter duration"
+    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+  />
+</div>
+
+{/* Duration Unit */}
+<div>
+  <label className="block text-sm font-semibold text-gray-700 mb-1">
+    Duration Unit
+  </label>
+  <select
+    value={durationUnit}
+    onChange={(e) => setDurationUnit(e.target.value)}
+    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+  >
+    <option value="days">Days</option>
+    <option value="nights">Nights</option>
+    {/* Add more if needed */}
+  </select>
+</div>
 
           {/* Old Price (Update) */}
 <div>
@@ -742,4 +783,5 @@ const handleSubmit = async (e) => {
   );
 };
 
-export default UpdateTrips;
+export default UpdateTrips;  
+ 

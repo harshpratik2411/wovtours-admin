@@ -36,7 +36,10 @@ const AddTrips = () => {
   const [excludes, setExcludes] = useState([""]); 
   const [oldPrice, setOldPrice] = useState("");
 const [newPrice, setNewPrice] = useState(""); 
-const [highlights, setHighlights] = useState([""]);  
+const [highlights, setHighlights] = useState([""]);   
+const [duration, setDuration] = useState(0);
+const [durationUnit, setDurationUnit] = useState("Day");
+
 
 
 
@@ -258,7 +261,9 @@ const removeHighlight = (index) => {
       excludes: excludes.filter((e) => e.trim() !== ""), 
      old_price: parseFloat(oldPrice) || 0,
      new_price: parseFloat(newPrice) || 0, 
-     highlights: highlights.filter((h) => h.trim() !== ""),
+     highlights: highlights.filter((h) => h.trim() !== ""), 
+   duration: parseFloat(duration) || 0,
+     duration_unit: durationUnit,
 
     };
 
@@ -596,7 +601,41 @@ const removeHighlight = (index) => {
                 <option value="Active">Active</option>
                 <option value="Inactive">Inactive</option>
               </select>
-            </div>
+            </div> 
+
+            {/* Duration */}
+<div>
+  <label className="block text-sm font-semibold text-gray-700 mb-1">
+    Duration
+  </label>
+  <input
+    type="number"
+    min="0" 
+    step="0.1"
+    value={duration}
+    onChange={(e) => setDuration(e.target.value)}
+    placeholder="Enter duration"
+    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    required
+  />
+</div>
+
+{/* Duration Unit */}
+<div>
+  <label className="block text-sm font-semibold text-gray-700 mb-1">
+    Duration Unit
+  </label>
+  <select
+    value={durationUnit}
+    onChange={(e) => setDurationUnit(e.target.value)}
+    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+  >
+    <option value="Day">Hour</option>
+    <option value="Week">Day</option>
+    <option value="Week">Week</option>
+  </select>
+</div>
+
 
             {/* Buttons */}
 {/* Old Price */}
@@ -673,24 +712,36 @@ const removeHighlight = (index) => {
             </label>
             {mediaFiles.length > 0 ? (
               <div className="w-full max-w-md grid grid-cols-2 gap-4 overflow-auto max-h-96">
-                {mediaFiles.map((file, idx) =>
-                  file.type.startsWith("image/") ? (
-                    <img
-                      key={idx}
-                      src={URL.createObjectURL(file)}
-                      alt={`Preview ${idx + 1}`}
-                      className="w-full h-48 object-cover rounded-md shadow-md"
-                      onLoad={() => URL.revokeObjectURL(file)}
-                    />
-                  ) : (
-                    <div
-                      key={idx}
-                      className="text-gray-400 border rounded-md p-4 flex items-center justify-center"
-                    >
-                      Unsupported file type
-                    </div>
-                  )
-                )}
+                {mediaFiles.map((file, idx) => (
+  <div key={idx} className="relative group">
+    {file.type.startsWith("image/") ? (
+      <>
+        <img
+          src={URL.createObjectURL(file)}
+          alt={`Preview ${idx + 1}`}
+          className="w-full h-48 object-cover rounded-md shadow-md"
+          onLoad={() => URL.revokeObjectURL(file)}
+        />
+        <button
+          type="button"
+          onClick={() => {
+            const updatedFiles = mediaFiles.filter((_, i) => i !== idx);
+            setMediaFiles(updatedFiles);
+          }}
+          className="absolute top-1 right-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-700"
+          title="Remove image"
+        >
+          ×
+        </button>
+      </>
+    ) : (
+      <div className="text-gray-400 border rounded-md p-4 flex items-center justify-center h-48">
+        Unsupported file type
+      </div>
+    )}
+  </div>
+))}
+
               </div>
             ) : (
               <div className="w-full max-w-md h-64 bg-gray-100 rounded-md flex items-center justify-center text-gray-400">

@@ -190,6 +190,14 @@ const ViewTrips = () => {
                 <span className="font-semibold w-40">FAQs:</span>
                 <span>{renderField(trip.faqs)}</span>
               </div>
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Duration:</span>
+                <span>{renderField(trip.duration)}</span>
+              </div>
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Duration Unit:</span>
+                <span>{renderField(trip.duration_unit)}</span>
+              </div>
 
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Tags:</span>
