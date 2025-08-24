@@ -36,7 +36,7 @@ const AddTrips = () => {
   const [excludes, setExcludes] = useState([""]); 
   const [oldPrice, setOldPrice] = useState("");
 const [newPrice, setNewPrice] = useState(""); 
-const [highlights, setHighlights] = useState([""]); 
+const [highlights, setHighlights] = useState([""]);  
 
 
 
