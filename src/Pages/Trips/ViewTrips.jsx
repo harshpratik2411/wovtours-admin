@@ -126,29 +126,23 @@ const ViewTrips = () => {
 
           <div className="grid lg:grid-cols-2 gap-8 text-gray-700 text-xs lg:text-lg mb-10">
             <div className="space-y-4">
-             <div className="flex gap-3">
-  <span className="font-semibold w-40">Trip Title:</span>
-  <span>{trip.title || "Untitled"}</span>
-</div>
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Trip Title:</span>
+                <span>{trip.title || "Untitled"}</span>
+              </div>
 
-             <div className="flex gap-3">
-  <span className="font-semibold w-40">Tags:</span>
-  <div className="flex flex-wrap gap-2">
-    {trip.tags?.length ? (
-      trip.tags.map((tag, index) => (
-        <span
-          key={index}
-        
-        >
-          {renderField(tag.title)}
-        </span>
-      ))
-    ) : (
-      <span>None</span>
-    )}
-  </div>
-</div>
-
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Tags:</span>
+                <div className="flex flex-wrap gap-2">
+                  {trip.tags?.length ? (
+                    trip.tags.map((tag, index) => (
+                      <span key={index}>{renderField(tag.title)}</span>
+                    ))
+                  ) : (
+                    <span>None</span>
+                  )}
+                </div>
+              </div>
 
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Description:</span>
@@ -171,11 +165,16 @@ const ViewTrips = () => {
                 <span className="font-semibold w-40">Difficulty:</span>
                 <span>{trip.difficulty.title || "None"}</span>
               </div>
-
-              <div className="flex gap-3">
+              <div className="flex gap-3 items-start">
                 <span className="font-semibold w-40">Highlights:</span>
-                <span>{renderField(trip.hilights)}</span>
-              </div>
+                <ul className="flex flex-col gap-1 list-disc pl-5">
+                  {trip.highlights?.map((highlight, index) => (
+                    <li key={index} className="font-medium text-gray-800">
+                      {highlight}
+                    </li>
+                  ))}
+                </ul>
+              </div>  
 
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Includes:</span>
@@ -210,15 +209,16 @@ const ViewTrips = () => {
                 {trip.trip_activity.map((trip_activity, index) => (
                   <span key={index}>{renderField(trip_activity.title)}</span>
                 ))}
-              </div><div className="flex gap-3">
-  <span className="font-semibold w-40">Old Price:</span>
-  <span>{trip.old_price ? `₹${trip.old_price}` : "None"}</span>
-</div>
+              </div>
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Old Price:</span>
+                <span>{trip.old_price ? `₹${trip.old_price}` : "None"}</span>
+              </div>
 
-<div className="flex gap-3">
-  <span className="font-semibold w-40">New Price:</span>
-  <span>{trip.new_price ? `₹${trip.new_price}` : "None"}</span>
-</div>
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">New Price:</span>
+                <span>{trip.new_price ? `₹${trip.new_price}` : "None"}</span>
+              </div>
 
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Created At:</span>

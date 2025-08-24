@@ -35,7 +35,10 @@ const AddTrips = () => {
   const [includes, setIncludes] = useState([""]);
   const [excludes, setExcludes] = useState([""]); 
   const [oldPrice, setOldPrice] = useState("");
-const [newPrice, setNewPrice] = useState("");
+const [newPrice, setNewPrice] = useState(""); 
+const [highlights, setHighlights] = useState([""]); 
+
+
 
 
   const { showAlert } = useAlert();
@@ -211,7 +214,23 @@ const [newPrice, setNewPrice] = useState("");
   const removeExclude = (index) => {
     const updatedExcludes = excludes.filter((_, i) => i !== index);
     setExcludes(updatedExcludes.length ? updatedExcludes : [""]);
-  };
+  }; 
+    
+   const handleHighlightChange = (index, value) => {
+  const updatedHighlights = [...highlights];
+  updatedHighlights[index] = value;
+  setHighlights(updatedHighlights);
+
+  if (index === highlights.length - 1 && value.trim() !== "") {
+    setHighlights([...updatedHighlights, ""]);
+  }
+};
+
+const removeHighlight = (index) => {
+  const updatedHighlights = highlights.filter((_, i) => i !== index);
+  setHighlights(updatedHighlights.length ? updatedHighlights : [""]);
+};
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -238,7 +257,9 @@ const [newPrice, setNewPrice] = useState("");
       includes: includes.filter((i) => i.trim() !== ""),
       excludes: excludes.filter((e) => e.trim() !== ""), 
      old_price: parseFloat(oldPrice) || 0,
-     new_price: parseFloat(newPrice) || 0,
+     new_price: parseFloat(newPrice) || 0, 
+     highlights: highlights.filter((h) => h.trim() !== ""),
+
     };
 
     console.log("Submitting trip data:", data);
@@ -483,7 +504,35 @@ const [newPrice, setNewPrice] = useState("");
                 })}
               </div>
             </div>
-            <div>
+            <div> 
+              <div>
+  <label className="block text-sm font-semibold text-gray-700 mb-1">
+    Highlights
+  </label>
+  {highlights.map((highlight, index) => (
+    <div key={index} className="flex gap-2 items-center mb-2">
+      <input
+        type="text"
+        value={highlight}
+        onChange={(e) =>
+          handleHighlightChange(index, e.target.value)
+        }
+        placeholder="Enter highlight point"
+        className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold"
+      />
+      {highlights.length > 1 && highlight.trim() !== "" && (
+        <button
+          type="button"
+          onClick={() => removeHighlight(index)}
+          className="text-red-600 font-bold px-2"
+        >
+          ×
+        </button>
+      )}
+    </div>
+  ))}
+</div>
+
               <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Includes
               </label>
@@ -584,7 +633,7 @@ const [newPrice, setNewPrice] = useState("");
       className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
       required
     />
-  </div>
+  </div> 
 </div>
 
             <div className="flex gap-4">
@@ -608,8 +657,6 @@ const [newPrice, setNewPrice] = useState("");
             </div> 
                 </form> 
             {/* Old Price */}
- {/* Old Price */}
-
 
           {/* Media Upload Preview */}
           <div className="flex-1 flex flex-col items-center justify-center p-4 border rounded-lg">

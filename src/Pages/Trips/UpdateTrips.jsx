@@ -40,7 +40,9 @@ const [existingMedia, setExistingMedia] = useState([]); // Already uploaded medi
   const [includes, setIncludes] = useState([""]);
   const [excludes, setExcludes] = useState([""]); 
   const [oldPrice, setOldPrice] = useState("");
-const [newPrice, setNewPrice] = useState("");
+const [newPrice, setNewPrice] = useState(""); 
+const [highlights, setHighlights] = useState([""]);
+
 
 
   useEffect(() => {
@@ -59,6 +61,8 @@ const [newPrice, setNewPrice] = useState("");
 
           setOldPrice(trip.old_price || "");
           setNewPrice(trip.new_price || "");
+          setHighlights(trip.highlights?.length ? trip.highlights : [""]);
+
 
 
            
@@ -224,7 +228,22 @@ const handleMediaChange = (e) => {
       updated.push("");
     }
     setExcludes(updated);
-  };
+  }; 
+      const handleHighlightChange = (index, value) => {
+  const updated = [...highlights];
+  updated[index] = value;
+  if (index === highlights.length - 1 && value.trim() !== "") {
+    updated.push("");
+  }
+  setHighlights(updated);
+};
+
+const removeHighlight = (index) => {
+  const updatedHighlights = highlights.filter((_, i) => i !== index);
+  setHighlights(updatedHighlights.length ? updatedHighlights : [""]);
+};
+
+   
 const handleSubmit = async (e) => {
   e.preventDefault();
 
@@ -256,7 +275,12 @@ const handleSubmit = async (e) => {
     .forEach((inc, i) => (data[`includes[${i}]`] = inc));
   excludes
     .filter((e) => e.trim())
-    .forEach((exc, i) => (data[`excludes[${i}]`] = exc));
+    .forEach((exc, i) => (data[`excludes[${i}]`] = exc)); 
+     
+    highlights
+  .filter((h) => h.trim())
+  .forEach((h, i) => (data[`highlights[${i}]`] = h));
+
 
   // Only add media if files were selected
   if (mediaFiles.length > 0) {
@@ -512,8 +536,34 @@ const handleSubmit = async (e) => {
                     </span>
                   );
                 })}
-              </div>
-            </div>
+              </div>  
+            </div> 
+              <div>
+  <label className="block text-sm font-semibold text-gray-700 mb-1">
+    Highlights
+  </label>
+  {highlights.map((highlight, index) => (
+    <div key={index} className="flex gap-2 items-center mb-2">
+      <input
+        type="text"
+        value={highlight}
+        onChange={(e) => handleHighlightChange(index, e.target.value)}
+        placeholder="Enter highlight"
+        className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      {highlights.length > 1 && highlight.trim() !== "" && (
+        <button
+          type="button"
+          onClick={() => removeHighlight(index)}
+          className="text-red-600 font-bold px-2"
+        >
+          ×
+        </button>
+      )}
+    </div>
+  ))}
+</div>
+
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Includes

@@ -198,7 +198,7 @@ const Trips = () => {
                 <th className="py-2 w-[10%]">Image</th>
                 <th className="py-2 w-[10%]">Title</th>
                 <th className="py-2 pl-3 w-[20%]">Description </th>
-                <th className="py-2  w-[10%]">Category</th>
+                <th className="py-2  w-[10%]">New Price</th>
                 <th className="py-2 w-[10%]">Status</th>
                 <th className="py-2 w-[15%]">Created At</th>
                 <th className="py-2 w-[15%]">Updated At</th>
@@ -262,9 +262,10 @@ const Trips = () => {
                     </td>
                      <td className="py-6">
                       <p className="font-medium ml-6   text-gray-800">
-                        {trip.category?.title ?? "none"}
+                        {trip.new_price} 
                       </p>
                     </td>
+                     
 
                     <td className="py-4">
                       <span
@@ -478,3 +479,4 @@ const Trips = () => {
 };
 
 export default Trips;
+   
