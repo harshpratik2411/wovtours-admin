@@ -19,9 +19,13 @@ const UpdateTrips = () => {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [places_covered, setPlacesCovered] = useState("");
+  const [meeting_point, setMeetingPoint] = useState("");
+  const [duration_note, setDurationNote] = useState("");
+  const [special_note, setSpecialNote] = useState("");
   const [status, setStatus] = useState("Active");
   const [mediaFiles, setMediaFiles] = useState([]); // New media
-const [existingMedia, setExistingMedia] = useState([]); // Already uploaded media from backend
+  const [existingMedia, setExistingMedia] = useState([]); // Already uploaded media from backend
   const [loading, setLoading] = useState(false);
   const [tagList, setTagList] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
@@ -38,12 +42,12 @@ const [existingMedia, setExistingMedia] = useState([]); // Already uploaded medi
   const [activityList, setActivityList] = useState([]);
   const [selectedActivities, setSelectedActivities] = useState([]);
   const [includes, setIncludes] = useState([""]);
-  const [excludes, setExcludes] = useState([""]); 
+  const [excludes, setExcludes] = useState([""]);
   const [oldPrice, setOldPrice] = useState("");
-const [newPrice, setNewPrice] = useState(""); 
-const [highlights, setHighlights] = useState([""]);  
-const [duration, setDuration] = useState("");
-const [durationUnit, setDurationUnit] = useState("days"); // or "nights"
+  const [newPrice, setNewPrice] = useState("");
+  const [highlights, setHighlights] = useState([""]);
+  const [duration, setDuration] = useState("");
+  const [durationUnit, setDurationUnit] = useState("days"); // or "nights"
 
 
 
@@ -51,7 +55,7 @@ const [durationUnit, setDurationUnit] = useState("days"); // or "nights"
   useEffect(() => {
     const fetchTrip = async () => {
       try {
-        const res = await TripServices.getAll("", "", 1, ""); 
+        const res = await TripServices.getAll("", "", 1, "");
         const allTrips = res?.Trips || [];
 
         const trip = allTrips.find((t) => t.id === parseInt(id));
@@ -60,28 +64,32 @@ const [durationUnit, setDurationUnit] = useState("days"); // or "nights"
         if (trip) {
           setTitle(trip.title || "");
           setDescription(trip.description || "");
+          setPlacesCovered(trip.places_covered || "");
+          setMeetingPoint(trip.meeting_point || "");
+          setDurationNote(trip.duration_note || "");
+          setSpecialNote(trip.special_note || "");
           setStatus(trip.status || "Active");
 
           setOldPrice(trip.old_price || "");
           setNewPrice(trip.new_price || "");
-          setHighlights(trip.highlights?.length ? trip.highlights : [""]); 
+          setHighlights(trip.highlights?.length ? trip.highlights : [""]);
           setDuration(trip.duration || "");
-         setDurationUnit(trip.duration_unit || "days");
+          setDurationUnit(trip.duration_unit || "days");
 
 
 
 
-           
+
           for (const type of trip.trip_types || []) {
             if (!selectedTripTypes.includes(type.id)) {
               setSelectedTripTypes((prev) => [type.id]);
             }
           }
-           for (const tag of trip.tags || []) {
+          for (const tag of trip.tags || []) {
             if (!selectedTags.includes(tag.id)) {
-              setSelectedTags((prev) => [tag.id]); 
+              setSelectedTags((prev) => [tag.id]);
             }
-          } 
+          }
 
           //single category
           if (trip.category != null && selectedCategory === null) {
@@ -158,10 +166,10 @@ const [durationUnit, setDurationUnit] = useState("days"); // or "nights"
   }, [id, showAlert]);
 
 
-const handleMediaChange = (e) => {
-  const files = Array.from(e.target.files);
-  setMediaFiles((prev) => [...prev, ...files]);
-};
+  const handleMediaChange = (e) => {
+    const files = Array.from(e.target.files);
+    setMediaFiles((prev) => [...prev, ...files]);
+  };
 
   const handleTagSelect = (e) => {
     const value = parseInt(e.target.value);
@@ -235,84 +243,87 @@ const handleMediaChange = (e) => {
       updated.push("");
     }
     setExcludes(updated);
-  }; 
-      const handleHighlightChange = (index, value) => {
-  const updated = [...highlights];
-  updated[index] = value;
-  if (index === highlights.length - 1 && value.trim() !== "") {
-    updated.push("");
-  }
-  setHighlights(updated);
-};
-
-const removeHighlight = (index) => {
-  const updatedHighlights = highlights.filter((_, i) => i !== index);
-  setHighlights(updatedHighlights.length ? updatedHighlights : [""]);
-};
-
-   
-const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  if (!title.trim()) {
-    showAlert("Title is required");
-    return;
-  }
-
-  setLoading(true);
-
-  const data = {
-    title,
-    description,
-    status,
-    category_id: selectedCategory,
-    destination_id: selectedDestination,
-    pricing_category_id: selectedPricingCategory,
-    difficulty_id: selectedDifficulty, 
-    old_price: parseFloat(oldPrice) || 0,
-    new_price: parseFloat(newPrice) || 0, 
-    duration: parseInt(duration) || 0,
-duration_unit: durationUnit,
-   
+  };
+  const handleHighlightChange = (index, value) => {
+    const updated = [...highlights];
+    updated[index] = value;
+    if (index === highlights.length - 1 && value.trim() !== "") {
+      updated.push("");
+    }
+    setHighlights(updated);
   };
 
-  // Arrays
-  selectedTags.forEach((tag, i) => (data[`tag_ids[${i}]`] = tag));
-  selectedTripTypes.forEach((type, i) => (data[`trip_type_ids[${i}]`] = type));
-  selectedActivities.forEach((act, i) => (data[`trip_activity_ids[${i}]`] = act));
-  includes
-    .filter((i) => i.trim())
-    .forEach((inc, i) => (data[`includes[${i}]`] = inc));
-  excludes
-    .filter((e) => e.trim())
-    .forEach((exc, i) => (data[`excludes[${i}]`] = exc)); 
-     
-    highlights
-  .filter((h) => h.trim())
-  .forEach((h, i) => (data[`highlights[${i}]`] = h));
+  const removeHighlight = (index) => {
+    const updatedHighlights = highlights.filter((_, i) => i !== index);
+    setHighlights(updatedHighlights.length ? updatedHighlights : [""]);
+  };
 
 
-  // Only add media if files were selected
-  if (mediaFiles.length > 0) {
-    mediaFiles.forEach((file, i) => data[`media`] = file); 
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  try {
-    const result = await TripServices.update(id, data, mediaFiles.length > 0);
-    setLoading(false);
-
-    if (result) {
-      showAlert("Trip updated successfully!");
-      navigate("/trips");
-    } else {
-      showAlert("Failed to update trip");
+    if (!title.trim()) {
+      showAlert("Title is required");
+      return;
     }
-  } catch (error) {
-    setLoading(false);
-    console.error("Update error", error);
-    showAlert("An error occurred while updating the trip.");
-  }
-};
+
+    setLoading(true);
+
+    const data = {
+      title,
+      description,
+      places_covered,
+      meeting_point,
+      duration_note,
+      status,
+      category_id: selectedCategory,
+      destination_id: selectedDestination,
+      pricing_category_id: selectedPricingCategory,
+      difficulty_id: selectedDifficulty,
+      old_price: parseFloat(oldPrice) || 0,
+      new_price: parseFloat(newPrice) || 0,
+      duration: parseInt(duration) || 0,
+      duration_unit: durationUnit,
+
+    };
+
+    // Arrays
+    selectedTags.forEach((tag, i) => (data[`tag_ids[${i}]`] = tag));
+    selectedTripTypes.forEach((type, i) => (data[`trip_type_ids[${i}]`] = type));
+    selectedActivities.forEach((act, i) => (data[`trip_activity_ids[${i}]`] = act));
+    includes
+      .filter((i) => i.trim())
+      .forEach((inc, i) => (data[`includes[${i}]`] = inc));
+    excludes
+      .filter((e) => e.trim())
+      .forEach((exc, i) => (data[`excludes[${i}]`] = exc));
+
+    highlights
+      .filter((h) => h.trim())
+      .forEach((h, i) => (data[`highlights[${i}]`] = h));
+
+
+    // Only add media if files were selected
+    if (mediaFiles.length > 0) {
+      mediaFiles.forEach((file, i) => data[`media`] = file);
+    }
+
+    try {
+      const result = await TripServices.update(id, data, mediaFiles.length > 0);
+      setLoading(false);
+
+      if (result) {
+        showAlert("Trip updated successfully!");
+        navigate("/trips");
+      } else {
+        showAlert("Failed to update trip");
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Update error", error);
+      showAlert("An error occurred while updating the trip.");
+    }
+  };
 
   return (
     <>
@@ -341,6 +352,8 @@ duration_unit: durationUnit,
               />
             </div>
 
+
+
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Description
@@ -353,6 +366,34 @@ duration_unit: durationUnit,
                 rows={4}
               />
             </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Places Covered
+              </label>
+              <textarea
+                value={places_covered}
+                onChange={(e) => setPlacesCovered(e.target.value)}
+                placeholder="Enter the places that will be covered in this trip"
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                rows={4}
+              />
+            </div>
+
+            {/* Meeting Point */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Meeting Point
+              </label>
+              <input
+                type="text"
+                value={meeting_point}
+                onChange={(e) => setMeetingPoint(e.target.value)}
+                placeholder="Meeting Point"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+
 
             {/* Tag Selection (Multi-Select) */}
             <div>
@@ -546,33 +587,33 @@ duration_unit: durationUnit,
                     </span>
                   );
                 })}
-              </div>  
-            </div> 
-              <div>
-  <label className="block text-sm font-semibold text-gray-700 mb-1">
-    Highlights
-  </label>
-  {highlights.map((highlight, index) => (
-    <div key={index} className="flex gap-2 items-center mb-2">
-      <input
-        type="text"
-        value={highlight}
-        onChange={(e) => handleHighlightChange(index, e.target.value)}
-        placeholder="Enter highlight"
-        className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      {highlights.length > 1 && highlight.trim() !== "" && (
-        <button
-          type="button"
-          onClick={() => removeHighlight(index)}
-          className="text-red-600 font-bold px-2"
-        >
-          ×
-        </button>
-      )}
-    </div>
-  ))}
-</div>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Highlights
+              </label>
+              {highlights.map((highlight, index) => (
+                <div key={index} className="flex gap-2 items-center mb-2">
+                  <input
+                    type="text"
+                    value={highlight}
+                    onChange={(e) => handleHighlightChange(index, e.target.value)}
+                    placeholder="Enter highlight"
+                    className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  {highlights.length > 1 && highlight.trim() !== "" && (
+                    <button
+                      type="button"
+                      onClick={() => removeHighlight(index)}
+                      className="text-red-600 font-bold px-2"
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
@@ -623,72 +664,90 @@ duration_unit: durationUnit,
                   )}
                 </div>
               ))}
-            </div>  
- 
-  
-           {/* Duration */}
-<div>
-  <label className="block text-sm font-semibold text-gray-700 mb-1">
-    Duration
-  </label>
-  <input
-    type="number"
-    value={duration}
-    onChange={(e) => setDuration(e.target.value)}
-    placeholder="Enter duration"
-    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-  />
-</div>
+            </div>
 
-{/* Duration Unit */}
-<div>
-  <label className="block text-sm font-semibold text-gray-700 mb-1">
-    Duration Unit
-  </label>
-  <select
-    value={durationUnit}
-    onChange={(e) => setDurationUnit(e.target.value)}
-    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-  >
-    <option value="days">Days</option>
-    <option value="nights">Nights</option>
-    {/* Add more if needed */}
-  </select>
-</div>
 
-          {/* Old Price (Update) */}
-<div>
-  <label className="block text-sm font-semibold text-gray-700 mb-1">
-    Old Price
-  </label>
-  <div className="relative">
-    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">₹</span>
-    <input
-      type="number"
-      value={oldPrice}
-      onChange={(e) => setOldPrice(e.target.value)}
-      placeholder="Enter old price"
-      className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-    />
-  </div>
-</div>
+            {/* Duration */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Duration
+              </label>
+              <input
+                type="number"
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)}
+                placeholder="Enter duration"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
 
-{/* New Price (Update) */}
-<div>
-  <label className="block text-sm font-semibold text-gray-700 mb-1">
-    New Price
-  </label>
-  <div className="relative">
-    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">₹</span>
-    <input
-      type="number"
-      value={newPrice}
-      onChange={(e) => setNewPrice(e.target.value)}
-      placeholder="Enter new price"
-      className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-    />
-  </div>
-</div>
+            {/* Duration Unit */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Duration Unit
+              </label>
+              <select
+                value={durationUnit}
+                onChange={(e) => setDurationUnit(e.target.value)}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="Hour">Hour</option>
+                <option value="Hours">Hours</option>
+                <option value="Day">Day</option>
+                <option value="Days">Days</option>
+                <option value="Week">Week</option>
+                <option value="Weeks">Weeks</option>
+                {/* Add more if needed */}
+              </select>
+            </div>
+
+            {/* Duration Note */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Duration Note
+              </label>
+              <input
+                type="text"
+                value={duration_note}
+                onChange={(e) => setDurationNote(e.target.value)}
+                placeholder="Duration Note"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            {/* Old Price (Update) */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Old Price
+              </label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">₹</span>
+                <input
+                  type="number"
+                  value={oldPrice}
+                  onChange={(e) => setOldPrice(e.target.value)}
+                  placeholder="Enter old price"
+                  className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+
+            {/* New Price (Update) */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                New Price
+              </label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">₹</span>
+                <input
+                  type="number"
+                  value={newPrice}
+                  onChange={(e) => setNewPrice(e.target.value)}
+                  placeholder="Enter new price"
+                  className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
 
 
             {/* Status */}
@@ -705,15 +764,26 @@ duration_unit: durationUnit,
                 <option value="Inactive">Inactive</option>
               </select>
             </div>
-
+            {/* Special Note */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Special Note
+              </label>
+              <input
+                type="text"
+                value={special_note}
+                onChange={(e) => setSpecialNote(e.target.value)}
+                placeholder="Special Note"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
             {/* Buttons */}
             <div className="flex gap-4">
               <button
                 type="submit"
                 disabled={loading}
-                className={`bg-primary text-white lg:px-6 px-3 lg:py-3 py-2 rounded-lg font-semibold transition duration-200 ${
-                  loading ? "opacity-60 cursor-not-allowed" : "hover:opacity-90"
-                }`}
+                className={`bg-primary text-white lg:px-6 px-3 lg:py-3 py-2 rounded-lg font-semibold transition duration-200 ${loading ? "opacity-60 cursor-not-allowed" : "hover:opacity-90"
+                  }`}
               >
                 {loading ? "Updating Trip..." : "Update Trip"}
               </button>
@@ -783,5 +853,4 @@ duration_unit: durationUnit,
   );
 };
 
-export default UpdateTrips;  
- 
+export default UpdateTrips;

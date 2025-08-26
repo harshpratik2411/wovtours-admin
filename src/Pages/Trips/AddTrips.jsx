@@ -15,6 +15,10 @@ import ActivityServices from "../../Pages/Activities/ActivityServices";
 const AddTrips = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [places_covered, setPlacesCovered] = useState("");
+  const [duration_note, setDurationNote] = useState("");
+  const [special_note, setSpecialNote] = useState("");
+  const [meeting_point, setMeetingPoint] = useState("");
   const [status, setStatus] = useState("Active");
   const [mediaFiles, setMediaFiles] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -33,12 +37,12 @@ const AddTrips = () => {
   const [activityList, setActivityList] = useState([]);
   const [selectedActivities, setSelectedActivities] = useState([]);
   const [includes, setIncludes] = useState([""]);
-  const [excludes, setExcludes] = useState([""]); 
+  const [excludes, setExcludes] = useState([""]);
   const [oldPrice, setOldPrice] = useState("");
-const [newPrice, setNewPrice] = useState(""); 
-const [highlights, setHighlights] = useState([""]);   
-const [duration, setDuration] = useState(0);
-const [durationUnit, setDurationUnit] = useState("Day");
+  const [newPrice, setNewPrice] = useState("");
+  const [highlights, setHighlights] = useState([""]);
+  const [duration, setDuration] = useState(0);
+  const [durationUnit, setDurationUnit] = useState("Day");
 
 
 
@@ -217,22 +221,22 @@ const [durationUnit, setDurationUnit] = useState("Day");
   const removeExclude = (index) => {
     const updatedExcludes = excludes.filter((_, i) => i !== index);
     setExcludes(updatedExcludes.length ? updatedExcludes : [""]);
-  }; 
-    
-   const handleHighlightChange = (index, value) => {
-  const updatedHighlights = [...highlights];
-  updatedHighlights[index] = value;
-  setHighlights(updatedHighlights);
+  };
 
-  if (index === highlights.length - 1 && value.trim() !== "") {
-    setHighlights([...updatedHighlights, ""]);
-  }
-};
+  const handleHighlightChange = (index, value) => {
+    const updatedHighlights = [...highlights];
+    updatedHighlights[index] = value;
+    setHighlights(updatedHighlights);
 
-const removeHighlight = (index) => {
-  const updatedHighlights = highlights.filter((_, i) => i !== index);
-  setHighlights(updatedHighlights.length ? updatedHighlights : [""]);
-};
+    if (index === highlights.length - 1 && value.trim() !== "") {
+      setHighlights([...updatedHighlights, ""]);
+    }
+  };
+
+  const removeHighlight = (index) => {
+    const updatedHighlights = highlights.filter((_, i) => i !== index);
+    setHighlights(updatedHighlights.length ? updatedHighlights : [""]);
+  };
 
 
   const handleSubmit = async (e) => {
@@ -248,6 +252,10 @@ const removeHighlight = (index) => {
     const data = {
       title,
       description,
+      places_covered,
+      duration_note,
+      special_note,
+      meeting_point,
       tag_ids: selectedTags,
       trip_type_ids: selectedTripTypes,
       trip_activity_ids: selectedActivities,
@@ -258,12 +266,12 @@ const removeHighlight = (index) => {
       pricing_category_id: selectedPricingCategory,
       difficulty_id: selectedDifficulty,
       includes: includes.filter((i) => i.trim() !== ""),
-      excludes: excludes.filter((e) => e.trim() !== ""), 
-     old_price: parseFloat(oldPrice) || 0,
-     new_price: parseFloat(newPrice) || 0, 
-     highlights: highlights.filter((h) => h.trim() !== ""), 
-   duration: parseFloat(duration) || 0,
-     duration_unit: durationUnit,
+      excludes: excludes.filter((e) => e.trim() !== ""),
+      old_price: parseFloat(oldPrice) || 0,
+      new_price: parseFloat(newPrice) || 0,
+      highlights: highlights.filter((h) => h.trim() !== ""),
+      duration: parseFloat(duration) || 0,
+      duration_unit: durationUnit,
 
     };
 
@@ -305,6 +313,7 @@ const removeHighlight = (index) => {
               />
             </div>
 
+
             {/* Description */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
@@ -318,6 +327,37 @@ const removeHighlight = (index) => {
                 rows={4}
               />
             </div>
+            {/* Places covered */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Places covered
+              </label>
+              <textarea
+                value={places_covered}
+                onChange={(e) => setPlacesCovered(e.target.value)}
+                placeholder="Enter the places that will be covered in this trip"
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                rows={4}
+              />
+            </div>
+
+            {/* Meeting Point */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Meeting Point
+              </label>
+              <input
+                type="text"
+                value={meeting_point}
+                onChange={(e) => setMeetingPoint(e.target.value)}
+                placeholder="Meeting Point"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+
+            
+            
 
             {/* Tag Selection (Multi-Select) */}
             <div>
@@ -509,34 +549,34 @@ const removeHighlight = (index) => {
                 })}
               </div>
             </div>
-            <div> 
+            <div>
               <div>
-  <label className="block text-sm font-semibold text-gray-700 mb-1">
-    Highlights
-  </label>
-  {highlights.map((highlight, index) => (
-    <div key={index} className="flex gap-2 items-center mb-2">
-      <input
-        type="text"
-        value={highlight}
-        onChange={(e) =>
-          handleHighlightChange(index, e.target.value)
-        }
-        placeholder="Enter highlight point"
-        className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold"
-      />
-      {highlights.length > 1 && highlight.trim() !== "" && (
-        <button
-          type="button"
-          onClick={() => removeHighlight(index)}
-          className="text-red-600 font-bold px-2"
-        >
-          ×
-        </button>
-      )}
-    </div>
-  ))}
-</div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  Highlights
+                </label>
+                {highlights.map((highlight, index) => (
+                  <div key={index} className="flex gap-2 items-center mb-2">
+                    <input
+                      type="text"
+                      value={highlight}
+                      onChange={(e) =>
+                        handleHighlightChange(index, e.target.value)
+                      }
+                      placeholder="Enter highlight point"
+                      className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold"
+                    />
+                    {highlights.length > 1 && highlight.trim() !== "" && (
+                      <button
+                        type="button"
+                        onClick={() => removeHighlight(index)}
+                        className="text-red-600 font-bold px-2"
+                      >
+                        ×
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
 
               <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Includes
@@ -601,88 +641,121 @@ const removeHighlight = (index) => {
                 <option value="Active">Active</option>
                 <option value="Inactive">Inactive</option>
               </select>
-            </div> 
+            </div>
 
             {/* Duration */}
-<div>
-  <label className="block text-sm font-semibold text-gray-700 mb-1">
-    Duration
-  </label>
-  <input
-    type="number"
-    min="0" 
-    step="0.1"
-    value={duration}
-    onChange={(e) => setDuration(e.target.value)}
-    placeholder="Enter duration"
-    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-    required
-  />
-</div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Duration
+              </label>
+              <input
+                type="number"
+                min="0"
+                step="0.1"
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)}
+                placeholder="Enter duration"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
 
-{/* Duration Unit */}
-<div>
-  <label className="block text-sm font-semibold text-gray-700 mb-1">
-    Duration Unit
-  </label>
-  <select
-    value={durationUnit}
-    onChange={(e) => setDurationUnit(e.target.value)}
-    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-  >
-    <option value="Day">Hour</option>
-    <option value="Week">Day</option>
-    <option value="Week">Week</option>
-  </select>
-</div>
+            {/* Duration Unit */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Duration Unit
+              </label>
+              <select
+                value={durationUnit}
+                onChange={(e) => setDurationUnit(e.target.value)}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="Hour">Hour</option>
+                <option value="Hours">Hours</option>
+                <option value="Day">Day</option>
+                <option value="Days">Days</option>
+                <option value="Week">Week</option>
+                <option value="Weeks">Weeks</option>
+              </select>
+            </div>
+
+            {/* Duration Note */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Duration Note
+              </label>
+              <input
+                type="text"
+                value={duration_note}
+                onChange={(e) => setDurationNote(e.target.value)}
+                placeholder="Duration Note"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+
 
 
             {/* Buttons */}
-{/* Old Price */}
-<div>
-  <label className="block text-sm font-semibold text-gray-700 mb-1">
-    Old Price
-  </label>
-  <div className="relative">
-    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">₹</span>
-    <input
-      type="number"
-      step="0.01"
-      value={oldPrice}
-      onChange={(e) => setOldPrice(e.target.value)}
-      placeholder="Enter old price"
-      className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-    />
-  </div>
-</div>
+            {/* Old Price */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Old Price
+              </label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">₹</span>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={oldPrice}
+                  onChange={(e) => setOldPrice(e.target.value)}
+                  placeholder="Enter old price"
+                  className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
 
-{/* New Price */}
-<div>
-  <label className="block text-sm font-semibold text-gray-700 mb-1">
-    New Price
-  </label>
-  <div className="relative">
-    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">₹</span>
-    <input
-      type="number"
-      step="0.01"
-      value={newPrice}
-      onChange={(e) => setNewPrice(e.target.value)}
-      placeholder="Enter new price"
-      className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      required
-    />
-  </div> 
-</div>
+            {/* New Price */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                New Price
+              </label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">₹</span>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={newPrice}
+                  onChange={(e) => setNewPrice(e.target.value)}
+                  placeholder="Enter new price"
+                  className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Special Note */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Special Note
+              </label>
+              <input
+                type="text"
+                value={special_note}
+                onChange={(e) => setSpecialNote(e.target.value)}
+                placeholder="Special Note"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
 
             <div className="flex gap-4">
               <button
                 type="submit"
                 disabled={loading}
-                className={`bg-primary text-white lg:px-6 px-3 lg:py-3 py-2 rounded-lg font-semibold transition duration-200 ${
-                  loading ? "opacity-60 cursor-not-allowed" : "hover:opacity-90"
-                }`}
-                >
+                className={`bg-primary text-white lg:px-6 px-3 lg:py-3 py-2 rounded-lg font-semibold transition duration-200 ${loading ? "opacity-60 cursor-not-allowed" : "hover:opacity-90"
+                  }`}
+              >
                 {loading ? "Adding Trip..." : "Add Trip"}
               </button>
 
@@ -690,12 +763,12 @@ const removeHighlight = (index) => {
                 type="button"
                 onClick={() => navigate("/trips")}
                 className="border lg:px-6 px-3 lg:py-3 py-2 rounded-lg font-semibold hover:bg-gray-100 transition"
-                >
+              >
                 Cancel
               </button>
-            </div> 
-                </form> 
-            {/* Old Price */}
+            </div>
+          </form>
+          {/* Old Price */}
 
           {/* Media Upload Preview */}
           <div className="flex-1 flex flex-col items-center justify-center p-4 border rounded-lg">
@@ -713,34 +786,34 @@ const removeHighlight = (index) => {
             {mediaFiles.length > 0 ? (
               <div className="w-full max-w-md grid grid-cols-2 gap-4 overflow-auto max-h-96">
                 {mediaFiles.map((file, idx) => (
-  <div key={idx} className="relative group">
-    {file.type.startsWith("image/") ? (
-      <>
-        <img
-          src={URL.createObjectURL(file)}
-          alt={`Preview ${idx + 1}`}
-          className="w-full h-48 object-cover rounded-md shadow-md"
-          onLoad={() => URL.revokeObjectURL(file)}
-        />
-        <button
-          type="button"
-          onClick={() => {
-            const updatedFiles = mediaFiles.filter((_, i) => i !== idx);
-            setMediaFiles(updatedFiles);
-          }}
-          className="absolute top-1 right-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-700"
-          title="Remove image"
-        >
-          ×
-        </button>
-      </>
-    ) : (
-      <div className="text-gray-400 border rounded-md p-4 flex items-center justify-center h-48">
-        Unsupported file type
-      </div>
-    )}
-  </div>
-))}
+                  <div key={idx} className="relative group">
+                    {file.type.startsWith("image/") ? (
+                      <>
+                        <img
+                          src={URL.createObjectURL(file)}
+                          alt={`Preview ${idx + 1}`}
+                          className="w-full h-48 object-cover rounded-md shadow-md"
+                          onLoad={() => URL.revokeObjectURL(file)}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updatedFiles = mediaFiles.filter((_, i) => i !== idx);
+                            setMediaFiles(updatedFiles);
+                          }}
+                          className="absolute top-1 right-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-700"
+                          title="Remove image"
+                        >
+                          ×
+                        </button>
+                      </>
+                    ) : (
+                      <div className="text-gray-400 border rounded-md p-4 flex items-center justify-center h-48">
+                        Unsupported file type
+                      </div>
+                    )}
+                  </div>
+                ))}
 
               </div>
             ) : (

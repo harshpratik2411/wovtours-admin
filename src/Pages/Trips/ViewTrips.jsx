@@ -148,6 +148,22 @@ const ViewTrips = () => {
                 <span className="font-semibold w-40">Description:</span>
                 <span>{renderField(trip.description)}</span>
               </div>
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Places covered:</span>
+                <span>{renderField(trip.places_covered)}</span>
+              </div>
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Meeting Point:</span>
+                <span>{renderField(trip.meeting_point)}</span>
+              </div>
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Duration Note:</span>
+                <span>{renderField(trip.duration_note)}</span>
+              </div>
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Special Note:</span>
+                <span>{renderField(trip.special_note)}</span>
+              </div>
 
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Category:</span>
@@ -174,7 +190,7 @@ const ViewTrips = () => {
                     </li>
                   ))}
                 </ul>
-              </div>  
+              </div>
 
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Includes:</span>
