@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import SettingsServices from './SettingServices';
 import { FiGlobe, FiMapPin, FiPhone, FiMail } from 'react-icons/fi';
 import { FaClock } from 'react-icons/fa';
-import { MdAlternateEmail, MdWebAsset } from 'react-icons/md'; 
+import { MdAlternateEmail, MdWebAsset } from 'react-icons/md';
 import { useAlert } from '../../Context/AlertContext/AlertContext';
 
 const Settings = () => {
@@ -37,20 +37,30 @@ const Settings = () => {
       [name]: value,
     }));
   };
-
   const handleLogoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData((prev) => ({
-          ...prev,
-          logo: reader.result,
-        }));
-      };
-      reader.readAsDataURL(file);
+      setFormData((prev) => ({
+        ...prev,
+        logo: file, // store file directly
+      }));
     }
   };
+
+
+  // const handleLogoChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       setFormData((prev) => ({
+  //         ...prev,
+  //         logo: reader.result,
+  //       }));
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
   const handleSocialChange = (index, field, value) => {
     const updatedSocial = [...(formData.social_media || [])];
@@ -80,7 +90,23 @@ const Settings = () => {
 
   const handleSave = async () => {
     try {
-      await SettingsServices.update(formData.id, formData);
+      // await SettingsServices.update(1, formData);
+      const data = new FormData();
+
+      // Append all fields
+      Object.keys(formData).forEach((key) => {
+        if (key === "social_media") {
+          data.append(key, JSON.stringify(formData.social_media));
+        } else if (key === "logo" && formData.logo instanceof File) {
+          data.append("logo", formData.logo); // real file
+        } else {
+          data.append(key, formData[key]);
+        }
+      });
+
+      await SettingsServices.update(1, data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       showalert('Settings updated successfully!');
       navigate('/settings');
       setEditMode(false);
@@ -143,7 +169,10 @@ const Settings = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-base">
                 <InputField icon={<FiGlobe />} label="Tagline" name="tagline" value={formData.tagline} onChange={handleInputChange} editable={editMode} />
                 <InputField icon={<MdWebAsset />} label="Description" name="description" value={formData.description} onChange={handleInputChange} editable={editMode} />
-                <InputField icon={<FiMapPin />} label="Address" name="address" value={formData.address} onChange={handleInputChange} editable={editMode} />
+                <InputField icon={<FiMapPin />} label="Address Line 1" name="address_line_1" value={formData.address_line_1} onChange={handleInputChange} editable={editMode} />
+                <InputField icon={<FiMapPin />} label="Address Line 2" name="address_line_2" value={formData.address_line_2} onChange={handleInputChange} editable={editMode} />
+                <InputField icon={<FiMapPin />} label="City" name="city" value={formData.city} onChange={handleInputChange} editable={editMode} />
+                <InputField icon={<FiMapPin />} label="State" name="state" value={formData.state} onChange={handleInputChange} editable={editMode} />
                 <InputField icon={<FiPhone />} label="Mobile 1" name="mobile_1" value={formData.mobile_1} onChange={handleInputChange} editable={editMode} />
                 <InputField icon={<FiPhone />} label="Mobile 2" name="mobile_2" value={formData.mobile_2} onChange={handleInputChange} editable={editMode} />
                 <InputField icon={<MdAlternateEmail />} label="Email" name="email" value={formData.email} onChange={handleInputChange} editable={editMode} />
