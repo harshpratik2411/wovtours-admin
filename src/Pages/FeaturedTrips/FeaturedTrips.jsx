@@ -289,14 +289,14 @@ const FeaturedTrips = () => {
                                                 {activeMenu === featuredTrip.id && (
                                                     <div className="dropdown-menu absolute right-0 -top-[4rem] z-10 bg-white border rounded shadow w-32">
                                                         <button
-                                                            onClick={() => navigate(`/trips/view/${featuredTrip.id}`)}
+                                                            onClick={() => navigate(`/featured-trips/view/${featuredTrip.id}`)}
                                                             className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                                                         >
                                                             <FaEye size={14} /> View
                                                         </button>
                                                         <button
                                                             onClick={() =>
-                                                                navigate(`/trips/update/${featuredTrip.id}`)
+                                                                navigate(`/featured-trips/update/${featuredTrip.id}`)
                                                             }
                                                             className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                                                         >
@@ -418,13 +418,13 @@ const FeaturedTrips = () => {
                                 {activeMenu === trip.id && (
                                     <div className="mt-3 dropdown-menu bg-white border rounded shadow w-full z-10">
                                         <button
-                                            onClick={() => navigate(`/trips/view/${trip.id}`)}
+                                            onClick={() => navigate(`/featured-trips/view/${trip.id}`)}
                                             className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                                         >
                                             <FaEye size={14} /> View
                                         </button>
                                         <button
-                                            onClick={() => navigate(`/trips/update/${trip.id}`)}
+                                            onClick={() => navigate(`/featured-trips/update/${trip.id}`)}
                                             className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                                         >
                                             <FaEdit size={14} /> Update

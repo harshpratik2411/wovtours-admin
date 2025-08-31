@@ -80,48 +80,25 @@ class FeaturedTripServices {
     }
   }
 
-  static async update(id, data, mediaChanged = false, ) {
+  static async update(id, data) {
     console.log("Update API called");
 
     const url = APIService.baseUrl + `api/admin/featured-trip/${id}/`;
 
     try {
-      let requestOptions;
-
-      if (mediaChanged) {
-        const formData = new FormData();
-        for (const key in data) {
-          if (data[key] !== undefined && data[key] !== null) {
-            formData.append(key, data[key]);
-          }
-        }
-
-        requestOptions = {
-          method: "PUT",
-          headers: {
-            Authorization: LocalStorage.getAccesToken(),
-          },
-          body: formData,
-        };
-      } else {
-        const filteredData = { ...data };
-        delete filteredData.media;
-
-        requestOptions = {
-          method: "PUT",
-          headers: {
-            Authorization: LocalStorage.getAccesToken(),
-          },
-          body: JSON.stringify(filteredData),
-        };
-      }
-
-      let response = await fetch(url, requestOptions);
+      let response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: LocalStorage.getAccesToken(),
+        },
+        body: JSON.stringify(data),
+      });
 
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.update(id, data, mediaChanged);
+          return this.update(id, data);
         }
       }
 
