@@ -100,6 +100,19 @@ const Sidebar = () => {
               </li>
               <li>
                 <a
+                  href="/featured-categories"
+                  className={`flex items-center gap-3 ${
+                    isActive("/featured-categories")
+                      ? "text-white"
+                      : "text-white/50 hover:text-white transition"
+                  }`}
+                >
+                  <MdOutlineCategory className="text-xl" />
+                  <span>Featured Categories</span>
+                </a>
+              </li>
+              <li>
+                <a
                   href="/tags"
                   className={`flex items-center gap-3 ${
                     isActive("/tags")

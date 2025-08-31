@@ -52,6 +52,10 @@ import FeaturedDestination from "./Pages/Destinations/FeaturedDestination";
 import AddFeaturedDestination from "./Pages/Destinations/AddFeaturedDestination";
 import ViewFeaturedDestination from "./Pages/Destinations/ViewFeaturedDestination";
 import UpdateFeaturedDestination from "./Pages/Destinations/UpdateFeaturedDestination";
+import FeaturedCategory from "./Pages/Category/FeaturedCategory";
+import AddFeaturedCategory from "./Pages/Category/AddFeaturedCategory";
+import ViewFeaturedCategory from "./Pages/Category/ViewFeaturedCategory";
+import UpdateFeaturedCategory from "./Pages/Category/UpdateFeaturedCategory";
 
 
 function App() {
@@ -140,6 +144,11 @@ function App() {
            <Route path="/featured-destinations/add" element={<PrivateRoute><AddFeaturedDestination /></PrivateRoute>} />
            <Route path="/featured-destinations/view/:id" element={<PrivateRoute><ViewFeaturedDestination /></PrivateRoute>} />
            <Route path="/featured-destinations/update/:id" element={<PrivateRoute><UpdateFeaturedDestination /></PrivateRoute>} />
+          {/* Featured Categories */}
+           <Route path="/featured-categories" element={<PrivateRoute>< FeaturedCategory /></PrivateRoute>} />
+           <Route path="/featured-categories/add" element={<PrivateRoute><AddFeaturedCategory /></PrivateRoute>} />
+           <Route path="/featured-categories/view/:id" element={<PrivateRoute><ViewFeaturedCategory /></PrivateRoute>} />
+           <Route path="/featured-categories/update/:id" element={<PrivateRoute><UpdateFeaturedCategory /></PrivateRoute>} />
         </Routes>
       
     </div>
