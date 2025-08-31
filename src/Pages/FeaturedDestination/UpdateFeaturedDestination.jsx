@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../../Components/Navbar/Navbar";
 import Sidebar from "../../Components/Siderbar/Sidebar";
 import FeaturedDestinationServices from "./FeaturedDestinationServices";
-import DestinationServices from "./DestinationServices";
+import DestinationServices from "../Destinations/DestinationServices";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

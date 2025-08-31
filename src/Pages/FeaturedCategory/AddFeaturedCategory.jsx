@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../../Components/Navbar/Navbar";
 import Sidebar from "../../Components/Siderbar/Sidebar";
 import { useNavigate } from "react-router-dom";
-import CategoryServices from "./CategoryServices";
+import CategoryServices from "../Category/CategoryServices";
 import FeaturedCategoryServices from "./FeaturedCategoryServices";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

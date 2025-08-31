@@ -48,14 +48,14 @@ import FeaturedTrips from "./Pages/FeaturedTrips/FeaturedTrips";
 import AddFeaturedTrip from "./Pages/FeaturedTrips/AddFeaturedTrip";
 import ViewFeaturedTrip from "./Pages/FeaturedTrips/ViewFeaturedTrip";
 import UpdateFeaturedTrip from "./Pages/FeaturedTrips/UpdateFeaturedTrip";
-import FeaturedDestination from "./Pages/Destinations/FeaturedDestination";
-import AddFeaturedDestination from "./Pages/Destinations/AddFeaturedDestination";
-import ViewFeaturedDestination from "./Pages/Destinations/ViewFeaturedDestination";
-import UpdateFeaturedDestination from "./Pages/Destinations/UpdateFeaturedDestination";
-import FeaturedCategory from "./Pages/Category/FeaturedCategory";
-import AddFeaturedCategory from "./Pages/Category/AddFeaturedCategory";
-import ViewFeaturedCategory from "./Pages/Category/ViewFeaturedCategory";
-import UpdateFeaturedCategory from "./Pages/Category/UpdateFeaturedCategory";
+import FeaturedDestination from "./Pages/FeaturedDestination/FeaturedDestination";
+import AddFeaturedDestination from "./Pages/FeaturedDestination/AddFeaturedDestination";
+import ViewFeaturedDestination from "./Pages/FeaturedDestination/ViewFeaturedDestination";
+import UpdateFeaturedDestination from "./Pages/FeaturedDestination/UpdateFeaturedDestination";
+import FeaturedCategory from "./Pages/FeaturedCategory/FeaturedCategory";
+import AddFeaturedCategory from "./Pages/FeaturedCategory/AddFeaturedCategory";
+import ViewFeaturedCategory from "./Pages/FeaturedCategory/ViewFeaturedCategory";
+import UpdateFeaturedCategory from "./Pages/FeaturedCategory/UpdateFeaturedCategory";
 
 
 function App() {
