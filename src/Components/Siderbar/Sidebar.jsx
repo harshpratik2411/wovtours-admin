@@ -202,6 +202,20 @@ const Sidebar = () => {
                   <span>Trips</span>
                 </a>
               </li>
+              
+              <li>
+                <a
+                  href="/featured-trips"
+                  className={`flex items-center gap-3 ${
+                    isActive("/featured-trips")
+                      ? "text-white"
+                      : "text-white/50 hover:text-white transition"
+                  }`}
+                >
+                  <MdOutlineProductionQuantityLimits className="text-xl" />
+                  <span>Featured Trips</span>
+                </a>
+              </li>
               <li>
                 <a
                   href="/trip-enquiry"

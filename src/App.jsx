@@ -44,6 +44,7 @@ import Trips from "./Pages/Trips/Trips";
 import AddTrips from "./Pages/Trips/AddTrips";
 import ViewTrips from "./Pages/Trips/ViewTrips";
 import UpdateTrips from "./Pages/Trips/UpdateTrips";
+import FeaturedTrips from "./Pages/FeaturedTrips/FeaturedTrips";
 
 
 function App() {
@@ -122,6 +123,7 @@ function App() {
           <Route path="/trips/update/:id" element={<PrivateRoute><UpdateTrips /></PrivateRoute>} />
           <Route path="/trips/add" element={<PrivateRoute><AddTrips/></PrivateRoute>} />  
 
+           <Route path="/featured-trips" element={<PrivateRoute>< FeaturedTrips /></PrivateRoute>} />
 
         </Routes>
       
