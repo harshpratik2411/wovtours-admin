@@ -142,28 +142,13 @@ class FeaturedTripServices {
     console.log("Data = ", data);
 
     try {
-      const formData = new FormData();
-
-      for (const key in data) {
-        const value = data[key];
-
-        if (value === undefined || value === null) continue;
-
-        if (key === "media" && Array.isArray(value)) {
-          value.forEach((file) => formData.append("media", file));
-        } else if (Array.isArray(value)) {
-          value.forEach((item) => formData.append(key, item));
-        } else {
-          formData.append(key, value);
-        }
-      }
-
       let response = await fetch(url, {
         method: "POST",
         headers: {
+          "Content-Type": "application/json",
           Authorization: LocalStorage.getAccesToken(),
         },
-        body: formData,
+        body: JSON.stringify(data),
       });
       // console.log("Response = ", await response.json());
       // console.log("Response = ",response);

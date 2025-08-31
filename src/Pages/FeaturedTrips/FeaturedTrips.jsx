@@ -185,7 +185,7 @@ const FeaturedTrips = () => {
 
                     {/* Add Button */}
                     <button
-                        onClick={() => navigate("/trips/add")}
+                        onClick={() => navigate("/featured-trips/add")}
                         className="flex items-center gap-1 border text-sm text-gray-600 bg-white px-2 py-2 rounded hover:bg-gray-100"
                     >
                         <FaPlus size={12} /> Add
@@ -463,7 +463,7 @@ const FeaturedTrips = () => {
 
             {/* Floating Add Button on Mobile */}
             <button
-                onClick={() => navigate("/trips/add")}
+                onClick={() => navigate("/featured-trips/add")}
                 className="sm:hidden fixed bottom-3 right-6 bg-primary text-white p-4 rounded-full shadow-lg hover:bg-blue-700"
                 title="Add tag"
             >
