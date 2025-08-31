@@ -165,6 +165,19 @@ const Sidebar = () => {
               </li>
               <li>
                 <a
+                  href="/featured-destinations"
+                  className={`flex items-center gap-3 ${
+                    isActive("/featured-destinations")
+                      ? "text-white"
+                      : "text-white/50 hover:text-white transition"
+                  }`}
+                >
+                  <MdPublic className="text-xl" />
+                  <span>Featured Destinations</span>
+                </a>
+              </li>
+              <li>
+                <a
                   href="/banners"
                   className={`flex items-center gap-3 ${
                     isActive("/banners")
