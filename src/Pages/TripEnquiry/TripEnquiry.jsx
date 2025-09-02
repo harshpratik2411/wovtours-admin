@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaEye } from "react-icons/fa";
+import { FaEye, FaEnvelope } from "react-icons/fa";
 import Navbar from "../../Components/Navbar/Navbar";
 import Sidebar from "../../Components/Siderbar/Sidebar";
 import TripEnquiryServices from "./TripEnquiryServices";
@@ -31,7 +31,6 @@ const TripEnquiry = () => {
   }, [currentPage]);
 
   const renderMedia = (enquiry) => {
-    // media URL is inside enquiry.trip.media_urls[0].media
     const url =
       enquiry?.trip?.media_urls && enquiry.trip.media_urls.length > 0
         ? enquiry.trip.media_urls[0].media
@@ -97,8 +96,8 @@ const TripEnquiry = () => {
           <>
             {/* Desktop Table */}
             <div className="overflow-x-auto hidden sm:table w-full">
-              <table className="w-full  text-sm text-left">
-                <thead className="text-gray-500  font-semibold uppercase border-b">
+              <table className="w-full text-sm text-left">
+                <thead className="text-gray-500 font-semibold uppercase border-b">
                   <tr>
                     <th className="py-2">Media</th>
                     <th className="py-2">Name</th>
@@ -111,20 +110,32 @@ const TripEnquiry = () => {
                   {enquiries.map((enquiry) => (
                     <tr key={enquiry.id} className="border-b hover:bg-gray-50">
                       <td className="py-3">{renderMedia(enquiry)}</td>
-                      <td className="py-3 mt-2 flex items-center gap-3">
-                        <img
-                          src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                            enquiry.name
-                          )}&background=0D8ABC&color=fff&size=32`}
-                          alt={enquiry.name}
-                          className="w-8 h-8  rounded-full"
-                        />
-                        {enquiry.name}
+                      <td className="py-3">
+                        <div className="flex items-center gap-3">
+                          <img
+                            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                              enquiry.name
+                            )}&background=0D8ABC&color=fff&size=32`}
+                            alt={enquiry.name}
+                            className="w-8 h-8 rounded-full"
+                          />
+                          {enquiry.name}
+                        </div>
                       </td>
-                      <td>{enquiry.email}</td>
-                      {/* Trip title is inside enquiry.trip.title */}
-                      <td>{enquiry.trip?.title || "N/A"}</td>
-                      <td>
+                      <td className="py-3">
+                        <div className="flex items-center gap-2">
+                          {enquiry.email}
+                          <a
+                            href={`mailto:${enquiry.email}`}
+                            title="Send Email"
+                            className="text-blue-600 hover:text-blue-800 text-lg"
+                          >
+                            <FaEnvelope />
+                          </a>
+                        </div>
+                      </td>
+                      <td className="py-3">{enquiry.trip?.title || "N/A"}</td>
+                      <td className="py-3">
                         <button
                           onClick={() => setSelectedEnquiry(enquiry)}
                           className="text-blue-500 hover:underline flex items-center gap-1"
@@ -148,7 +159,7 @@ const TripEnquiry = () => {
                   <div className="flex gap-3 mb-2">
                     {renderMedia(enquiry)}
                     <div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex -mt-4 items-center gap-2">
                         <img
                           src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
                             enquiry.name
@@ -156,13 +167,26 @@ const TripEnquiry = () => {
                           alt={enquiry.name}
                           className="w-10 h-10 rounded-full"
                         />
-                        <div>
-                          <p className="font-semibold  text-lg">{enquiry.name}</p>
-                          <p className="text-sm text-gray-600">{enquiry.email}</p>
-                          {/* No contactedAt in your data, use created_at */}
+                        <div>  
+                          <div className="mt-3">
+                          <p className="font-semibold  text-lg">
+                            {enquiry.name}
+                          </p>
+                          </div>
+                          <p className="text-sm text-gray-600 flex items-center gap-2">
+                            {enquiry.email} 
+
+                          </p>
                           <p className="text-xs text-gray-500">
                             {new Date(enquiry.created_at).toLocaleString()}
                           </p>
+                            <a
+                              href={`mailto:${enquiry.email}`}
+                              title="Send Email"
+                              className="text-blue-600 flex hover:text-blue-800 text-base"
+                              >
+                              <FaEnvelope />
+                            </a>
                         </div>
                       </div>
                     </div>
