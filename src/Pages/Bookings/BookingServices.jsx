@@ -3,27 +3,32 @@ import LocalStorage from "../LocalStorage";
 import AuthService from "../AuthService";
 
 class BookingServices {
-  static async getAll(page) {
-    const url = APIService.baseUrl + `api/users/customer/?page=${page}`;
+  static async getAll(page = 1) {
+    // Make sure baseUrl ends with '/'
+    const baseUrl = APIService.baseUrl.endsWith("/")
+      ? APIService.baseUrl
+      : APIService.baseUrl + "/";
+
+    const url = `${baseUrl}api/bookings/trip-bookings/?page=${page}`;
 
     try {
-      const response = await fetch(url, {
-        // No headers or authorization — same as TripEnquiryServices
-      });
-
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data = await response.json();
       console.log("🟩 CUSTOMER API RAW RESPONSE:", data);
 
       return {
-        customers: data.results,
-        totalCount: data.count,
-        totalPages: Math.ceil(data.count / 10),
+        bookings: data.results || [],
+        totalCount: data.count || 0,
+        totalPages: Math.ceil((data.count || 0) / (data.page_size || 10)),
         currentPage: page,
       };
     } catch (error) {
       console.error("Failed to fetch customers:", error);
       return {
-        customers: [],
+        bookings: [],
         totalCount: 0,
         totalPages: 1,
         currentPage: 1,
