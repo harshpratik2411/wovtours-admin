@@ -261,7 +261,7 @@ const Trips = () => {
                     </td>
                      <td className="py-6">
                       <p className="font-medium ml-6   text-gray-800">
-                        {trip.new_price} 
+                        {DateFormatter.formatCurrency(trip.new_price)}
                       </p>
                     </td>
                      
@@ -379,6 +379,15 @@ const Trips = () => {
                       </strong>
                       <p className="text-sm text-justify text-gray-800">
                         {trip.description}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center mb-2">
+                      <strong className="text-sm text-gray-700 mr-2">
+                        Price:
+                      </strong>
+                      <p className="text-sm text-gray-800">
+                        {DateFormatter.formatCurrency(trip.new_price)}
                       </p>
                     </div>
 

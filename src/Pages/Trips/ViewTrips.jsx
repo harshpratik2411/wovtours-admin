@@ -246,12 +246,12 @@ const ViewTrips = () => {
               </div>
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Old Price:</span>
-                <span>{trip.old_price ? `₹${trip.old_price}` : "None"}</span>
+                <span>{DateFormatter.formatCurrency(trip.old_price)}</span>
               </div>
 
               <div className="flex gap-3">
                 <span className="font-semibold w-40">New Price:</span>
-                <span>{trip.new_price ? `₹${trip.new_price}` : "None"}</span>
+                <span>{DateFormatter.formatCurrency(trip.new_price)}</span>
               </div>
 
               <div className="flex gap-3">
