@@ -216,6 +216,16 @@ const ViewTrips = () => {
               </div>
 
               <div className="flex gap-3">
+                <span className="font-semibold w-40">Minimum Pax:</span>
+                <span>{renderField(trip.min_pax)}</span>
+              </div>
+
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Maximum Pax:</span>
+                <span>{renderField(trip.max_pax)}</span>
+              </div>
+
+              <div className="flex gap-3">
                 <span className="font-semibold w-40">Tags:</span>
                 {trip.tags.map((tags, index) => (
                   <span key={index}>{renderField(tags.title)}</span>
