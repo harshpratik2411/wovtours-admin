@@ -87,9 +87,8 @@ class TripServices {
 
     try {
       let requestOptions;
-
-      if (mediaChanged) {
-        const formData = new FormData();
+      console.log("mediaChanged = ", mediaChanged);
+      const formData = new FormData();
         for (const key in data) {
           if (data[key] !== undefined && data[key] !== null) {
             formData.append(key, data[key]);
@@ -103,18 +102,35 @@ class TripServices {
           },
           body: formData,
         };
-      } else {
-        const filteredData = { ...data };
-        delete filteredData.media;
 
-        requestOptions = {
-          method: "PUT",
-          headers: {
-            Authorization: LocalStorage.getAccesToken(),
-          },
-          body: JSON.stringify(filteredData),
-        };
-      }
+      // if (mediaChanged) {
+      //   const formData = new FormData();
+      //   for (const key in data) {
+      //     if (data[key] !== undefined && data[key] !== null) {
+      //       formData.append(key, data[key]);
+      //     }
+      //   }
+
+      //   requestOptions = {
+      //     method: "PUT",
+      //     headers: {
+      //       Authorization: LocalStorage.getAccesToken(),
+      //     },
+      //     body: formData,
+      //   };
+      // } 
+      // else {
+      //   const filteredData = { ...data };
+      //   delete filteredData.media;
+
+      //   requestOptions = {
+      //     method: "PUT",
+      //     headers: {
+      //       Authorization: LocalStorage.getAccesToken(),
+      //     },
+      //     body: JSON.stringify(filteredData),
+      //   };
+      // }
 
       let response = await fetch(url, requestOptions);
 
