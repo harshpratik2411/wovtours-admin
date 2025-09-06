@@ -57,10 +57,8 @@ const UpdateTrips = () => {
   useEffect(() => {
     const fetchTrip = async () => {
       try {
-        const res = await TripServices.getAll("", "", 1, "");
-        const allTrips = res?.Trips || [];
-
-        const trip = allTrips.find((t) => t.id === parseInt(id));
+        const trip = await TripServices.get(parseInt(id));
+        
         console.log("Fetched Trip:", trip);
 
         if (trip) {
