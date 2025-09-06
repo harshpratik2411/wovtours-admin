@@ -1,223 +1,281 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { FaEye } from "react-icons/fa";
 import Navbar from "../../Components/Navbar/Navbar";
 import Sidebar from "../../Components/Siderbar/Sidebar";
+import BookingServices from "./BookingServices";
+import { FiSearch } from "react-icons/fi";
+import DateFormatter from '../../Services/DateFormatter'
+import StatusClassMap from "../../Services/StatusClassMap";
 
-const bookingData = [
-  {
-    id: 1,
-    name: "Alice Johnson",
-    bookingDate: "2025-07-20",
-    tripDate: "2025-08-01",
-    tripName: "Beach Paradise",
-    travellers: 2,
-    status: "Confirmed",
-    amount: 1200,
-  },
-  {
-    id: 2,
-    name: "Bob Smith",
-    bookingDate: "2025-07-18",
-    tripDate: "2025-08-05",
-    tripName: "Mountain Escape",
-    travellers: 4,
-    status: "Pending",
-    amount: 1800,
-  },
-  { 
-    id: 3,
-    name: "Charlie Brown",
-    bookingDate: "2025-07-15",
-    tripDate: "2025-08-10",
-    tripName: "City Lights",
-    travellers: 1,
-    status: "Cancelled",
-    amount: 0,
-  },
-  {
-    id: 4,
-    name: "Diana Prince",
-    bookingDate: "2025-07-10",
-    tripDate: "2025-08-03",
-    tripName: "Safari Adventure",
-    travellers: 3,
-    status: "Confirmed",
-    amount: 2100,
-  },
-  {
-    id: 5,
-    name: "Diana Prince",
-    bookingDate: "2025-07-10",
-    tripDate: "2025-08-03",
-    tripName: "Safari Adventure",
-    travellers: 3,
-    status: "Confirmed",
-    amount: 2100,
-  },
-  {
-    id: 6,
-    name: "Diana Prince",
-    bookingDate: "2025-07-10",
-    tripDate: "2025-08-03",
-    tripName: "Safari Adventure",
-    travellers: 3,
-    status: "Confirmed",
-    amount: 2100,
-  },
-];
-
-const Booking = () => {
+const Bookings = () => {
+  const [bookings, setBookings] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const perPage = 4;
-  const pages = Math.ceil(bookingData.length / perPage);
-  const displayed = bookingData.slice(
-    (currentPage - 1) * perPage,
-    currentPage * perPage
-  );
+  const [totalPages, setTotalPages] = useState(1);
+  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const fetchBookings = async (page) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await BookingServices.getAll(page);
+      setBookings(result.bookings || []);
+      setTotalPages(result.totalPages || 1);
+    } catch (err) {
+      setError("Failed to fetch bookings.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBookings(currentPage);
+  }, [currentPage]);
+
+  const renderMedia = (booking, fullWidth = false) => {
+    const url =
+      booking?.trip?.media_urls && booking.trip.media_urls.length > 0
+        ? booking.trip.media_urls[0].media
+        : null;
+
+    const className = fullWidth
+      ? "w-full h-40 object-cover rounded-md"
+      : "h-12 w-16 object-cover rounded-md";
+
+    if (!url) {
+      return <img src="/placeholder.jpg" alt="No media" className={className} />;
+    }
+
+    if (url.match(/\.(jpeg|jpg|gif|png|webp)$/i)) {
+      return <img src={url} alt="media" className={className} />;
+    }
+
+    if (url.match(/\.(mp4|webm|ogg)$/i)) {
+      return <video src={url} className={className} controls />;
+    }
+
+    return <img src="/placeholder.jpg" alt="Unsupported" className={className} />;
+  };
 
   return (
     <>
       <Navbar />
       <Sidebar />
-      <h1 className="lg:ml-72 text-center font-rubik text-3xl font-bold mt-6">
+      <h1 className="lg:ml-72 text-center lg:-mt-0 -mt-6 font-rubik text-3xl font-bold">
         Bookings
       </h1>
-      <div className="bg-white p-6 lg:ml-72 rounded-xl shadow-md font-rubik w-full max-w-6xl mx-auto mt-8">
-        {/* Desktop Table */}
-        <div className="overflow-x-auto hidden sm:table w-full">
-          <table className="w-full text-left text-sm">
-            <thead className="text-gray-500 uppercase border-b">
-              <tr>
-                <th className="py-2">Name</th>
-                <th className="py-2">Booking Date</th>
-                <th className="py-2">Trip Date</th>
-                <th className="py-2">Trip Name</th>
-                <th className="py-2">Travellers</th>
-                <th className="py-2">Status</th>
-                <th className="py-2">Amount ($)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {displayed.map((booking) => (
-                <tr key={booking.id} className="border-b hover:bg-gray-50">
-                  <td className="py-4 font-medium text-gray-800 flex items-center gap-3">
-                    <img
-                      src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                        booking.name
-                      )}&background=0D8ABC&color=fff&size=32`}
-                      alt={booking.name}
-                      className="w-8 h-8 rounded-full"
-                    />
-                    {booking.name}
-                  </td>
-                  <td className="py-4 text-gray-700">
-                    {new Date(booking.bookingDate).toLocaleDateString()}
-                  </td>
-                  <td className="py-4 text-gray-700">
-                    {new Date(booking.tripDate).toLocaleDateString()}
-                  </td>
-                  <td className="py-4 text-gray-700">{booking.tripName}</td>
+      <div className="bg-white p-6 lg:ml-72 rounded-xl shadow-md font-rubik w-full max-w-6xl mx-auto mt-6">
+        {loading && <p className="text-center text-gray-500">Loading bookings...</p>}
+        {error && <p className="text-center text-red-500">{error}</p>}
 
-                  <td className="py-4 text-gray-700">
-                    <span className="lg:ml-8">{booking.travellers}</span>
-                  </td>
-                  <td
-                    className={`py-4 text-sm font-semibold ${
-                      booking.status === "Confirmed"
-                        ? " text-green-600"
-                        : booking.status === "Pending"
-                        ? "text-yellow-600"
-                        : "text-red-500"
+        {!loading && bookings.length === 0 && (
+          <p className="text-center text-gray-500">No bookings found.</p>
+        )}
+
+        {!loading && bookings.length > 0 && (
+          <>
+            {/* Desktop Table */}
+            <div className="overflow-x-auto hidden sm:table w-full">
+              <div className="relative w-full sm:w-auto mb-4">
+                <FiSearch
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600"
+                  size={18}
+                />
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  className="border pl-10 pr-8 py-1 rounded text-sm focus:outline-none focus:ring w-full sm:w-52"
+                />
+              </div>
+              <table className="w-full text-sm text-left">
+                <thead className="text-gray-500 font-semibold uppercase border-b">
+                  <tr>
+                    <th className="py-2 pl-2">Media</th>
+                    <th className="py-2 ">Name</th>
+                    <th className="py-2">Email</th>
+                    <th className="py-2">Trip Name</th>
+                    <th className="py-2">Status</th>
+                    <th className="py-2">Date</th>
+                    <th className="py-2">Preview</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {bookings.map((booking) => (
+                    <tr key={booking.id} className="border-b hover:bg-gray-50">
+                      <td className="py-3">{renderMedia(booking)}</td>
+                      <td className="py-3">
+                        {booking.customer
+                          ? `${booking.customer.first_name} ${booking.customer.last_name}`
+                          : "N/A"}
+                      </td>
+                      <td className="py-3">{booking.customer?.email || "N/A"}</td>
+                      <td className="py-3">{booking.trip?.title || "N/A"}</td>
+                      <td className="py-3">
+                        <span
+                          className={`px-2 py-1 rounded-full text-sm font-medium ${StatusClassMap.getClass(
+                            booking.trip?.status
+                          )}`}
+                        >
+                          {booking.trip?.status || "N/A"}
+                        </span>
+                      </td>
+                      <td className="py-3">
+                        {DateFormatter.formatDate(booking.date)}
+                      </td>
+                      <td className="py-3">
+                        <button
+                          onClick={() => setSelectedBooking(booking)}
+                          className="text-blue-500 hover:underline flex items-center gap-1"
+                        >
+                          <FaEye className="text-blue-800" /> Preview
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Cards */}
+            <div className="sm:hidden space-y-6">
+              {bookings.map((booking) => (
+                <div
+                  key={booking.id}
+                  className="border rounded-lg bg-gray-50 p-5 shadow flex flex-col gap-4"
+                >
+                  <div>{renderMedia(booking, true)}</div>
+                  <div className="flex flex-col gap-1 text-sm text-gray-800">
+                    <p><span className="font-semibold">Name:</span> {booking.customer ? `${booking.customer.first_name} ${booking.customer.last_name}` : "N/A"}</p>
+                    <p><span className="font-semibold">Email:</span> {booking.customer?.email || "N/A"}</p>
+                    <p><span className="font-semibold">Trip:</span> {booking.trip?.title || "N/A"}</p>
+                    <p>
+                      <span className="font-semibold">Status:</span>{" "}
+                      <span className={`ml-1 px-2 py-1 rounded-full text-xs font-medium ${StatusClassMap.getClass(booking.trip?.status)}`}>
+                        {booking.trip?.status || "N/A"}
+                      </span>
+                    </p>
+                    <p><span className="font-semibold">Date:</span> {DateFormatter.formatDate(booking.date)}</p>
+                    <button
+                      onClick={() => setSelectedBooking(booking)}
+                      className="text-blue-500 text-sm mt-2 hover:underline flex items-center gap-1"
+                    >
+                      <FaEye className="text-blue-800" /> Preview
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="mt-6 flex justify-center space-x-2">
+                {Array.from({ length: totalPages }, (_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentPage(idx + 1)}
+                    className={`px-3 py-1 rounded ${
+                      currentPage === idx + 1
+                        ? "bg-primary text-white"
+                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                     }`}
                   >
-                    {booking.status}
-                  </td>
-                  <td className="py-4 text-gray-700">${booking.amount}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                    {idx + 1}
+                  </button>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+      </div>
 
-        {/* Mobile Cards */}
-        <div className="sm:hidden space-y-5">
-          {displayed.map((booking) => (
-            <div
-              key={booking.id}
-              className="bg-white shadow-md rounded-xl p-4 border border-gray-200 mx-auto w-[90%]"
+      {/* Preview Modal */}
+      {selectedBooking && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 sm:p-8">
+          <div className="bg-white rounded-xl shadow-2xl p-6 sm:p-8 w-full max-w-3xl relative transition-all duration-300 ease-in-out overflow-auto max-h-[90vh]">
+            <button
+              onClick={() => setSelectedBooking(null)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-2xl font-semibold transition-colors"
+              aria-label="Close"
             >
-              <div className="flex items-center gap-4 mb-3">
-                <img
-                  src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                    booking.name
-                  )}&background=0D8ABC&color=fff&size=40`}
-                  alt={booking.name}
-                  className="w-10 h-10 rounded-full"
-                />
-                <div>
-                  <h2 className="text-lg font-semibold text-gray-800">
-                    {booking.name}
-                  </h2>
-                  <span className="text-sm text-gray-500">
-                    Booking Date:{" "}
-                    {new Date(booking.bookingDate).toLocaleDateString()}
-                  </span>
-                </div>
-              </div>
+              &times;
+            </button>
 
-              <div className="space-y-1 text-sm text-gray-700 mb-2">
-                <p>
-                  <span className="font-medium">Trip Name:</span>{" "}
-                  {booking.tripName}
-                </p>
-                <p>
-                  <span className="font-medium">Trip Date:</span>{" "}
-                  {new Date(booking.tripDate).toLocaleDateString()}
-                </p>
-                <p>
-                  <span className="font-medium">Travellers:</span>
-                  {booking.travellers}
-                </p>
-              </div>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-2">
+              Booking Details
+            </h2>
 
-              <div className="flex justify-between items-center mt-4">
+            <div className="w-full mb-6 rounded-lg overflow-hidden max-h-60 sm:max-h-72">
+              {renderMedia(selectedBooking)}
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-gray-700">
+              <div>
+                <span className="font-semibold">Name:</span>{" "}
+                {selectedBooking.customer
+                  ? `${selectedBooking.customer.first_name} ${selectedBooking.customer.last_name}`
+                  : "N/A"}
+              </div>
+              <div>
+                <span className="font-semibold">Email:</span>{" "}
+                {selectedBooking.customer?.email || "N/A"}
+              </div>
+              <div>
+                <span className="font-semibold">Phone:</span>{" "}
+                {selectedBooking.customer?.phone || "N/A"}
+              </div>
+              <div>
+                <span className="font-semibold">Country:</span>{" "}
+                {selectedBooking.customer?.country?.name || "N/A"}
+              </div>
+              <div>
+                <span className="font-semibold">Persons:</span>{" "}
+                {selectedBooking.person}
+              </div>
+              <div>
+                <span className="font-semibold">Date:</span>{" "}
+                {DateFormatter.formatDate(selectedBooking.date)}
+              </div>
+              <div>
+                <span className="font-semibold">City:</span>{" "}
+                {selectedBooking.city || "N/A"}
+              </div>
+              <div className="sm:col-span-2">
+                <span className="font-semibold">Address:</span>{" "}
+                {selectedBooking.address || "N/A"}
+              </div>
+              <div>
+                <span className="font-semibold">Trip:</span>{" "}
+                {selectedBooking.trip?.title || "N/A"}
+              </div>
+              <div>
+                <span className="font-semibold">Status:</span>{" "}
                 <span
-                  className={`text-xs font-bold px-2 py-1 rounded-full ${
-                    booking.status === "Confirmed"
-                      ? "bg-green-100 text-green-700"
-                      : booking.status === "Pending"
-                      ? "bg-yellow-100 text-yellow-600"
-                      : "bg-red-100 text-red-600"
-                  }`}
+                  className={`px-2 py-1 rounded-full ml-2 text-sm font-medium ${StatusClassMap.getClass(
+                    selectedBooking.trip?.status
+                  )}`}
                 >
-                  {booking.status}
+                  {selectedBooking.trip?.status || "N/A"}
                 </span>
-                <span className="text-base font-semibold text-gray-800">
-                  ${booking.amount}
-                </span>
+              </div>
+              <div>
+                <span className="font-semibold">Price:</span> ₹
+                {selectedBooking.trip?.new_price || "N/A"}
+              </div>
+              <div className="sm:col-span-2">
+                <span className="font-semibold">Booked On:</span>{" "}
+                {DateFormatter.formatDate(selectedBooking.created_at)}
+              </div>
+              <div className="sm:col-span-2">
+                <span className="font-semibold">Updated On:</span>{" "}
+                {DateFormatter.formatDate(selectedBooking.updated_at)}
               </div>
             </div>
-          ))}
+          </div>
         </div>
-
-        {/* Pagination */}
-        <div className="flex justify-center mt-6 gap-2">
-          {Array.from({ length: pages }, (_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrentPage(i + 1)}
-              className={`px-3 py-1 rounded-md text-sm font-medium ${
-                currentPage === i + 1
-                  ? "bg-primary text-white"
-                  : "bg-gray-200 text-gray-700"
-              }`}
-            >
-              {i + 1}
-            </button>
-          ))}
-        </div>
-      </div>
+      )}
     </>
   );
 };
 
-export default Booking;
+export default Bookings;

@@ -1,244 +1,303 @@
 import React, { useEffect, useState } from "react";
-import { FiSearch } from "react-icons/fi";
-import { BsXCircle } from "react-icons/bs";
-import { FaEye } from "react-icons/fa";
+import { FaEye, FaEnvelope } from "react-icons/fa";
 import Navbar from "../../Components/Navbar/Navbar";
 import Sidebar from "../../Components/Siderbar/Sidebar";
-
-const enquiryList = [
-  {
-    id: 1,
-    name: "Alice Johnson",
-    email: "alice@example.com",
-    contactedAt: "2025-07-28T10:15:00",
-    country: "USA",
-    contact: "+1 555-1234",
-    adults: 2,
-    children: 1,
-    subject: "Summer Vacation",
-    message: "Looking for a 7-day trip to Hawaii.",
-    trip: "Hawaii Getaway",
-    packageName: "Sunset Deluxe",
-  },
-  {
-    id: 2,
-    name: "Bob Smith",
-    email: "bob@example.com",
-    contactedAt: "2025-07-25T08:30:00",
-    country: "Canada",
-    contact: "+1 604-4567",
-    adults: 4,
-    children: 0,
-    subject: "Winter Trip",
-    message: "Interested in skiing trip in Whistler.",
-    trip: "Whistler Snow Adventure",
-    packageName: "Ski Max Pro",
-  },
-  // Add more entries as needed
-];
+import TripEnquiryServices from "./TripEnquiryServices";
+import { FiSearch } from "react-icons/fi";
 
 const TripEnquiry = () => {
-  const [searchText, setSearchText] = useState("");
-  const [sortOption, setSortOption] = useState("");
+  const [enquiries, setEnquiries] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [selectedEnquiry, setSelectedEnquiry] = useState(null);
-  const [sortMenuOpen, setSortMenuOpen] = useState(false);
-  const perPage = 5;
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        !event.target.closest(".dropdown-menu") &&
-        !event.target.closest(".sort-toggle")
-      ) {
-        setSortMenuOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const handleSort = (option) => {
-    setSortOption(option);
-    setSortMenuOpen(false);
+  const fetchEnquiries = async (page) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await TripEnquiryServices.getAll(page);
+      setEnquiries(result.enquiries || []);
+      setTotalPages(result.totalPages || 1);
+    } catch (err) {
+      setError("Failed to fetch enquiries.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const filtered = enquiryList
-    .filter(
-      (item) =>
-        item.name.toLowerCase().includes(searchText.toLowerCase()) ||
-        item.email.toLowerCase().includes(searchText.toLowerCase())
-    )
-    .sort((a, b) => {
-      if (sortOption === "Name A-Z") return a.name.localeCompare(b.name);
-      if (sortOption === "Name Z-A") return b.name.localeCompare(a.name);
-      if (sortOption === "Email A-Z") return a.email.localeCompare(b.email);
-      if (sortOption === "Email Z-A") return b.email.localeCompare(a.email);
-      return 0;
-    });
+  useEffect(() => {
+    fetchEnquiries(currentPage);
+  }, [currentPage]);
 
-  const pages = Math.ceil(filtered.length / perPage);
-  const displayed = filtered.slice((currentPage - 1) * perPage, currentPage * perPage);
+  const renderMedia = (enquiry) => {
+    const url =
+      enquiry?.trip?.media_urls && enquiry.trip.media_urls.length > 0
+        ? enquiry.trip.media_urls[0].media
+        : null;
 
-  const clearSearch = () => setSearchText("");
+    if (!url) {
+      return (
+        <img
+          src="/placeholder.jpg"
+          alt="No media"
+          className="h-12 w-16 object-cover rounded-md"
+        />
+      );
+    }
+
+    if (url.match(/\.(jpeg|jpg|gif|png|webp)$/i)) {
+      return (
+        <img
+          src={url}
+          alt="media"
+          className="h-12 w-16 object-cover rounded-md"
+        />
+      );
+    }
+
+    if (url.match(/\.(mp4|webm|ogg)$/i)) {
+      return (
+        <video
+          src={url}
+          className="h-12 w-16 object-cover rounded-md"
+          controls
+        />
+      );
+    }
+
+    return (
+      <img
+        src="/placeholder.jpg"
+        alt="Unsupported"
+        className="h-12 w-16 object-cover rounded-md"
+      />
+    );
+  };
 
   return (
     <>
       <Navbar />
       <Sidebar />
-      <h1 className="lg:ml-72 text-center lg:-mt-0 -mt-6 font-rubik text-3xl font-bold ">Trip Enquiries</h1>
+      <h1 className="lg:ml-72 text-center lg:-mt-0 -mt-6 font-rubik text-3xl font-bold">
+        Trip Enquiries
+      </h1>
       <div className="bg-white p-6 lg:ml-72 rounded-xl shadow-md font-rubik w-full max-w-6xl mx-auto mt-6">
-        <div className="flex flex-wrap justify-between items-center mb-4 gap-2">
-          <div className="relative">
-            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600" size={18} />
-            <input
-              type="text"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-              placeholder="Search by name or email..."
-              className="border pl-10 pr-8 py-1 rounded text-sm focus:outline-none focus:ring w-60"
-            />
-            {searchText && (
-              <button
-                onClick={clearSearch}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-              >
-                <BsXCircle size={18} />
-              </button>
-            )}
-          </div>
+        {loading && (
+          <p className="text-center text-gray-500">Loading enquiries...</p>
+        )}
+        {error && <p className="text-center text-red-500">{error}</p>}
 
-          <div className="relative">
-            <button
-              onClick={() => setSortMenuOpen(!sortMenuOpen)}
-              className="sort-toggle border px-3 py-1 rounded text-sm bg-white hover:bg-gray-100 text-gray-700"
-            >
-              Sort By
-            </button>
-            {sortMenuOpen && (
-              <div className="dropdown-menu absolute left-0 mt-1 bg-white border rounded shadow w-44 z-10">
-                {["Name A-Z", "Name Z-A", "Email A-Z", "Email Z-A"].map((opt) => (
+        {!loading && enquiries.length === 0 && (
+          <p className="text-center text-gray-500">No enquiries found.</p>
+        )}
+
+        {!loading && enquiries.length > 0 && (
+          <>
+            {/* Desktop Table */}
+            <div className="overflow-x-auto hidden sm:table w-full">
+              <div className="relative w-full sm:w-auto">
+                <FiSearch
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600"
+                  size={18}
+                />
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  className="border pl-10 pr-8 py-1 rounded text-sm focus:outline-none focus:ring w-full sm:w-52"
+                />
+              </div>
+              <table className="w-full text-sm text-left">
+                <thead className="text-gray-500 font-semibold uppercase border-b">
+                  <tr>
+                    <th className="py-2">Trip Media</th>
+                    <th className="py-2">Trip Name</th>
+                    <th className="py-2">User Name</th>
+                    <th className="py-2">Email</th>
+                    <th className="py-2">Preview</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {enquiries.map((enquiry) => (
+                    <tr key={enquiry.id} className="border-b hover:bg-gray-50">
+                      <td className="py-3">{renderMedia(enquiry)}</td>
+                      <td className="py-3">{enquiry.trip?.title || "N/A"}</td>
+                      <td className="py-3">
+                        <div className="flex items-center gap-3">
+                          <img
+                            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                              enquiry.name
+                            )}&background=0D8ABC&color=fff&size=32`}
+                            alt={enquiry.name}
+                            className="w-8 h-8 rounded-full"
+                          />
+                          {enquiry.name}
+                        </div>
+                      </td>
+                      <td className="py-3">
+                        <div className="flex items-center gap-2">
+                          {enquiry.email}
+                          <a
+                            href={`mailto:${enquiry.email}`}
+                            title="Send Email"
+                            className="text-blue-600 hover:text-blue-800 text-lg"
+                          >
+                            <FaEnvelope />
+                          </a>
+                        </div>
+                      </td>
+                      <td className="py-3">
+                        <button
+                          onClick={() => setSelectedEnquiry(enquiry)}
+                          className="text-blue-500 hover:underline flex items-center gap-1"
+                        >
+                          <FaEye className="text-blue-800" /> Preview
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Cards */}
+            <div className="sm:hidden space-y-4">
+              {enquiries.map((enquiry) => (
+                <div
+                  key={enquiry.id}
+                  className="border rounded-lg bg-gray-50 p-4 shadow"
+                >
+                  <div className="flex gap-3 mb-2">
+                    {renderMedia(enquiry)}
+                    <div>
+                      <div className="flex -mt-4 items-center gap-2">
+                        <img
+                          src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                            enquiry.name
+                          )}&background=0D8ABC&color=fff&size=40`}
+                          alt={enquiry.name}
+                          className="w-10 h-10 rounded-full"
+                        />
+                        <div>
+                          <div className="mt-3">
+                            <p className="font-semibold  text-lg">
+                              {enquiry.name}
+                            </p>
+                          </div>
+                          <p className="text-sm text-gray-600 flex items-center gap-2">
+                            {enquiry.email}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {new Date(enquiry.created_at).toLocaleString()}
+                          </p>
+                          <a
+                            href={`mailto:${enquiry.email}`}
+                            title="Send Email"
+                            className="text-blue-600 flex hover:text-blue-800 text-base"
+                          >
+                            <FaEnvelope />
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <button
-                    key={opt}
-                    onClick={() => handleSort(opt)}
-                    className="block px-4 py-2 text-left w-full text-sm hover:bg-gray-100"
+                    onClick={() => setSelectedEnquiry(enquiry)}
+                    className="text-blue-500 text-sm mt-2 hover:underline flex items-center gap-1"
                   >
-                    {opt}
+                    <FaEye className="text-blue-800" /> Preview
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="mt-6 flex justify-center space-x-2">
+                {Array.from({ length: totalPages }, (_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentPage(idx + 1)}
+                    className={`px-3 py-1 rounded ${
+                      currentPage === idx + 1
+                        ? "bg-primary text-white"
+                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    }`}
+                  >
+                    {idx + 1}
                   </button>
                 ))}
               </div>
             )}
-          </div>
-        </div>
-
-        {/* Desktop Table */}
-        <div className="overflow-x-auto hidden sm:table w-full">
-          <table className="w-full text-sm text-left">
-            <thead className="text-gray-500 font-semibold uppercase border-b">
-              <tr>
-                <th className="py-2">Name</th>
-                <th className="py-2">Email</th>
-                <th className="py-2">Contacted On</th>
-                <th className="py-2">Preview</th>
-              </tr>
-            </thead>
-            <tbody>
-              {displayed.map((user) => (
-                <tr key={user.id} className="border-b hover:bg-gray-50">
-                  <td className="py-3 flex items-center gap-3">
-                    <img
-                      src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=0D8ABC&color=fff&size=32`}
-                      alt={user.name}
-                      className="w-8 h-8 rounded-full"
-                    />
-                    {user.name}
-                  </td>
-                  <td>{user.email}</td>
-                  <td>{new Date(user.contactedAt).toLocaleString()}</td>
-                  <td>
-                    <button
-                      onClick={() => setSelectedEnquiry(user)}
-                      className="text-blue-500 hover:underline flex items-center gap-1"
-                    >
-                      <FaEye className="text-blue-800" /> Preview
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Mobile Cards */}
-        <div className="sm:hidden space-y-4">
-          {displayed.map((user) => (
-            <div key={user.id} className="border rounded-lg bg-gray-50 p-4 shadow">
-              <div className="flex items-center gap-3 mb-2">
-                <img
-                  src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=0D8ABC&color=fff&size=40`}
-                  alt={user.name}
-                  className="w-10 h-10 rounded-full"
-                />
-                <div>
-                  <p className="font-semibold text-lg">{user.name}</p>
-                  <p className="text-sm text-gray-600">{user.email}</p>
-                  <p className="text-xs text-gray-500">{new Date(user.contactedAt).toLocaleString()}</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setSelectedEnquiry(user)}
-                className="text-blue-500 text-sm mt-2 hover:underline flex items-center gap-1"
-              >
-                <FaEye className="text-blue-800" /> Preview
-              </button>
-            </div>
-          ))}
-        </div>
-
-        {/* Pagination */}
-        {pages > 1 && (
-          <div className="mt-6 flex justify-center space-x-2">
-            {Array.from({ length: pages }, (_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setCurrentPage(idx + 1)}
-                className={`px-3 py-1 rounded ${
-                  currentPage === idx + 1
-                    ? "bg-primary text-white"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                }`}
-              >
-                {idx + 1}
-              </button>
-            ))}
-          </div>
+          </>
         )}
       </div>
 
       {/* Preview Modal */}
       {selectedEnquiry && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white space-y-4 rounded-lg p-6 w-[90%] max-w-lg relative">
-            <button
-              onClick={() => setSelectedEnquiry(null)}
-              className="absolute top-2 right-3 text-gray-500 hover:text-red-500 text-xl"
-            >
-              ×
-            </button> 
-            <h2 className="text-xl  font-bold mb-4">Enquiry Details</h2>
-            <p><strong>Name:</strong> {selectedEnquiry.name}</p>
-            <p><strong>Email:</strong> {selectedEnquiry.email}</p>
-            <p><strong>Country:</strong> {selectedEnquiry.country}</p>
-            <p><strong>Contact:</strong> {selectedEnquiry.contact}</p>
-            <p><strong>Adults:</strong> {selectedEnquiry.adults}</p>
-            <p><strong>Children:</strong> {selectedEnquiry.children}</p>
-            <p><strong>Subject:</strong> {selectedEnquiry.subject}</p>
-            <p><strong>Message:</strong> {selectedEnquiry.message}</p>
-            <p><strong>Trip:</strong> {selectedEnquiry.trip}</p>
-            <p><strong>Package:</strong> {selectedEnquiry.packageName}</p>
-            <p><strong>Contacted On:</strong> {new Date(selectedEnquiry.contactedAt).toLocaleString()}</p>
-          </div>
-        </div>
+       <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+  <div className="bg-white rounded-xl shadow-2xl p-6 sm:p-8 w-[90%] max-w-3xl relative transition-all duration-300 ease-in-out">
+    {/* Close Button */}
+    <button
+      onClick={() => setSelectedEnquiry(null)}
+      className="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-2xl font-semibold transition-colors"
+      aria-label="Close"
+    >
+      &times;
+    </button>
+
+    {/* Header */}
+    <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b border-b-primary  pb-2">
+      Enquiry Details
+    </h2>
+
+    {/* Media Preview */}
+    <div className="w-full mb-6 rounded-lg overflow-hidden ">
+      {renderMedia(selectedEnquiry)}
+    </div>
+
+    {/* Enquiry Info */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-700">
+      <div>
+        <span className="font-semibold text-gray-900">Name:</span> {selectedEnquiry.name}
+      </div>
+      <div>
+        <span className="font-semibold text-gray-900">Email:</span> {selectedEnquiry.email}
+      </div>
+      <div>
+        <span className="font-semibold text-gray-900">Country:</span> {selectedEnquiry.country?.name || "N/A"}
+      </div>
+      <div>
+        <span className="font-semibold text-gray-900">Contact:</span> {selectedEnquiry.mobile || "N/A"}
+      </div>
+      <div>
+        <span className="font-semibold text-gray-900">Adults:</span> {selectedEnquiry.adult || 0}
+      </div>
+      <div>
+        <span className="font-semibold  text-gray-900">Children:</span> {selectedEnquiry.children || 0}
+      </div>
+      <div className="sm:col-span-1 mt-1">
+        <span className="font-semibold m text-gray-900">Subject:</span> {selectedEnquiry.subject || "N/A"}
+      </div>
+      <div className="sm:col-span-1">
+        <span className="font-semibold text-gray-900">Message:</span>
+        <p className="mt-1 text-gray-600 whitespace-pre-line">{selectedEnquiry.body || "N/A"}</p>
+      </div>
+      <div>
+        <span className="font-semibold text-gray-900">Trip:</span> {selectedEnquiry.trip?.title || "N/A"}
+      </div>
+      <div>
+        <span className="font-semibold text-gray-900">Package Price:</span> ₹{selectedEnquiry.trip?.new_price || "N/A"}
+      </div>
+      <div className="sm:col-span-2">
+        <span className="font-semibold text-gray-900">Contacted On:</span>{" "}
+        {new Date(selectedEnquiry.created_at).toLocaleString()}
+      </div>
+    </div>
+  </div>
+</div>
+
       )}
     </>
   );
