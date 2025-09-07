@@ -4,7 +4,7 @@ import Navbar from "../../Components/Navbar/Navbar";
 import Sidebar from "../../Components/Siderbar/Sidebar";
 import BookingServices from "./BookingServices";
 import { FiSearch } from "react-icons/fi";
-import DateFormatter from '../../Services/DateFormatter'
+import DateFormatter from "../../Services/DateFormatter";
 import StatusClassMap from "../../Services/StatusClassMap";
 
 const Bookings = () => {
@@ -44,7 +44,9 @@ const Bookings = () => {
       : "h-12 w-16 object-cover rounded-md";
 
     if (!url) {
-      return <img src="/placeholder.jpg" alt="No media" className={className} />;
+      return (
+        <img src="/placeholder.jpg" alt="No media" className={className} />
+      );
     }
 
     if (url.match(/\.(jpeg|jpg|gif|png|webp)$/i)) {
@@ -55,7 +57,9 @@ const Bookings = () => {
       return <video src={url} className={className} controls />;
     }
 
-    return <img src="/placeholder.jpg" alt="Unsupported" className={className} />;
+    return (
+      <img src="/placeholder.jpg" alt="Unsupported" className={className} />
+    );
   };
 
   return (
@@ -66,7 +70,9 @@ const Bookings = () => {
         Bookings
       </h1>
       <div className="bg-white p-6 lg:ml-72 rounded-xl shadow-md font-rubik w-full max-w-6xl mx-auto mt-6">
-        {loading && <p className="text-center text-gray-500">Loading bookings...</p>}
+        {loading && (
+          <p className="text-center text-gray-500">Loading bookings...</p>
+        )}
         {error && <p className="text-center text-red-500">{error}</p>}
 
         {!loading && bookings.length === 0 && (
@@ -109,7 +115,9 @@ const Bookings = () => {
                           ? `${booking.customer.first_name} ${booking.customer.last_name}`
                           : "N/A"}
                       </td>
-                      <td className="py-3">{booking.customer?.email || "N/A"}</td>
+                      <td className="py-3">
+                        {booking.customer?.email || "N/A"}
+                      </td>
                       <td className="py-3">{booking.trip?.title || "N/A"}</td>
                       <td className="py-3">
                         <span
@@ -146,16 +154,34 @@ const Bookings = () => {
                 >
                   <div>{renderMedia(booking, true)}</div>
                   <div className="flex flex-col gap-1 text-sm text-gray-800">
-                    <p><span className="font-semibold">Name:</span> {booking.customer ? `${booking.customer.first_name} ${booking.customer.last_name}` : "N/A"}</p>
-                    <p><span className="font-semibold">Email:</span> {booking.customer?.email || "N/A"}</p>
-                    <p><span className="font-semibold">Trip:</span> {booking.trip?.title || "N/A"}</p>
+                    <p>
+                      <span className="font-semibold">Name:</span>{" "}
+                      {booking.customer
+                        ? `${booking.customer.first_name} ${booking.customer.last_name}`
+                        : "N/A"}
+                    </p>
+                    <p>
+                      <span className="font-semibold">Email:</span>{" "}
+                      {booking.customer?.email || "N/A"}
+                    </p>
+                    <p>
+                      <span className="font-semibold">Trip:</span>{" "}
+                      {booking.trip?.title || "N/A"}
+                    </p>
                     <p>
                       <span className="font-semibold">Status:</span>{" "}
-                      <span className={`ml-1 px-2 py-1 rounded-full text-xs font-medium ${StatusClassMap.getClass(booking.trip?.status)}`}>
+                      <span
+                        className={`ml-1 px-2 py-1 rounded-full text-xs font-medium ${StatusClassMap.getClass(
+                          booking.trip?.status
+                        )}`}
+                      >
                         {booking.trip?.status || "N/A"}
                       </span>
                     </p>
-                    <p><span className="font-semibold">Date:</span> {DateFormatter.formatDate(booking.date)}</p>
+                    <p>
+                      <span className="font-semibold">Date:</span>{" "}
+                      {DateFormatter.formatDate(booking.date)}
+                    </p>
                     <button
                       onClick={() => setSelectedBooking(booking)}
                       className="text-blue-500 text-sm mt-2 hover:underline flex items-center gap-1"
@@ -211,7 +237,11 @@ const Bookings = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-gray-700">
               <div>
-                <span className="font-semibold">Name:</span>{" "}
+                <span className="font-semibold">Trip:</span>{" "}
+                {selectedBooking.trip?.title || "N/A"}
+              </div>
+              <div>
+                <span className="font-semibold">Customer Name:</span>{" "}
                 {selectedBooking.customer
                   ? `${selectedBooking.customer.first_name} ${selectedBooking.customer.last_name}`
                   : "N/A"}
@@ -244,10 +274,7 @@ const Bookings = () => {
                 <span className="font-semibold">Address:</span>{" "}
                 {selectedBooking.address || "N/A"}
               </div>
-              <div>
-                <span className="font-semibold">Trip:</span>{" "}
-                {selectedBooking.trip?.title || "N/A"}
-              </div>
+
               <div>
                 <span className="font-semibold">Status:</span>{" "}
                 <span
