@@ -81,12 +81,24 @@ const Settings = () => {
                   </div>
                   <div className="flex items-start gap-2 p-2 rounded-md transition">
                     <FiMapPin className="text-blue-400 mt-1" />
-                    <span><strong className='text-lg'>Address:</strong> {setting.address}</span>
+                    <span><strong className='text-lg'>Address Line 1:</strong> {setting.address_line_1}</span>
+                  </div>
+                  <div className="flex items-start gap-2 p-2 rounded-md transition">
+                    <FiMapPin className="text-blue-400 mt-1" />
+                    <span><strong className='text-lg'>Address Line 2:</strong> {setting.address_line_2}</span>
+                  </div>
+                  <div className="flex items-start gap-2 p-2 rounded-md transition">
+                    <FiMapPin className="text-blue-400 mt-1" />
+                    <span><strong className='text-lg'>City:</strong> {setting.city}</span>
+                  </div>
+                  <div className="flex items-start gap-2 p-2 rounded-md transition">
+                    <FiMapPin className="text-blue-400 mt-1" />
+                    <span><strong className='text-lg'>State:</strong> {setting.state}</span>
                   </div>
                   <div className="flex items-start gap-2 p-2 rounded-md transition">
                     <FiPhone className="text-blue-400 mt-1" />
                     <div>
-                      <div><strong className='text-lg'>Mobile 1:</strong> {setting.mobile_1}</div> 
+                      <div><strong className='text-lg'>Mobile 1:</strong> {setting.mobile_1}</div>
                       <div><strong className='text-lg'>Mobile 2:</strong> {setting.mobile_2}</div>
                     </div>
                   </div>

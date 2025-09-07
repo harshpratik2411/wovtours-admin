@@ -18,30 +18,8 @@ class SettingsServices {
       const data = await response.json();
       console.log("🟦 API RAW RESPONSE:", data);
 
-      return { 
-        settings: data.results.map((setting) => ({ 
-             id: setting.id,
-    name: setting.name,
-    tagline: setting.tagline,
-    description: setting.description,
-    address: setting.address,
-    logo: setting.logo,
-    mobile_1: setting.mobile_1,
-    mobile_2: setting.mobile_2,
-    host: setting.host,
-    port: setting.port,
-    email: setting.email,
-    email_password: setting.email_password,
-    website: setting.website,
-    created_at: setting.created_at,
-    updated_at: setting.updated_at,
-    social_media: setting.social_media.map(sm => ({
-        id: sm.id,
-        name: sm.name,
-        url: sm.url
-    }))
-         
-        })),
+      return {
+        settings: data.results,
         totalCount: data.count,
         totalPages: Math.ceil(data.count / 10),
         currentPage: page,
@@ -83,19 +61,42 @@ class SettingsServices {
   }
 
   static async update(id = 1, data) {
-    console.log("Update API called");
+
 
     const url = APIService.baseUrl + `api/admin/settings/${id}/`;
 
     try {
-      let response = await fetch(url, {
+      let requestOptions;
+
+      const formData = new FormData();
+      for (const key in data) {
+        if (data[key] !== undefined && data[key] !== null) {
+          formData.append(key, data[key]);
+        }
+      }
+      formData.append('country_id', 102);
+      // formData.append('country', null);
+      formData.forEach((val,key ) => {
+        console.log(key, " --> ", val);
+      });
+
+
+      requestOptions = {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
           Authorization: LocalStorage.getAccesToken(),
         },
-        body: JSON.stringify(data),
-      });
+        body: formData,
+      };
+      let response = await fetch(url, requestOptions);
+      // let response = await fetch(url, {
+      //   method: "PUT",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Authorization: LocalStorage.getAccesToken(),
+      //   },
+      //   body: JSON.stringify(data),
+      // });
 
       console.log("Response = ", response.status);
 
