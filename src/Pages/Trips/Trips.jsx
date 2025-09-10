@@ -197,10 +197,9 @@ const Trips = () => {
               <tr>
                 <th className="py-2 w-[10%]">Image</th>
                 <th className="py-2 w-[10%]">Title</th>
-                <th className="py-2 pl-3 w-[20%]">Description </th>
-                <th className="py-2  w-[10%]">New Price</th>
+                <th className="py-2 pl-3 w-[30%]">Description </th>
+                <th className="py-2  w-[15%]">New Price</th>
                 <th className="py-2 w-[10%]">Status</th>
-                <th className="py-2 w-[15%]">Created At</th>
                 <th className="py-2 w-[15%]">Updated At</th>
                 <th className="py-2 w-[10%] text-right">Actions</th>
               </tr>
@@ -256,7 +255,7 @@ const Trips = () => {
                     </td>
 
                     <td className="py-6">
-                      <p className="font-medium ml-3  text-gray-800">
+                      <p className="font-medium ml-3 text-justify text-gray-800">
                         {trip.description}
                       </p>
                     </td>
@@ -276,9 +275,7 @@ const Trips = () => {
                         {trip.status}
                       </span>
                     </td>
-                    <td className="py-4 text-gray-700">
-                      {DateFormatter.formatDate(trip.created_at)}
-                    </td>
+                   
                     <td className="py-4 text-gray-700">
                       {DateFormatter.formatDate(trip.updated_at)}
                     </td>
@@ -380,7 +377,7 @@ const Trips = () => {
                       <strong className="text-sm text-gray-700 mr-2">
                         Description:
                       </strong>
-                      <p className="text-sm text-gray-800">
+                      <p className="text-sm text-justify text-gray-800">
                         {trip.description}
                       </p>
                     </div>

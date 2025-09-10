@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { FaEye } from "react-icons/fa";
+import { FaEye, FaEnvelope } from "react-icons/fa";
 import Navbar from "../../Components/Navbar/Navbar";
 import Sidebar from "../../Components/Siderbar/Sidebar";
 import TripEnquiryServices from "./TripEnquiryServices";
+import { FiSearch } from "react-icons/fi";
 
 const TripEnquiry = () => {
   const [enquiries, setEnquiries] = useState([]);
@@ -31,7 +32,6 @@ const TripEnquiry = () => {
   }, [currentPage]);
 
   const renderMedia = (enquiry) => {
-    // media URL is inside enquiry.trip.media_urls[0].media
     const url =
       enquiry?.trip?.media_urls && enquiry.trip.media_urls.length > 0
         ? enquiry.trip.media_urls[0].media
@@ -97,13 +97,24 @@ const TripEnquiry = () => {
           <>
             {/* Desktop Table */}
             <div className="overflow-x-auto hidden sm:table w-full">
-              <table className="w-full  text-sm text-left">
-                <thead className="text-gray-500  font-semibold uppercase border-b">
+              <div className="relative w-full sm:w-auto">
+                <FiSearch
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600"
+                  size={18}
+                />
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  className="border pl-10 pr-8 py-1 rounded text-sm focus:outline-none focus:ring w-full sm:w-52"
+                />
+              </div>
+              <table className="w-full text-sm text-left">
+                <thead className="text-gray-500 font-semibold uppercase border-b">
                   <tr>
-                    <th className="py-2">Media</th>
-                    <th className="py-2">Name</th>
-                    <th className="py-2">Email</th>
+                    <th className="py-2">Trip Media</th>
                     <th className="py-2">Trip Name</th>
+                    <th className="py-2">User Name</th>
+                    <th className="py-2">Email</th>
                     <th className="py-2">Preview</th>
                   </tr>
                 </thead>
@@ -111,20 +122,32 @@ const TripEnquiry = () => {
                   {enquiries.map((enquiry) => (
                     <tr key={enquiry.id} className="border-b hover:bg-gray-50">
                       <td className="py-3">{renderMedia(enquiry)}</td>
-                      <td className="py-3 mt-2 flex items-center gap-3">
-                        <img
-                          src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                            enquiry.name
-                          )}&background=0D8ABC&color=fff&size=32`}
-                          alt={enquiry.name}
-                          className="w-8 h-8  rounded-full"
-                        />
-                        {enquiry.name}
+                      <td className="py-3">{enquiry.trip?.title || "N/A"}</td>
+                      <td className="py-3">
+                        <div className="flex items-center gap-3">
+                          <img
+                            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                              enquiry.name
+                            )}&background=0D8ABC&color=fff&size=32`}
+                            alt={enquiry.name}
+                            className="w-8 h-8 rounded-full"
+                          />
+                          {enquiry.name}
+                        </div>
                       </td>
-                      <td>{enquiry.email}</td>
-                      {/* Trip title is inside enquiry.trip.title */}
-                      <td>{enquiry.trip?.title || "N/A"}</td>
-                      <td>
+                      <td className="py-3">
+                        <div className="flex items-center gap-2">
+                          {enquiry.email}
+                          <a
+                            href={`mailto:${enquiry.email}`}
+                            title="Send Email"
+                            className="text-blue-600 hover:text-blue-800 text-lg"
+                          >
+                            <FaEnvelope />
+                          </a>
+                        </div>
+                      </td>
+                      <td className="py-3">
                         <button
                           onClick={() => setSelectedEnquiry(enquiry)}
                           className="text-blue-500 hover:underline flex items-center gap-1"
@@ -148,7 +171,7 @@ const TripEnquiry = () => {
                   <div className="flex gap-3 mb-2">
                     {renderMedia(enquiry)}
                     <div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex -mt-4 items-center gap-2">
                         <img
                           src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
                             enquiry.name
@@ -157,12 +180,24 @@ const TripEnquiry = () => {
                           className="w-10 h-10 rounded-full"
                         />
                         <div>
-                          <p className="font-semibold  text-lg">{enquiry.name}</p>
-                          <p className="text-sm text-gray-600">{enquiry.email}</p>
-                          {/* No contactedAt in your data, use created_at */}
+                          <div className="mt-3">
+                            <p className="font-semibold  text-lg">
+                              {enquiry.name}
+                            </p>
+                          </div>
+                          <p className="text-sm text-gray-600 flex items-center gap-2">
+                            {enquiry.email}
+                          </p>
                           <p className="text-xs text-gray-500">
                             {new Date(enquiry.created_at).toLocaleString()}
                           </p>
+                          <a
+                            href={`mailto:${enquiry.email}`}
+                            title="Send Email"
+                            className="text-blue-600 flex hover:text-blue-800 text-base"
+                          >
+                            <FaEnvelope />
+                          </a>
                         </div>
                       </div>
                     </div>
@@ -201,51 +236,68 @@ const TripEnquiry = () => {
 
       {/* Preview Modal */}
       {selectedEnquiry && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white space-y-4 rounded-lg p-6 w-[90%] max-w-lg relative">
-            <button
-              onClick={() => setSelectedEnquiry(null)}
-              className="absolute top-2 right-3 text-gray-500 hover:text-red-500 text-xl"
-            >
-              ×
-            </button>
-            <h2 className="text-xl font-bold mb-4">Enquiry Details</h2>
-            <p>
-              <strong>Name:</strong> {selectedEnquiry.name}
-            </p>
-            <p>
-              <strong>Email:</strong> {selectedEnquiry.email}
-            </p>
-            <p>
-              <strong>Country:</strong> {selectedEnquiry.country?.name || "N/A"}
-            </p>
-            <p>
-              <strong>Contact:</strong> {selectedEnquiry.mobile || "N/A"}
-            </p>
-            <p>
-              <strong>Adults:</strong> {selectedEnquiry.adult || 0}
-            </p>
-            <p>
-              <strong>Children:</strong> {selectedEnquiry.children || 0}
-            </p>
-            <p>
-              <strong>Subject:</strong> {selectedEnquiry.subject || "N/A"}
-            </p>
-            <p>
-              <strong>Message:</strong> {selectedEnquiry.body || "N/A"}
-            </p>
-            <p>
-              <strong>Trip:</strong> {selectedEnquiry.trip?.title || "N/A"}
-            </p>
-            <p>
-              <strong>Package Price:</strong> ₹{selectedEnquiry.trip?.new_price || "N/A"}
-            </p>
-            <p>
-              <strong>Contacted On:</strong>{" "}
-              {new Date(selectedEnquiry.created_at).toLocaleString()}
-            </p>
-          </div>
-        </div>
+       <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+  <div className="bg-white rounded-xl shadow-2xl p-6 sm:p-8 w-[90%] max-w-3xl relative transition-all duration-300 ease-in-out">
+    {/* Close Button */}
+    <button
+      onClick={() => setSelectedEnquiry(null)}
+      className="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-2xl font-semibold transition-colors"
+      aria-label="Close"
+    >
+      &times;
+    </button>
+
+    {/* Header */}
+    <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b border-b-primary  pb-2">
+      Enquiry Details
+    </h2>
+
+    {/* Media Preview */}
+    <div className="w-full mb-6 rounded-lg overflow-hidden ">
+      {renderMedia(selectedEnquiry)}
+    </div>
+
+    {/* Enquiry Info */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-700">
+      <div>
+        <span className="font-semibold text-gray-900">Name:</span> {selectedEnquiry.name}
+      </div>
+      <div>
+        <span className="font-semibold text-gray-900">Email:</span> {selectedEnquiry.email}
+      </div>
+      <div>
+        <span className="font-semibold text-gray-900">Country:</span> {selectedEnquiry.country?.name || "N/A"}
+      </div>
+      <div>
+        <span className="font-semibold text-gray-900">Contact:</span> {selectedEnquiry.mobile || "N/A"}
+      </div>
+      <div>
+        <span className="font-semibold text-gray-900">Adults:</span> {selectedEnquiry.adult || 0}
+      </div>
+      <div>
+        <span className="font-semibold  text-gray-900">Children:</span> {selectedEnquiry.children || 0}
+      </div>
+      <div className="sm:col-span-1 mt-1">
+        <span className="font-semibold m text-gray-900">Subject:</span> {selectedEnquiry.subject || "N/A"}
+      </div>
+      <div className="sm:col-span-1">
+        <span className="font-semibold text-gray-900">Message:</span>
+        <p className="mt-1 text-gray-600 whitespace-pre-line">{selectedEnquiry.body || "N/A"}</p>
+      </div>
+      <div>
+        <span className="font-semibold text-gray-900">Trip:</span> {selectedEnquiry.trip?.title || "N/A"}
+      </div>
+      <div>
+        <span className="font-semibold text-gray-900">Package Price:</span> ₹{selectedEnquiry.trip?.new_price || "N/A"}
+      </div>
+      <div className="sm:col-span-2">
+        <span className="font-semibold text-gray-900">Contacted On:</span>{" "}
+        {new Date(selectedEnquiry.created_at).toLocaleString()}
+      </div>
+    </div>
+  </div>
+</div>
+
       )}
     </>
   );
