@@ -91,7 +91,12 @@ class TripServices {
       const formData = new FormData();
         for (const key in data) {
           if (data[key] !== undefined && data[key] !== null) {
-            formData.append(key, data[key]);
+            if (key === "faqs" || key === "itinerary") {
+              // Send complex objects as JSON strings
+              formData.append(key, JSON.stringify(data[key]));
+            } else {
+              formData.append(key, data[key]);
+            }
           }
         }
 
@@ -167,6 +172,9 @@ class TripServices {
 
         if (key === "media" && Array.isArray(value)) {
           value.forEach((file) => formData.append("media", file));
+        } else if (key === "faqs" || key === "itinerary") {
+          // Send complex objects as JSON strings
+          formData.append(key, JSON.stringify(value));
         } else if (Array.isArray(value)) {
           value.forEach((item) => formData.append(key, item));
         } else {
