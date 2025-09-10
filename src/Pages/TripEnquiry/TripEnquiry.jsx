@@ -139,7 +139,7 @@ const TripEnquiry = () => {
                         <div className="flex items-center gap-2">
                           {enquiry.email}
                           <a
-                            href={`mailto:${enquiry.email}`}
+                            href={`mailto:${enquiry.email}?subject=Regarding your query : ${enquiry.subject}`}
                             title="Send Email"
                             className="text-blue-600 hover:text-blue-800 text-lg"
                           >
