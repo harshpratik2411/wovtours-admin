@@ -1,6 +1,7 @@
 import LocalStorage from "./LocalStorage";
 
 class APIService {
+  // static baseUrl = "https://api.wovtours.com/";
   static baseUrl = "https://api-stage.wovtours.com/";
   // static baseUrl = "http://127.0.0.1:8082/";
 

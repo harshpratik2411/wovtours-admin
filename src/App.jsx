@@ -44,6 +44,18 @@ import Trips from "./Pages/Trips/Trips";
 import AddTrips from "./Pages/Trips/AddTrips";
 import ViewTrips from "./Pages/Trips/ViewTrips";
 import UpdateTrips from "./Pages/Trips/UpdateTrips";
+import FeaturedTrips from "./Pages/FeaturedTrips/FeaturedTrips";
+import AddFeaturedTrip from "./Pages/FeaturedTrips/AddFeaturedTrip";
+import ViewFeaturedTrip from "./Pages/FeaturedTrips/ViewFeaturedTrip";
+import UpdateFeaturedTrip from "./Pages/FeaturedTrips/UpdateFeaturedTrip";
+import FeaturedDestination from "./Pages/FeaturedDestination/FeaturedDestination";
+import AddFeaturedDestination from "./Pages/FeaturedDestination/AddFeaturedDestination";
+import ViewFeaturedDestination from "./Pages/FeaturedDestination/ViewFeaturedDestination";
+import UpdateFeaturedDestination from "./Pages/FeaturedDestination/UpdateFeaturedDestination";
+import FeaturedCategory from "./Pages/FeaturedCategory/FeaturedCategory";
+import AddFeaturedCategory from "./Pages/FeaturedCategory/AddFeaturedCategory";
+import ViewFeaturedCategory from "./Pages/FeaturedCategory/ViewFeaturedCategory";
+import UpdateFeaturedCategory from "./Pages/FeaturedCategory/UpdateFeaturedCategory";
 
 
 function App() {
@@ -122,7 +134,21 @@ function App() {
           <Route path="/trips/update/:id" element={<PrivateRoute><UpdateTrips /></PrivateRoute>} />
           <Route path="/trips/add" element={<PrivateRoute><AddTrips/></PrivateRoute>} />  
 
+           <Route path="/featured-trips" element={<PrivateRoute>< FeaturedTrips /></PrivateRoute>} />
+           <Route path="/featured-trips/add" element={<PrivateRoute><AddFeaturedTrip /></PrivateRoute>} />
+           <Route path="/featured-trips/view/:id" element={<PrivateRoute><ViewFeaturedTrip /></PrivateRoute>} />
+           <Route path="/featured-trips/update/:id" element={<PrivateRoute><UpdateFeaturedTrip /></PrivateRoute>} />
 
+          {/* Featured Destinations */}
+           <Route path="/featured-destinations" element={<PrivateRoute>< FeaturedDestination /></PrivateRoute>} />
+           <Route path="/featured-destinations/add" element={<PrivateRoute><AddFeaturedDestination /></PrivateRoute>} />
+           <Route path="/featured-destinations/view/:id" element={<PrivateRoute><ViewFeaturedDestination /></PrivateRoute>} />
+           <Route path="/featured-destinations/update/:id" element={<PrivateRoute><UpdateFeaturedDestination /></PrivateRoute>} />
+          {/* Featured Categories */}
+           <Route path="/featured-categories" element={<PrivateRoute>< FeaturedCategory /></PrivateRoute>} />
+           <Route path="/featured-categories/add" element={<PrivateRoute><AddFeaturedCategory /></PrivateRoute>} />
+           <Route path="/featured-categories/view/:id" element={<PrivateRoute><ViewFeaturedCategory /></PrivateRoute>} />
+           <Route path="/featured-categories/update/:id" element={<PrivateRoute><UpdateFeaturedCategory /></PrivateRoute>} />
         </Routes>
       
     </div>

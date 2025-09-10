@@ -1,11 +1,11 @@
 import APIService from "../APIServices";
 import LocalStorage from "../LocalStorage";
 
-class TripServices {
+class FeaturedTripServices {
   static async getAll(search, orderBy, page, status) {
     const url =
       APIService.baseUrl +
-      `api/admin/trip/?search=${search}&ordering=${orderBy}&page=${page}&status=${status}`;
+      `api/admin/featured-trip/?search=${search}&ordering=${orderBy}&page=${page}&status=${status}`;
 
     try {
       const response = await fetch(url, {
@@ -30,7 +30,7 @@ class TripServices {
       const data = await response.json();
 
       return {
-        Trips: data.results,
+        featuredTrips: data.results,
         totalCount: data.count,
         totalPages: Math.ceil(data.count / 10),
         currentPage: page,
@@ -47,7 +47,7 @@ class TripServices {
   }
 
   static async get(id) {
-    const url = APIService.baseUrl + `api/admin/trip/${id}/`;
+    const url = APIService.baseUrl + `api/admin/featured-trip/${id}/`;
     console.log("URL called", url);
 
     try {
@@ -80,64 +80,25 @@ class TripServices {
     }
   }
 
-  static async update(id, data, mediaChanged = false, ) {
+  static async update(id, data) {
     console.log("Update API called");
 
-    const url = APIService.baseUrl + `api/admin/trip/${id}/`;
+    const url = APIService.baseUrl + `api/admin/featured-trip/${id}/`;
 
     try {
-      let requestOptions;
-      console.log("mediaChanged = ", mediaChanged);
-      const formData = new FormData();
-        for (const key in data) {
-          if (data[key] !== undefined && data[key] !== null) {
-            formData.append(key, data[key]);
-          }
-        }
-
-        requestOptions = {
-          method: "PUT",
-          headers: {
-            Authorization: LocalStorage.getAccesToken(),
-          },
-          body: formData,
-        };
-
-      // if (mediaChanged) {
-      //   const formData = new FormData();
-      //   for (const key in data) {
-      //     if (data[key] !== undefined && data[key] !== null) {
-      //       formData.append(key, data[key]);
-      //     }
-      //   }
-
-      //   requestOptions = {
-      //     method: "PUT",
-      //     headers: {
-      //       Authorization: LocalStorage.getAccesToken(),
-      //     },
-      //     body: formData,
-      //   };
-      // } 
-      // else {
-      //   const filteredData = { ...data };
-      //   delete filteredData.media;
-
-      //   requestOptions = {
-      //     method: "PUT",
-      //     headers: {
-      //       Authorization: LocalStorage.getAccesToken(),
-      //     },
-      //     body: JSON.stringify(filteredData),
-      //   };
-      // }
-
-      let response = await fetch(url, requestOptions);
+      let response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: LocalStorage.getAccesToken(),
+        },
+        body: JSON.stringify(data),
+      });
 
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.update(id, data, mediaChanged);
+          return this.update(id, data);
         }
       }
 
@@ -154,32 +115,17 @@ class TripServices {
   }
 
   static async add(data) {
-    const url = APIService.baseUrl + "api/admin/trip/";
+    const url = APIService.baseUrl + "api/admin/featured-trip/";
     console.log("Data = ", data);
 
     try {
-      const formData = new FormData();
-
-      for (const key in data) {
-        const value = data[key];
-
-        if (value === undefined || value === null) continue;
-
-        if (key === "media" && Array.isArray(value)) {
-          value.forEach((file) => formData.append("media", file));
-        } else if (Array.isArray(value)) {
-          value.forEach((item) => formData.append(key, item));
-        } else {
-          formData.append(key, value);
-        }
-      }
-
       let response = await fetch(url, {
         method: "POST",
         headers: {
+          "Content-Type": "application/json",
           Authorization: LocalStorage.getAccesToken(),
         },
-        body: formData,
+        body: JSON.stringify(data),
       });
       // console.log("Response = ", await response.json());
       // console.log("Response = ",response);
@@ -206,5 +152,5 @@ class TripServices {
 
 }
 
-export default TripServices;
+export default FeaturedTripServices;
     

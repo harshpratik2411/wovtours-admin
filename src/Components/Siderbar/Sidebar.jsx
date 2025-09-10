@@ -100,6 +100,19 @@ const Sidebar = () => {
               </li>
               <li>
                 <a
+                  href="/featured-categories"
+                  className={`flex items-center gap-3 ${
+                    isActive("/featured-categories")
+                      ? "text-white"
+                      : "text-white/50 hover:text-white transition"
+                  }`}
+                >
+                  <MdOutlineCategory className="text-xl" />
+                  <span>Featured Categories</span>
+                </a>
+              </li>
+              <li>
+                <a
                   href="/tags"
                   className={`flex items-center gap-3 ${
                     isActive("/tags")
@@ -165,6 +178,19 @@ const Sidebar = () => {
               </li>
               <li>
                 <a
+                  href="/featured-destinations"
+                  className={`flex items-center gap-3 ${
+                    isActive("/featured-destinations")
+                      ? "text-white"
+                      : "text-white/50 hover:text-white transition"
+                  }`}
+                >
+                  <MdPublic className="text-xl" />
+                  <span>Featured Destinations</span>
+                </a>
+              </li>
+              <li>
+                <a
                   href="/banners"
                   className={`flex items-center gap-3 ${
                     isActive("/banners")
@@ -200,6 +226,20 @@ const Sidebar = () => {
                 >
                   <MdOutlineProductionQuantityLimits className="text-xl" />
                   <span>Trips</span>
+                </a>
+              </li>
+              
+              <li>
+                <a
+                  href="/featured-trips"
+                  className={`flex items-center gap-3 ${
+                    isActive("/featured-trips")
+                      ? "text-white"
+                      : "text-white/50 hover:text-white transition"
+                  }`}
+                >
+                  <MdOutlineProductionQuantityLimits className="text-xl" />
+                  <span>Featured Trips</span>
                 </a>
               </li>
               <li>
