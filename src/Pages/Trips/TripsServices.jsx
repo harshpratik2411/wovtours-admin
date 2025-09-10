@@ -80,7 +80,7 @@ class TripServices {
     }
   }
 
-  static async update(id, data, mediaChanged = false, ) {
+  static async update(id, data, mediaChanged = false,) {
     console.log("Update API called");
 
     const url = APIService.baseUrl + `api/admin/trip/${id}/`;
@@ -89,19 +89,19 @@ class TripServices {
       let requestOptions;
       console.log("mediaChanged = ", mediaChanged);
       const formData = new FormData();
-        for (const key in data) {
-          if (data[key] !== undefined && data[key] !== null) {
-            formData.append(key, data[key]);
-          }
+      for (const key in data) {
+        if (data[key] !== undefined && data[key] !== null) {
+          formData.append(key, data[key]);
         }
+      }
 
-        requestOptions = {
-          method: "PUT",
-          headers: {
-            Authorization: LocalStorage.getAccesToken(),
-          },
-          body: formData,
-        };
+      requestOptions = {
+        method: "PUT",
+        headers: {
+          Authorization: LocalStorage.getAccesToken(),
+        },
+        body: formData,
+      };
 
       // if (mediaChanged) {
       //   const formData = new FormData();
@@ -165,7 +165,12 @@ class TripServices {
 
         if (value === undefined || value === null) continue;
 
-        if (key === "media" && Array.isArray(value)) {
+        if (key === "faqs" && Array.isArray(value)) {
+          formData.append("faqs", JSON.stringify(value));
+        } else if (key === "itinerary" && Array.isArray(value)) {
+          formData.append("itinerary", JSON.stringify(value));
+        }
+        else if (key === "media" && Array.isArray(value)) {
           value.forEach((file) => formData.append("media", file));
         } else if (Array.isArray(value)) {
           value.forEach((item) => formData.append(key, item));
@@ -207,4 +212,3 @@ class TripServices {
 }
 
 export default TripServices;
-    
