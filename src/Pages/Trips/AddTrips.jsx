@@ -42,7 +42,12 @@ const AddTrips = () => {
   const [newPrice, setNewPrice] = useState("");
   const [highlights, setHighlights] = useState([""]);
   const [duration, setDuration] = useState(0);
-  const [durationUnit, setDurationUnit] = useState("Day");
+  const [durationUnit, setDurationUnit] = useState("Day"); 
+const [itineraryItems, setItineraryItems] = useState([
+  { day_number: "", title: "", description: "" },
+]);
+
+
 
 
 
@@ -133,7 +138,23 @@ const AddTrips = () => {
     };
 
     fetchData();
-  }, []);
+  }, []); 
+
+   const handleItineraryChange = (index, field, value) => {
+  const updatedItineraries = [...itineraryItems];
+  updatedItineraries[index][field] = value;
+  setItineraryItems(updatedItineraries);
+};
+
+const addItineraryItem = () => {
+  setItineraryItems([...itineraryItems, { day_number: "", title: "", description: "" }]);
+};
+
+const removeItineraryItem = (index) => {
+  const updatedItineraries = itineraryItems.filter((_, i) => i !== index);
+  setItineraryItems(updatedItineraries.length ? updatedItineraries : [{ day_number: "", title: "", description: "" }]);
+};
+
 
   const handleMediaChange = (e) => {
     const files = Array.from(e.target.files);
@@ -272,7 +293,15 @@ const AddTrips = () => {
       highlights: highlights.filter((h) => h.trim() !== ""),
       duration: parseFloat(duration) || 0,
       duration_unit: durationUnit,
-
+      itinerary: itineraryItems.filter((item) => 
+        item.day_number.trim() !== "" && 
+        item.title.trim() !== "" && 
+        item.description.trim() !== ""
+      ).map(item => ({
+        day_number: parseInt(item.day_number) || 1,
+        title: item.title.trim(),
+        description: item.description.trim()
+      }))
     };
 
     console.log("Submitting trip data:", data);
@@ -626,7 +655,77 @@ const AddTrips = () => {
                   )}
                 </div>
               ))}
-            </div>
+            </div> 
+         <div className="mt-4">
+  <div className="flex justify-between items-center mb-3">
+    <label className="block text-sm font-semibold text-gray-700">
+      Itinerary
+    </label>
+    <button
+      type="button"
+      onClick={addItineraryItem}
+      className="bg-blue-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-blue-600 transition-colors"
+    >
+      + Add Itinerary
+    </button>
+  </div>
+
+  {itineraryItems.map((item, index) => (
+    <div key={index} className="mb-4 border p-4 rounded-md bg-gray-50">
+      <div className="mb-3">
+        <label className="block text-sm font-medium text-gray-600 mb-1">
+          Day Number
+        </label>
+        <input
+          type="number"
+          value={item.day_number}
+          onChange={(e) => handleItineraryChange(index, "day_number", e.target.value)}
+          placeholder="1"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          min={1}
+        />
+      </div>
+
+      <div className="mb-3">
+        <label className="block text-sm font-medium text-gray-600 mb-1">
+          Itinerary Title
+        </label>
+        <input
+          type="text"
+          value={item.title}
+          onChange={(e) => handleItineraryChange(index, "title", e.target.value)}
+          placeholder="Itinerary Title"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <div className="mb-2">
+        <label className="block text-sm font-medium text-gray-600 mb-1">
+          Description
+        </label>
+        <textarea
+          value={item.description}
+          onChange={(e) => handleItineraryChange(index, "description", e.target.value)}
+          placeholder="Itinerary Description"
+          rows={3}
+          className="w-full border border-gray-300 rounded-lg px-4 py-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      {itineraryItems.length > 1 && (
+        <button
+          type="button"
+          onClick={() => removeItineraryItem(index)}
+          className="text-red-500 text-sm font-semibold"
+        >
+          Remove
+        </button>
+      )}
+    </div>
+  ))}
+</div>
+
+
 
             {/* Status */}
             <div>
