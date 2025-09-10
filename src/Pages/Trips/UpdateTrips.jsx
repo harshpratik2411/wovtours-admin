@@ -63,7 +63,7 @@ const UpdateTrips = () => {
     const fetchTrip = async () => {
       try {
         const trip = await TripServices.get(parseInt(id));
-        
+
         console.log("Fetched Trip:", trip);
 
         if (trip) {
@@ -127,10 +127,10 @@ const UpdateTrips = () => {
           setIncludes(trip.includes?.length ? trip.includes : [""]);
           setExcludes(trip.excludes?.length ? trip.excludes : [""]);
           setExistingMedia(trip.media_urls?.map((item) => item.media) || []);
-          
+
           // Set FAQs
           setFaqs(trip.faqs?.length ? trip.faqs : [{ q: "", a: "" }]);
-          
+
           // Set Itinerary
           setItineraryItems(trip.itinerary?.length ? trip.itinerary : [{ day_number: "", title: "", description: "" }]);
         } else {
@@ -347,6 +347,23 @@ const UpdateTrips = () => {
       .filter((h) => h.trim())
       .forEach((h, i) => (data[`highlights[${i}]`] = h));
 
+    data['faqs'] = faqs.filter((faq) =>
+      faq.q.trim() !== "" &&
+      faq.a.trim() !== ""
+    ).map(faq => ({
+      q: faq.q.trim(),
+      a: faq.a.trim()
+    })),
+      data['itinerary'] = itineraryItems.filter((item) =>
+        item.day_number !== "" &&
+        item.title.trim() !== "" &&
+        item.description.trim() !== ""
+      ).map(item => ({
+        day_number: parseInt(item.day_number) || 1,
+        title: item.title.trim(),
+        description: item.description.trim()
+      }))
+
     // Add FAQs
     faqs
       .filter((faq) => faq.q.trim() !== "" && faq.a.trim() !== "")
@@ -357,7 +374,7 @@ const UpdateTrips = () => {
 
     // Add Itinerary
     itineraryItems
-      .filter((item) => item.day_number.trim() !== "" && item.title.trim() !== "" && item.description.trim() !== "")
+      .filter((item) => item.day_number !== "" && item.title.trim() !== "" && item.description.trim() !== "")
       .forEach((item, i) => {
         data[`itinerary[${i}][day_number]`] = parseInt(item.day_number) || 1;
         data[`itinerary[${i}][title]`] = item.title.trim();
@@ -829,7 +846,7 @@ const UpdateTrips = () => {
                     {index < itineraryItems.length - 1 && (
                       <div className="absolute left-6 top-16 bottom-0 w-0.5 bg-gradient-to-b from-green-200 to-green-300 z-0"></div>
                     )}
-                    
+
                     <div className="relative bg-white border border-green-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-200 hover:border-green-300">
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-3">

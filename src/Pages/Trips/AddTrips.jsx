@@ -318,7 +318,7 @@ const AddTrips = () => {
         a: faq.a.trim()
       })),
       itinerary: itineraryItems.filter((item) => 
-        item.day_number.trim() !== "" && 
+        item.day_number !== "" && 
         item.title.trim() !== "" && 
         item.description.trim() !== ""
       ).map(item => ({

@@ -82,6 +82,7 @@ class TripServices {
 
   static async update(id, data, mediaChanged = false,) {
     console.log("Update API called");
+    console.log("Data = ", data);
 
     const url = APIService.baseUrl + `api/admin/trip/${id}/`;
 
@@ -91,7 +92,8 @@ class TripServices {
       const formData = new FormData();
         for (const key in data) {
           if (data[key] !== undefined && data[key] !== null) {
-            if (key === "faqs" || key === "itinerary") {
+            
+          if (key === "faqs" || key === "itinerary") {
               // Send complex objects as JSON strings
               formData.append(key, JSON.stringify(data[key]));
             } else {
@@ -170,12 +172,7 @@ class TripServices {
 
         if (value === undefined || value === null) continue;
 
-        if (key === "faqs" && Array.isArray(value)) {
-          formData.append("faqs", JSON.stringify(value));
-        } else if (key === "itinerary" && Array.isArray(value)) {
-          formData.append("itinerary", JSON.stringify(value));
-        }
-        else if (key === "media" && Array.isArray(value)) {
+       if (key === "media" && Array.isArray(value)) {
           value.forEach((file) => formData.append("media", file));
         } else if (key === "faqs" || key === "itinerary") {
           // Send complex objects as JSON strings
