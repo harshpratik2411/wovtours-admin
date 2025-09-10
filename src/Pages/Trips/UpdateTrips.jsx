@@ -82,21 +82,20 @@ const UpdateTrips = () => {
           setDurationUnit(trip.duration_unit || "days");
           setMinPax(trip.min_pax || 0);
           setMaxPax(trip.max_pax || 0);
-
-
-
-
-
+          let tags = [], types = [], activities = [];
           for (const type of trip.trip_types || []) {
             if (!selectedTripTypes.includes(type.id)) {
-              setSelectedTripTypes((prev) => [type.id]);
+              types.push(type.id);
+
             }
           }
           for (const tag of trip.tags || []) {
             if (!selectedTags.includes(tag.id)) {
-              setSelectedTags((prev) => [tag.id]);
+              tags.push(tag.id);
+
             }
           }
+
 
           //single category
           if (trip.category != null && selectedCategory === null) {
@@ -120,9 +119,13 @@ const UpdateTrips = () => {
 
           for (const activity of trip.trip_activity || []) {
             if (!selectedActivities.includes(activity.id)) {
-              setSelectedActivities((prev) => [activity.id]);
+              activities.push(activity.id);
+
             }
           }
+          setSelectedTripTypes(types);
+          setSelectedTags(tags);
+          setSelectedActivities(activities);
 
           setIncludes(trip.includes?.length ? trip.includes : [""]);
           setExcludes(trip.excludes?.length ? trip.excludes : [""]);
@@ -363,23 +366,6 @@ const UpdateTrips = () => {
         title: item.title.trim(),
         description: item.description.trim()
       }))
-
-    // Add FAQs
-    faqs
-      .filter((faq) => faq.q.trim() !== "" && faq.a.trim() !== "")
-      .forEach((faq, i) => {
-        data[`faqs[${i}][q]`] = faq.q.trim();
-        data[`faqs[${i}][a]`] = faq.a.trim();
-      });
-
-    // Add Itinerary
-    itineraryItems
-      .filter((item) => item.day_number !== "" && item.title.trim() !== "" && item.description.trim() !== "")
-      .forEach((item, i) => {
-        data[`itinerary[${i}][day_number]`] = parseInt(item.day_number) || 1;
-        data[`itinerary[${i}][title]`] = item.title.trim();
-        data[`itinerary[${i}][description]`] = item.description.trim();
-      });
 
 
     // Only add media if files were selected
