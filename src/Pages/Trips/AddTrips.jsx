@@ -42,12 +42,11 @@ const AddTrips = () => {
   const [newPrice, setNewPrice] = useState("");
   const [highlights, setHighlights] = useState([""]);
   const [duration, setDuration] = useState(0);
-  const [durationUnit, setDurationUnit] = useState("Day"); 
-const [itineraryItems, setItineraryItems] = useState([
-  { day_number: "", title: "", description: "" },
-]);
-
-
+  const [durationUnit, setDurationUnit] = useState("Day");
+  const [faqs, setFaqs] = useState([{ q: "", a: "" }]);
+  const [itineraryItems, setItineraryItems] = useState([
+    { day_number: "", title: "", description: "" },
+  ]);
 
 
 
@@ -138,23 +137,37 @@ const [itineraryItems, setItineraryItems] = useState([
     };
 
     fetchData();
-  }, []); 
+  }, []);
 
-   const handleItineraryChange = (index, field, value) => {
-  const updatedItineraries = [...itineraryItems];
-  updatedItineraries[index][field] = value;
-  setItineraryItems(updatedItineraries);
-};
+  const handleFaqChange = (index, field, value) => {
+    const updatedFaqs = [...faqs];
+    updatedFaqs[index][field] = value;
+    setFaqs(updatedFaqs);
+  };
 
-const addItineraryItem = () => {
-  setItineraryItems([...itineraryItems, { day_number: "", title: "", description: "" }]);
-};
+  const addFaq = () => {
+    setFaqs([...faqs, { q: "", a: "" }]);
+  };
 
-const removeItineraryItem = (index) => {
-  const updatedItineraries = itineraryItems.filter((_, i) => i !== index);
-  setItineraryItems(updatedItineraries.length ? updatedItineraries : [{ day_number: "", title: "", description: "" }]);
-};
+  const removeFaq = (index) => {
+    const updatedFaqs = faqs.filter((_, i) => i !== index);
+    setFaqs(updatedFaqs.length ? updatedFaqs : [{ q: "", a: "" }]);
+  };
 
+  const handleItineraryChange = (index, field, value) => {
+    const updatedItineraries = [...itineraryItems];
+    updatedItineraries[index][field] = value;
+    setItineraryItems(updatedItineraries);
+  };
+
+  const addItineraryItem = () => {
+    setItineraryItems([...itineraryItems, { day_number: "", title: "", description: "" }]);
+  };
+
+  const removeItineraryItem = (index) => {
+    const updatedItineraries = itineraryItems.filter((_, i) => i !== index);
+    setItineraryItems(updatedItineraries.length ? updatedItineraries : [{ day_number: "", title: "", description: "" }]);
+  };
 
   const handleMediaChange = (e) => {
     const files = Array.from(e.target.files);
@@ -293,6 +306,13 @@ const removeItineraryItem = (index) => {
       highlights: highlights.filter((h) => h.trim() !== ""),
       duration: parseFloat(duration) || 0,
       duration_unit: durationUnit,
+      faqs: faqs.filter((faq) => 
+        faq.q.trim() !== "" && 
+        faq.a.trim() !== ""
+      ).map(faq => ({
+        q: faq.q.trim(),
+        a: faq.a.trim()
+      })),
       itinerary: itineraryItems.filter((item) => 
         item.day_number.trim() !== "" && 
         item.title.trim() !== "" && 
@@ -655,77 +675,133 @@ const removeItineraryItem = (index) => {
                   )}
                 </div>
               ))}
-            </div> 
-         <div className="mt-4">
-  <div className="flex justify-between items-center mb-3">
-    <label className="block text-sm font-semibold text-gray-700">
-      Itinerary
-    </label>
-    <button
-      type="button"
-      onClick={addItineraryItem}
-      className="bg-blue-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-blue-600 transition-colors"
-    >
-      + Add Itinerary
-    </button>
-  </div>
+            </div>
 
-  {itineraryItems.map((item, index) => (
-    <div key={index} className="mb-4 border p-4 rounded-md bg-gray-50">
-      <div className="mb-3">
-        <label className="block text-sm font-medium text-gray-600 mb-1">
-          Day Number
-        </label>
-        <input
-          type="number"
-          value={item.day_number}
-          onChange={(e) => handleItineraryChange(index, "day_number", e.target.value)}
-          placeholder="1"
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          min={1}
-        />
-      </div>
+            {/* FAQ Section */}
+            <div className="mt-4">
+              <div className="flex justify-between items-center mb-3">
+                <label className="block text-sm font-semibold text-gray-700">
+                  FAQs
+                </label>
+                <button
+                  type="button"
+                  onClick={addFaq}
+                  className="bg-green-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-green-600 transition-colors"
+                >
+                  + Add FAQ
+                </button>
+              </div>
 
-      <div className="mb-3">
-        <label className="block text-sm font-medium text-gray-600 mb-1">
-          Itinerary Title
-        </label>
-        <input
-          type="text"
-          value={item.title}
-          onChange={(e) => handleItineraryChange(index, "title", e.target.value)}
-          placeholder="Itinerary Title"
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
+              {faqs.map((faq, index) => (
+                <div key={index} className="mb-4 border p-4 rounded-md bg-gray-50">
+                  <div className="mb-3">
+                    <label className="block text-sm font-medium text-gray-600 mb-1">
+                      Question
+                    </label>
+                    <input
+                      type="text"
+                      value={faq.q}
+                      onChange={(e) => handleFaqChange(index, "q", e.target.value)}
+                      placeholder="Enter FAQ question"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
 
-      <div className="mb-2">
-        <label className="block text-sm font-medium text-gray-600 mb-1">
-          Description
-        </label>
-        <textarea
-          value={item.description}
-          onChange={(e) => handleItineraryChange(index, "description", e.target.value)}
-          placeholder="Itinerary Description"
-          rows={3}
-          className="w-full border border-gray-300 rounded-lg px-4 py-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
+                  <div className="mb-2">
+                    <label className="block text-sm font-medium text-gray-600 mb-1">
+                      Answer
+                    </label>
+                    <textarea
+                      value={faq.a}
+                      onChange={(e) => handleFaqChange(index, "a", e.target.value)}
+                      placeholder="Enter FAQ answer"
+                      rows={3}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
 
-      {itineraryItems.length > 1 && (
-        <button
-          type="button"
-          onClick={() => removeItineraryItem(index)}
-          className="text-red-500 text-sm font-semibold"
-        >
-          Remove
-        </button>
-      )}
-    </div>
-  ))}
-</div>
+                  {faqs.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeFaq(index)}
+                      className="text-red-500 text-sm font-semibold"
+                    >
+                      Remove FAQ
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
 
+            {/* Itinerary Section */}
+            <div className="mt-4">
+              <div className="flex justify-between items-center mb-3">
+                <label className="block text-sm font-semibold text-gray-700">
+                  Itinerary
+                </label>
+                <button
+                  type="button"
+                  onClick={addItineraryItem}
+                  className="bg-blue-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-blue-600 transition-colors"
+                >
+                  + Add Itinerary
+                </button>
+              </div>
 
+              {itineraryItems.map((item, index) => (
+                <div key={index} className="mb-4 border p-4 rounded-md bg-gray-50">
+                  <div className="mb-3">
+                    <label className="block text-sm font-medium text-gray-600 mb-1">
+                      Day Number
+                    </label>
+                    <input
+                      type="number"
+                      value={item.day_number}
+                      onChange={(e) => handleItineraryChange(index, "day_number", e.target.value)}
+                      placeholder="1"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      min={1}
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label className="block text-sm font-medium text-gray-600 mb-1">
+                      Itinerary Title
+                    </label>
+                    <input
+                      type="text"
+                      value={item.title}
+                      onChange={(e) => handleItineraryChange(index, "title", e.target.value)}
+                      placeholder="Itinerary Title"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  <div className="mb-2">
+                    <label className="block text-sm font-medium text-gray-600 mb-1">
+                      Description
+                    </label>
+                    <textarea
+                      value={item.description}
+                      onChange={(e) => handleItineraryChange(index, "description", e.target.value)}
+                      placeholder="Itinerary Description"
+                      rows={3}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  {itineraryItems.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeItineraryItem(index)}
+                      className="text-red-500 text-sm font-semibold"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
 
             {/* Status */}
             <div>
