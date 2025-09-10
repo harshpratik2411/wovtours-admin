@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../../Components/Navbar/Navbar";
 import Sidebar from "../../Components/Siderbar/Sidebar";
 import { useAlert } from "../../Context/AlertContext/AlertContext";
+import { FaPlus, FaTrash, FaQuestionCircle, FaRoute, FaCalendarAlt, FaMapMarkerAlt, FaEdit } from "react-icons/fa";
 import TripServices from "./TripsServices";
 import TripTypeServices from "../TripType/TripTypeServices";
 import TagServices from "../Tags/TagServices";
@@ -48,6 +49,10 @@ const UpdateTrips = () => {
   const [highlights, setHighlights] = useState([""]);
   const [duration, setDuration] = useState("");
   const [durationUnit, setDurationUnit] = useState("days"); // or "nights"
+  const [faqs, setFaqs] = useState([{ q: "", a: "" }]);
+  const [itineraryItems, setItineraryItems] = useState([
+    { day_number: "", title: "", description: "" },
+  ]);
   const [min_pax, setMinPax] = useState(0);
   const [max_pax, setMaxPax] = useState(0);
 
@@ -122,6 +127,12 @@ const UpdateTrips = () => {
           setIncludes(trip.includes?.length ? trip.includes : [""]);
           setExcludes(trip.excludes?.length ? trip.excludes : [""]);
           setExistingMedia(trip.media_urls?.map((item) => item.media) || []);
+          
+          // Set FAQs
+          setFaqs(trip.faqs?.length ? trip.faqs : [{ q: "", a: "" }]);
+          
+          // Set Itinerary
+          setItineraryItems(trip.itinerary?.length ? trip.itinerary : [{ day_number: "", title: "", description: "" }]);
         } else {
           showAlert("Trip not found");
         }
@@ -260,6 +271,36 @@ const UpdateTrips = () => {
     setHighlights(updatedHighlights.length ? updatedHighlights : [""]);
   };
 
+  const handleFaqChange = (index, field, value) => {
+    const updatedFaqs = [...faqs];
+    updatedFaqs[index][field] = value;
+    setFaqs(updatedFaqs);
+  };
+
+  const addFaq = () => {
+    setFaqs([...faqs, { q: "", a: "" }]);
+  };
+
+  const removeFaq = (index) => {
+    const updatedFaqs = faqs.filter((_, i) => i !== index);
+    setFaqs(updatedFaqs.length ? updatedFaqs : [{ q: "", a: "" }]);
+  };
+
+  const handleItineraryChange = (index, field, value) => {
+    const updatedItineraries = [...itineraryItems];
+    updatedItineraries[index][field] = value;
+    setItineraryItems(updatedItineraries);
+  };
+
+  const addItineraryItem = () => {
+    setItineraryItems([...itineraryItems, { day_number: "", title: "", description: "" }]);
+  };
+
+  const removeItineraryItem = (index) => {
+    const updatedItineraries = itineraryItems.filter((_, i) => i !== index);
+    setItineraryItems(updatedItineraries.length ? updatedItineraries : [{ day_number: "", title: "", description: "" }]);
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -305,6 +346,23 @@ const UpdateTrips = () => {
     highlights
       .filter((h) => h.trim())
       .forEach((h, i) => (data[`highlights[${i}]`] = h));
+
+    // Add FAQs
+    faqs
+      .filter((faq) => faq.q.trim() !== "" && faq.a.trim() !== "")
+      .forEach((faq, i) => {
+        data[`faqs[${i}][q]`] = faq.q.trim();
+        data[`faqs[${i}][a]`] = faq.a.trim();
+      });
+
+    // Add Itinerary
+    itineraryItems
+      .filter((item) => item.day_number.trim() !== "" && item.title.trim() !== "" && item.description.trim() !== "")
+      .forEach((item, i) => {
+        data[`itinerary[${i}][day_number]`] = parseInt(item.day_number) || 1;
+        data[`itinerary[${i}][title]`] = item.title.trim();
+        data[`itinerary[${i}][description]`] = item.description.trim();
+      });
 
 
     // Only add media if files were selected
@@ -670,6 +728,185 @@ const UpdateTrips = () => {
               ))}
             </div>
 
+            {/* FAQ Section */}
+            <div className="mt-6">
+              <div className="flex justify-between items-center mb-4">
+                <div className="flex items-center gap-2">
+                  <FaQuestionCircle className="text-blue-600 text-lg" />
+                  <label className="block text-lg font-bold text-gray-800">
+                    Frequently Asked Questions
+                  </label>
+                </div>
+                <button
+                  type="button"
+                  onClick={addFaq}
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg"
+                >
+                  <FaPlus className="text-xs" />
+                  Add FAQ
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {faqs.map((faq, index) => (
+                  <div key={index} className="border border-blue-200 rounded-xl p-5 bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm hover:shadow-md transition-all duration-200">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                          <span className="text-blue-600 font-bold text-sm">{index + 1}</span>
+                        </div>
+                        <span className="text-sm font-semibold text-blue-700">FAQ #{index + 1}</span>
+                      </div>
+                      {faqs.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeFaq(index)}
+                          className="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition-colors"
+                          title="Remove FAQ"
+                        >
+                          <FaTrash className="text-sm" />
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-4">
+                      <div>
+                        <label className="flex text-sm font-semibold text-gray-700 mb-2 items-center gap-2">
+                          <span className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xs font-bold">Q</span>
+                          Question
+                        </label>
+                        <input
+                          type="text"
+                          value={faq.q}
+                          onChange={(e) => handleFaqChange(index, "q", e.target.value)}
+                          placeholder="Enter your question here..."
+                          className="w-full border border-blue-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="flex text-sm font-semibold text-gray-700 mb-2 items-center gap-2">
+                          <span className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-xs font-bold">A</span>
+                          Answer
+                        </label>
+                        <textarea
+                          value={faq.a}
+                          onChange={(e) => handleFaqChange(index, "a", e.target.value)}
+                          placeholder="Enter your answer here..."
+                          rows={4}
+                          className="w-full border border-blue-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white resize-none"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Itinerary Section */}
+            <div className="mt-6">
+              <div className="flex justify-between items-center mb-4">
+                <div className="flex items-center gap-2">
+                  <FaRoute className="text-green-600 text-lg" />
+                  <label className="block text-lg font-bold text-gray-800">
+                    Trip Itinerary
+                  </label>
+                </div>
+                <button
+                  type="button"
+                  onClick={addItineraryItem}
+                  className="bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-green-600 hover:to-green-700 transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg"
+                >
+                  <FaPlus className="text-xs" />
+                  Add Day
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                {itineraryItems.map((item, index) => (
+                  <div key={index} className="relative">
+                    {/* Timeline connector for multiple items */}
+                    {index < itineraryItems.length - 1 && (
+                      <div className="absolute left-6 top-16 bottom-0 w-0.5 bg-gradient-to-b from-green-200 to-green-300 z-0"></div>
+                    )}
+                    
+                    <div className="relative bg-white border border-green-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-200 hover:border-green-300">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center shadow-lg">
+                            <FaCalendarAlt className="text-white text-sm" />
+                          </div>
+                          <div>
+                            <span className="text-sm font-semibold text-green-700">Day #{index + 1}</span>
+                            <div className="flex items-center gap-2 text-green-600">
+                              <FaMapMarkerAlt className="text-xs" />
+                              <span className="text-xs font-medium">ITINERARY</span>
+                            </div>
+                          </div>
+                        </div>
+                        {itineraryItems.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => removeItineraryItem(index)}
+                            className="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition-colors"
+                            title="Remove Day"
+                          >
+                            <FaTrash className="text-sm" />
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                        <div>
+                          <label className="flex text-sm font-semibold text-gray-700 mb-2 items-center gap-2">
+                            <span className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-xs font-bold">#</span>
+                            Day Number
+                          </label>
+                          <input
+                            type="number"
+                            value={item.day_number}
+                            onChange={(e) => handleItineraryChange(index, "day_number", e.target.value)}
+                            placeholder="1"
+                            className="w-full border border-green-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 bg-white"
+                            min={1}
+                          />
+                        </div>
+
+                        <div className="lg:col-span-2">
+                          <label className="flex text-sm font-semibold text-gray-700 mb-2 items-center gap-2">
+                            <span className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xs font-bold">
+                              <FaEdit className="text-xs" />
+                            </span>
+                            Day Title
+                          </label>
+                          <input
+                            type="text"
+                            value={item.title}
+                            onChange={(e) => handleItineraryChange(index, "title", e.target.value)}
+                            placeholder="Enter day title (e.g., Arrival in Paris)"
+                            className="w-full border border-green-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 bg-white"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="mt-4">
+                        <label className="flex text-sm font-semibold text-gray-700 mb-2 items-center gap-2">
+                          <span className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 text-xs font-bold">📝</span>
+                          Day Description
+                        </label>
+                        <textarea
+                          value={item.description}
+                          onChange={(e) => handleItineraryChange(index, "description", e.target.value)}
+                          placeholder="Describe the activities, places to visit, meals, and other details for this day..."
+                          rows={4}
+                          className="w-full border border-green-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 bg-white resize-none"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
 
             {/* Duration */}
             <div>

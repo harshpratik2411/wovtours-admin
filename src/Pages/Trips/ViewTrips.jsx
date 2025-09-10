@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../../Components/Navbar/Navbar";
 import Sidebar from "../../Components/Siderbar/Sidebar";
-import { FaInfoCircle, FaClipboardList } from "react-icons/fa";
+import { FaInfoCircle, FaClipboardList, FaCalendarAlt, FaQuestionCircle, FaMapMarkerAlt, FaClock, FaRoute } from "react-icons/fa";
 import DateFormatter from "../../Services/DateFormatter";
 import StatusClassMap from "../../Services/StatusClassMap";
 import TripServices from "./TripsServices";
@@ -202,9 +202,41 @@ const ViewTrips = () => {
                 <span>{renderField(trip.excludes)}</span>
               </div>
 
-              <div className="flex gap-3">
-                <span className="font-semibold w-40">FAQs:</span>
-                <span>{renderField(trip.faqs)}</span>
+              <div className="flex gap-3 items-start">
+                <span className="font-semibold w-40 flex items-center gap-2">
+                  <FaQuestionCircle className="text-blue-600" />
+                  FAQs:
+                </span>
+                <div className="flex flex-col gap-3 w-full">
+                  {trip.faqs?.length ? (
+                    trip.faqs.map((faq, index) => (
+                      <div key={index} className="border border-blue-200 rounded-lg p-4 bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm hover:shadow-md transition-shadow">
+                        <div className="flex items-start gap-3">
+                          <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                            <span className="text-blue-600 font-bold text-sm">Q</span>
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-semibold text-gray-800 mb-2 text-lg">
+                              {faq.q}
+                            </div>
+                            <div className="flex items-start gap-3">
+                              <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                <span className="text-green-600 font-bold text-sm">A</span>
+                              </div>
+                              <div className="text-gray-700 leading-relaxed">
+                                {faq.a}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-gray-500 italic bg-gray-50 p-4 rounded-lg border-2 border-dashed border-gray-300">
+                      No FAQs available for this trip
+                    </div>
+                  )}
+                </div>
               </div>
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Duration:</span>
@@ -262,6 +294,58 @@ const ViewTrips = () => {
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Updated At:</span>
                 <span>{DateFormatter.formatDate(trip.updated_at)}</span>
+              </div>
+
+              <div className="flex gap-3 items-start">
+                <span className="font-semibold w-40 flex items-center gap-2">
+                  <FaRoute className="text-green-600" />
+                  Itinerary:
+                </span>
+                <div className="flex flex-col gap-4 w-full">
+                  {trip.itinerary?.length ? (
+                    <div className="relative">
+                      {/* Timeline line */}
+                      <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-green-200 via-green-300 to-green-200"></div>
+                      
+                      {trip.itinerary.map((item, index) => (
+                        <div key={index} className="relative flex items-start gap-4 pb-6 last:pb-0">
+                          {/* Timeline dot */}
+                          <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center shadow-lg z-10">
+                            <FaCalendarAlt className="text-white text-sm" />
+                          </div>
+                          
+                          {/* Content card */}
+                          <div className="flex-1 bg-white border border-green-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-200 hover:border-green-300">
+                            <div className="flex items-center gap-3 mb-3">
+                              <span className="bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 text-sm font-bold px-3 py-1 rounded-full border border-green-200">
+                                Day {item.day_number}
+                              </span>
+                              <div className="flex items-center gap-2 text-green-600">
+                                <FaMapMarkerAlt className="text-xs" />
+                                <span className="text-xs font-medium">ITINERARY</span>
+                              </div>
+                            </div>
+                            
+                            <h4 className="font-bold text-gray-800 text-lg mb-3 leading-tight">
+                              {item.title}
+                            </h4>
+                            
+                            <div className="bg-gray-50 rounded-lg p-4 border-l-4 border-green-400">
+                              <p className="text-gray-700 leading-relaxed">
+                                {item.description}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-gray-500 italic bg-gray-50 p-6 rounded-lg border-2 border-dashed border-gray-300 text-center">
+                      <FaRoute className="text-4xl text-gray-400 mx-auto mb-3" />
+                      <p>No itinerary available for this trip</p>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
