@@ -21,6 +21,7 @@ const ViewTrips = () => {
   const { id } = useParams();
   const [trip, setTrip] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("general");
 
   useEffect(() => {
     const fetchTrip = async () => {
@@ -122,26 +123,59 @@ const ViewTrips = () => {
             </h2>
           </div>
 
+          {/* Media Display moved to top */}
           <div className="flex justify-center mb-10">{renderMedia()}</div>
 
-          <div className="grid lg:grid-cols-2 gap-8 text-gray-700 text-xs lg:text-lg mb-10">
+          {/* Tab Navigation */}
+          <div className="flex border-b border-gray-200 mb-6">
+            <button
+              type="button"
+              onClick={() => setActiveTab("general")}
+              className={`py-3 px-6 text-sm font-medium ${activeTab === "general"
+                ? "border-b-2 border-blue-500 text-blue-600"
+                : "text-gray-500 hover:text-gray-700"}
+              `}
+            >
+              General Info
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("extra")}
+              className={`py-3 px-6 text-sm font-medium ${activeTab === "extra"
+                ? "border-b-2 border-blue-500 text-blue-600"
+                : "text-gray-500 hover:text-gray-700"}
+              `}
+            >
+              Extra Info
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("faqs")}
+              className={`py-3 px-6 text-sm font-medium ${activeTab === "faqs"
+                ? "border-b-2 border-blue-500 text-blue-600"
+                : "text-gray-500 hover:text-gray-700"}
+              `}
+            >
+              FAQs
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("itinerary")}
+              className={`py-3 px-6 text-sm font-medium ${activeTab === "itinerary"
+                ? "border-b-2 border-blue-500 text-blue-600"
+                : "text-gray-500 hover:text-gray-700"}
+              `}
+            >
+              Itinerary
+            </button>
+          </div>
+
+          {/* Tab Content */}
+          {activeTab === "general" && (
             <div className="space-y-4">
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Trip Title:</span>
                 <span>{trip.title || "Untitled"}</span>
-              </div>
-
-              <div className="flex gap-3">
-                <span className="font-semibold w-40">Tags:</span>
-                <div className="flex flex-wrap gap-2">
-                  {trip.tags?.length ? (
-                    trip.tags.map((tag, index) => (
-                      <span key={index}>{renderField(tag.title)}</span>
-                    ))
-                  ) : (
-                    <span>None</span>
-                  )}
-                </div>
               </div>
 
               <div className="flex gap-3">
@@ -156,13 +190,63 @@ const ViewTrips = () => {
                 <span className="font-semibold w-40">Meeting Point:</span>
                 <span>{renderField(trip.meeting_point)}</span>
               </div>
+
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Status:</span>
+                <span
+                  className={`lg:px-4 px-2 py-2 lg:mt-2 rounded-full lg:text-sm font-medium ${StatusClassMap.getClass(
+                    trip.status
+                  )}`}
+                >
+                  {trip.status}
+                </span>
+              </div>
+
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Old Price:</span>
+                <span>{DateFormatter.formatCurrency(trip.old_price)}</span>
+              </div>
+
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">New Price:</span>
+                <span>{DateFormatter.formatCurrency(trip.new_price)}</span>
+              </div>
+
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Duration:</span>
+                <span>{renderField(trip.duration)}</span>
+              </div>
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Duration Unit:</span>
+                <span>{renderField(trip.duration_unit)}</span>
+              </div>
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Duration Note:</span>
                 <span>{renderField(trip.duration_note)}</span>
               </div>
+            </div>
+          )}
+
+          {activeTab === "extra" && (
+            <div className="space-y-4">
               <div className="flex gap-3">
-                <span className="font-semibold w-40">Special Note:</span>
-                <span>{renderField(trip.special_note)}</span>
+                <span className="font-semibold w-40">Tags:</span>
+                <div className="flex flex-wrap gap-2">
+                  {trip.tags?.length ? (
+                    trip.tags.map((tag, index) => (
+                      <span key={index}>{renderField(tag.title)}</span>
+                    ))
+                  ) : (
+                    <span>None</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Trip Types:</span>
+                {trip.trip_types.map((trip_type, index) => (
+                  <span key={index}>{renderField(trip_type.title)}</span>
+                ))}
               </div>
 
               <div className="flex gap-3">
@@ -174,12 +258,18 @@ const ViewTrips = () => {
                 <span>{trip.destination?.title || "None"}</span>
               </div>
               <div className="flex gap-3">
-                <span className="font-semibold w-40">pricing Category:</span>
+                <span className="font-semibold w-40">Pricing Category:</span>
                 <span>{trip.pricing_category.title || "None"}</span>
               </div>
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Difficulty:</span>
                 <span>{trip.difficulty.title || "None"}</span>
+              </div>
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Trip Activity:</span>
+                {trip.trip_activity.map((trip_activity, index) => (
+                  <span key={index}>{renderField(trip_activity.title)}</span>
+                ))}
               </div>
               <div className="flex gap-3 items-start">
                 <span className="font-semibold w-40">Highlights:</span>
@@ -201,7 +291,24 @@ const ViewTrips = () => {
                 <span className="font-semibold w-40">Excludes:</span>
                 <span>{renderField(trip.excludes)}</span>
               </div>
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Minimum Pax:</span>
+                <span>{renderField(trip.min_pax)}</span>
+              </div>
 
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Maximum Pax:</span>
+                <span>{renderField(trip.max_pax)}</span>
+              </div>
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Special Note:</span>
+                <span>{renderField(trip.special_note)}</span>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "faqs" && (
+            <div className="space-y-4">
               <div className="flex gap-3 items-start">
                 <span className="font-semibold w-40 flex items-center gap-2">
                   <FaQuestionCircle className="text-blue-600" />
@@ -238,64 +345,11 @@ const ViewTrips = () => {
                   )}
                 </div>
               </div>
-              <div className="flex gap-3">
-                <span className="font-semibold w-40">Duration:</span>
-                <span>{renderField(trip.duration)}</span>
-              </div>
-              <div className="flex gap-3">
-                <span className="font-semibold w-40">Duration Unit:</span>
-                <span>{renderField(trip.duration_unit)}</span>
-              </div>
+            </div>
+          )}
 
-              <div className="flex gap-3">
-                <span className="font-semibold w-40">Minimum Pax:</span>
-                <span>{renderField(trip.min_pax)}</span>
-              </div>
-
-              <div className="flex gap-3">
-                <span className="font-semibold w-40">Maximum Pax:</span>
-                <span>{renderField(trip.max_pax)}</span>
-              </div>
-
-              <div className="flex gap-3">
-                <span className="font-semibold w-40">Tags:</span>
-                {trip.tags.map((tags, index) => (
-                  <span key={index}>{renderField(tags.title)}</span>
-                ))}
-              </div>
-
-              <div className="flex gap-3">
-                <span className="font-semibold w-40">Trip Types:</span>
-                {trip.trip_types.map((trip_type, index) => (
-                  <span key={index}>{renderField(trip_type.title)}</span>
-                ))}
-              </div>
-              <div className="flex gap-3">
-                <span className="font-semibold w-40">Trip Activity:</span>
-                {trip.trip_activity.map((trip_activity, index) => (
-                  <span key={index}>{renderField(trip_activity.title)}</span>
-                ))}
-              </div>
-              <div className="flex gap-3">
-                <span className="font-semibold w-40">Old Price:</span>
-                <span>{DateFormatter.formatCurrency(trip.old_price)}</span>
-              </div>
-
-              <div className="flex gap-3">
-                <span className="font-semibold w-40">New Price:</span>
-                <span>{DateFormatter.formatCurrency(trip.new_price)}</span>
-              </div>
-
-              <div className="flex gap-3">
-                <span className="font-semibold w-40">Created At:</span>
-                <span>{DateFormatter.formatDate(trip.created_at)}</span>
-              </div>
-
-              <div className="flex gap-3">
-                <span className="font-semibold w-40">Updated At:</span>
-                <span>{DateFormatter.formatDate(trip.updated_at)}</span>
-              </div>
-
+          {activeTab === "itinerary" && (
+            <div className="space-y-4">
               <div className="flex gap-3 items-start">
                 <span className="font-semibold w-40 flex items-center gap-2">
                   <FaRoute className="text-green-600" />
@@ -348,17 +402,28 @@ const ViewTrips = () => {
                 </div>
               </div>
             </div>
+          )}
 
-            <div className="flex items-start lg:items-center gap-3 lg:mt-4">
-              <span className="font-semibold mt-2">Status:</span>
-              <span
-                className={`lg:px-4 px-2 py-2 lg:mt-2 rounded-full lg:text-sm font-medium ${StatusClassMap.getClass(
-                  trip.status
-                )}`}
-              >
-                {trip.status}
-              </span>
-            </div>
+          {/* Old content removed after tab implementation */}
+          <div className="flex gap-3">
+            <span className="font-semibold w-40">Created At:</span>
+            <span>{DateFormatter.formatDate(trip.created_at)}</span>
+          </div>
+
+          <div className="flex gap-3">
+            <span className="font-semibold w-40">Updated At:</span>
+            <span>{DateFormatter.formatDate(trip.updated_at)}</span>
+          </div>
+
+          <div className="flex items-start lg:items-center gap-3 lg:mt-4">
+            <span className="font-semibold mt-2">Status:</span>
+            <span
+              className={`lg:px-4 px-2 py-2 lg:mt-2 rounded-full lg:text-sm font-medium ${StatusClassMap.getClass(
+                trip.status
+              )}`}
+            >
+              {trip.status}
+            </span>
           </div>
 
           {trip.description && (

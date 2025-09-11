@@ -55,6 +55,7 @@ const UpdateTrips = () => {
   ]);
   const [min_pax, setMinPax] = useState(0);
   const [max_pax, setMaxPax] = useState(0);
+  const [activeTab, setActiveTab] = useState("general");
 
 
 
@@ -332,6 +333,22 @@ const UpdateTrips = () => {
       duration_unit: durationUnit,
       min_pax: parseInt(min_pax) || 0,
       max_pax: parseInt(max_pax) || 0,
+      faqs: faqs.filter((faq) =>
+        faq.q.trim() !== "" &&
+        faq.a.trim() !== ""
+      ).map(faq => ({
+        q: faq.q.trim(),
+        a: faq.a.trim()
+      })),
+      itinerary: itineraryItems.filter((item) =>
+        item.day_number !== "" &&
+        item.title.trim() !== "" &&
+        item.description.trim() !== ""
+      ).map(item => ({
+        day_number: parseInt(item.day_number) || 1,
+        title: item.title.trim(),
+        description: item.description.trim()
+      })),
 
     };
 
@@ -349,24 +366,6 @@ const UpdateTrips = () => {
     highlights
       .filter((h) => h.trim())
       .forEach((h, i) => (data[`highlights[${i}]`] = h));
-
-    data['faqs'] = faqs.filter((faq) =>
-      faq.q.trim() !== "" &&
-      faq.a.trim() !== ""
-    ).map(faq => ({
-      q: faq.q.trim(),
-      a: faq.a.trim()
-    })),
-      data['itinerary'] = itineraryItems.filter((item) =>
-        item.day_number !== "" &&
-        item.title.trim() !== "" &&
-        item.description.trim() !== ""
-      ).map(item => ({
-        day_number: parseInt(item.day_number) || 1,
-        title: item.title.trim(),
-        description: item.description.trim()
-      }))
-
 
     // Only add media if files were selected
     if (mediaFiles.length > 0) {
@@ -400,9 +399,104 @@ const UpdateTrips = () => {
         </h2>
 
         <div className="bg-white shadow-xl rounded-xl p-8 flex flex-col lg:flex-row gap-8">
+          {/* Media Upload Preview */}
+          <div className="flex-1 flex flex-col items-center justify-center p-4 border rounded-lg mb-8">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleMediaChange}
+              className="mb-4 w-full max-w-md"
+              multiple
+            />
+            <label className="block text-sm font-semibold text-gray-700 mb-3">
+              Media Preview
+            </label>
+            {existingMedia.length > 0 || mediaFiles.length > 0 ? (
+              <div className="w-full max-w-md grid grid-cols-2 gap-4 overflow-auto max-h-96">
+                {/* Existing media */}
+                {existingMedia.map((fileUrl, idx) => (
+                  <img
+                    key={`existing-${idx}`}
+                    src={fileUrl}
+                    alt={`Existing Media ${idx + 1}`}
+                    className="w-full h-48 object-cover rounded-md shadow-md"
+                  />
+                ))}
+                {/* New media */}
+                {mediaFiles.map((file, idx) =>
+                  file.type.startsWith("image/") ? (
+                    <img
+                      key={idx}
+                      src={URL.createObjectURL(file)}
+                      alt={`New Preview ${idx + 1}`}
+                      className="w-full h-48 object-cover rounded-md shadow-md"
+                      onLoad={() => URL.revokeObjectURL(file)}
+                    />
+                  ) : (
+                    <div
+                      key={idx}
+                      className="text-gray-400 border rounded-md p-4 flex items-center justify-center"
+                    >
+                      Unsupported file
+                    </div>
+                  )
+                )}
+              </div>
+            ) : (
+              <div className="w-full max-w-md h-64 bg-gray-100 rounded-md flex items-center justify-center text-gray-400">
+                No media to show
+              </div>
+            )}
+          </div>
           {/* Form */}
           <form onSubmit={handleSubmit} className="flex-1 space-y-6">
-            {/* Reuse the same form controls from AddTrips, e.g.: */}
+            {/* Tab Navigation */}
+            <div className="flex border-b border-gray-200 mb-6">
+              <button
+                type="button"
+                onClick={() => setActiveTab("general")}
+                className={`py-3 px-6 text-sm font-medium ${activeTab === "general"
+                  ? "border-b-2 border-blue-500 text-blue-600"
+                  : "text-gray-500 hover:text-gray-700"}
+                `}
+              >
+                General Info
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab("extra")}
+                className={`py-3 px-6 text-sm font-medium ${activeTab === "extra"
+                  ? "border-b-2 border-blue-500 text-blue-600"
+                  : "text-gray-500 hover:text-gray-700"}
+                `}
+              >
+                Extra Info
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab("faqs")}
+                className={`py-3 px-6 text-sm font-medium ${activeTab === "faqs"
+                  ? "border-b-2 border-blue-500 text-blue-600"
+                  : "text-gray-500 hover:text-gray-700"}
+                `}
+              >
+                FAQs
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab("itinerary")}
+                className={`py-3 px-6 text-sm font-medium ${activeTab === "itinerary"
+                  ? "border-b-2 border-blue-500 text-blue-600"
+                  : "text-gray-500 hover:text-gray-700"}
+                `}
+              >
+                Itinerary
+              </button>
+            </div>
+
+            {/* Tab Content */}
+            {activeTab === "general" && (
+              <div className="space-y-6">
             {/* Title */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
@@ -460,6 +554,106 @@ const UpdateTrips = () => {
 
 
 
+                {/* Status */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Status
+                  </label>
+                  <select
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                  </select>
+                </div>
+
+                {/* Old Price (Update) */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Old Price
+                  </label>
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">₹</span>
+                    <input
+                      type="number"
+                      value={oldPrice}
+                      onChange={(e) => setOldPrice(e.target.value)}
+                      placeholder="Enter old price"
+                      className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                </div>
+
+                {/* New Price (Update) */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    New Price
+                  </label>
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">₹</span>
+                    <input
+                      type="number"
+                      value={newPrice}
+                      onChange={(e) => setNewPrice(e.target.value)}
+                      placeholder="Enter new price"
+                      className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Duration */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Duration
+                  </label>
+                  <input
+                    type="number"
+                    value={duration}
+                    onChange={(e) => setDuration(e.target.value)}
+                    placeholder="Enter duration"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                {/* Duration Unit */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Duration Unit
+                  </label>
+                  <select
+                    value={durationUnit}
+                    onChange={(e) => setDurationUnit(e.target.value)}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="Hour">Hour</option>
+                    <option value="Hours">Hours</option>
+                    <option value="Day">Day</option>
+                    <option value="Days">Days</option>
+                    <option value="Week">Week</option>
+                    <option value="Weeks">Weeks</option>
+                  </select>
+                </div>
+
+                {/* Duration Note */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Duration Note
+                  </label>
+                  <input
+                    type="text"
+                    value={duration_note}
+                    onChange={(e) => setDurationNote(e.target.value)}
+                    placeholder="Duration Note"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+            )}
+
+            {activeTab === "extra" && (
+              <div className="space-y-6">
             {/* Tag Selection (Multi-Select) */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
@@ -539,6 +733,7 @@ const UpdateTrips = () => {
                 })}
               </div>
             </div>
+
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Category
@@ -731,327 +926,242 @@ const UpdateTrips = () => {
               ))}
             </div>
 
-            {/* FAQ Section */}
-            <div className="mt-6">
-              <div className="flex justify-between items-center mb-4">
-                <div className="flex items-center gap-2">
-                  <FaQuestionCircle className="text-blue-600 text-lg" />
-                  <label className="block text-lg font-bold text-gray-800">
-                    Frequently Asked Questions
-                  </label>
-                </div>
-                <button
-                  type="button"
-                  onClick={addFaq}
-                  className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg"
-                >
-                  <FaPlus className="text-xs" />
-                  Add FAQ
-                </button>
-              </div>
-
-              <div className="space-y-4">
-                {faqs.map((faq, index) => (
-                  <div key={index} className="border border-blue-200 rounded-xl p-5 bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm hover:shadow-md transition-all duration-200">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                          <span className="text-blue-600 font-bold text-sm">{index + 1}</span>
-                        </div>
-                        <span className="text-sm font-semibold text-blue-700">FAQ #{index + 1}</span>
-                      </div>
-                      {faqs.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => removeFaq(index)}
-                          className="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition-colors"
-                          title="Remove FAQ"
-                        >
-                          <FaTrash className="text-sm" />
-                        </button>
-                      )}
-                    </div>
-
-                    <div className="grid grid-cols-1 gap-4">
-                      <div>
-                        <label className="flex text-sm font-semibold text-gray-700 mb-2 items-center gap-2">
-                          <span className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xs font-bold">Q</span>
-                          Question
-                        </label>
-                        <input
-                          type="text"
-                          value={faq.q}
-                          onChange={(e) => handleFaqChange(index, "q", e.target.value)}
-                          placeholder="Enter your question here..."
-                          className="w-full border border-blue-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="flex text-sm font-semibold text-gray-700 mb-2 items-center gap-2">
-                          <span className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-xs font-bold">A</span>
-                          Answer
-                        </label>
-                        <textarea
-                          value={faq.a}
-                          onChange={(e) => handleFaqChange(index, "a", e.target.value)}
-                          placeholder="Enter your answer here..."
-                          rows={4}
-                          className="w-full border border-blue-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white resize-none"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                {/* Special Note */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Special Note
+              </label>
+              <input
+                    type="text"
+                    value={special_note}
+                    onChange={(e) => setSpecialNote(e.target.value)}
+                    placeholder="Special Note"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
             </div>
 
-            {/* Itinerary Section */}
-            <div className="mt-6">
-              <div className="flex justify-between items-center mb-4">
-                <div className="flex items-center gap-2">
-                  <FaRoute className="text-green-600 text-lg" />
-                  <label className="block text-lg font-bold text-gray-800">
-                    Trip Itinerary
-                  </label>
-                </div>
-                <button
-                  type="button"
-                  onClick={addItineraryItem}
-                  className="bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-green-600 hover:to-green-700 transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg"
-                >
-                  <FaPlus className="text-xs" />
-                  Add Day
-                </button>
-              </div>
+                {/* Min Pax */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Minimum Pax
+              </label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={min_pax}
+                    onChange={(e) => setMinPax(e.target.value)}
+                    placeholder="Enter minimum number of people"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+            </div>
 
+                {/* Max Pax */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Maximum Pax
+              </label>
+              <input
+                    type="number"
+                    min="0"
+                    value={max_pax}
+                    onChange={(e) => setMaxPax(e.target.value)}
+                    placeholder="Enter maximum number of people"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+              />
+            </div>
+              </div>
+            )}
+
+            {activeTab === "faqs" && (
               <div className="space-y-6">
-                {itineraryItems.map((item, index) => (
-                  <div key={index} className="relative">
-                    {/* Timeline connector for multiple items */}
-                    {index < itineraryItems.length - 1 && (
-                      <div className="absolute left-6 top-16 bottom-0 w-0.5 bg-gradient-to-b from-green-200 to-green-300 z-0"></div>
-                    )}
-
-                    <div className="relative bg-white border border-green-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-200 hover:border-green-300">
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center shadow-lg">
-                            <FaCalendarAlt className="text-white text-sm" />
-                          </div>
-                          <div>
-                            <span className="text-sm font-semibold text-green-700">Day #{index + 1}</span>
-                            <div className="flex items-center gap-2 text-green-600">
-                              <FaMapMarkerAlt className="text-xs" />
-                              <span className="text-xs font-medium">ITINERARY</span>
-                            </div>
-                          </div>
-                        </div>
-                        {itineraryItems.length > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => removeItineraryItem(index)}
-                            className="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition-colors"
-                            title="Remove Day"
-                          >
-                            <FaTrash className="text-sm" />
-                          </button>
-                        )}
-                      </div>
-
-                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                        <div>
-                          <label className="flex text-sm font-semibold text-gray-700 mb-2 items-center gap-2">
-                            <span className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-xs font-bold">#</span>
-                            Day Number
-                          </label>
-                          <input
-                            type="number"
-                            value={item.day_number}
-                            onChange={(e) => handleItineraryChange(index, "day_number", e.target.value)}
-                            placeholder="1"
-                            className="w-full border border-green-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 bg-white"
-                            min={1}
-                          />
-                        </div>
-
-                        <div className="lg:col-span-2">
-                          <label className="flex text-sm font-semibold text-gray-700 mb-2 items-center gap-2">
-                            <span className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xs font-bold">
-                              <FaEdit className="text-xs" />
-                            </span>
-                            Day Title
-                          </label>
-                          <input
-                            type="text"
-                            value={item.title}
-                            onChange={(e) => handleItineraryChange(index, "title", e.target.value)}
-                            placeholder="Enter day title (e.g., Arrival in Paris)"
-                            className="w-full border border-green-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 bg-white"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="mt-4">
-                        <label className="flex text-sm font-semibold text-gray-700 mb-2 items-center gap-2">
-                          <span className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 text-xs font-bold">📝</span>
-                          Day Description
-                        </label>
-                        <textarea
-                          value={item.description}
-                          onChange={(e) => handleItineraryChange(index, "description", e.target.value)}
-                          placeholder="Describe the activities, places to visit, meals, and other details for this day..."
-                          rows={4}
-                          className="w-full border border-green-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 bg-white resize-none"
-                        />
-                      </div>
+                {/* FAQ Section */}
+                <div className="mt-6">
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="flex items-center gap-2">
+                      <FaQuestionCircle className="text-blue-600 text-lg" />
+                      <label className="block text-lg font-bold text-gray-800">
+                        Frequently Asked Questions
+                      </label>
                     </div>
+                    <button
+                      type="button"
+                      onClick={addFaq}
+                      className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg"
+                    >
+                      <FaPlus className="text-xs" />
+                      Add FAQ
+                    </button>
                   </div>
-                ))}
-              </div>
-            </div>
 
-            {/* Duration */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Duration
-              </label>
-              <input
-                type="number"
-                value={duration}
-                onChange={(e) => setDuration(e.target.value)}
-                placeholder="Enter duration"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
+                  <div className="space-y-4">
+                    {faqs.map((faq, index) => (
+                      <div key={index} className="border border-blue-200 rounded-xl p-5 bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm hover:shadow-md transition-all duration-200">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                              <span className="text-blue-600 font-bold text-sm">{index + 1}</span>
+                            </div>
+                            <span className="text-sm font-semibold text-blue-700">FAQ #{index + 1}</span>
+                          </div>
+                          {faqs.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => removeFaq(index)}
+                              className="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition-colors"
+                              title="Remove FAQ"
+                            >
+                              <FaTrash className="text-sm" />
+                            </button>
+                          )}
+                        </div>
 
-            {/* Duration Unit */}
+                        <div className="grid grid-cols-1 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Duration Unit
+                            <label className="flex text-sm font-semibold text-gray-700 mb-2 items-center gap-2">
+                              <span className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xs font-bold">Q</span>
+                              Question
               </label>
-              <select
-                value={durationUnit}
-                onChange={(e) => setDurationUnit(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="Hour">Hour</option>
-                <option value="Hours">Hours</option>
-                <option value="Day">Day</option>
-                <option value="Days">Days</option>
-                <option value="Week">Week</option>
-                <option value="Weeks">Weeks</option>
-                {/* Add more if needed */}
-              </select>
-            </div>
-
-            {/* Duration Note */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Duration Note
-              </label>
-              <input
-                type="text"
-                value={duration_note}
-                onChange={(e) => setDurationNote(e.target.value)}
-                placeholder="Duration Note"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            {/* Old Price (Update) */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Old Price
-              </label>
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">₹</span>
                 <input
-                  type="number"
-                  value={oldPrice}
-                  onChange={(e) => setOldPrice(e.target.value)}
-                  placeholder="Enter old price"
-                  className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              type="text"
+                              value={faq.q}
+                              onChange={(e) => handleFaqChange(index, "q", e.target.value)}
+                              placeholder="Enter your question here..."
+                              className="w-full border border-blue-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white"
+                            />
+            </div>
+
+            <div>
+                            <label className="flex text-sm font-semibold text-gray-700 mb-2 items-center gap-2">
+                              <span className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-xs font-bold">A</span>
+                              Answer
+              </label>
+                            <textarea
+                              value={faq.a}
+                              onChange={(e) => handleFaqChange(index, "a", e.target.value)}
+                              placeholder="Enter your answer here..."
+                              rows={4}
+                              className="w-full border border-blue-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white resize-none"
                 />
               </div>
             </div>
-
-            {/* New Price (Update) */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                New Price
-              </label>
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">₹</span>
-                <input
-                  type="number"
-                  value={newPrice}
-                  onChange={(e) => setNewPrice(e.target.value)}
-                  placeholder="Enter new price"
-                  className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
+            )}
+
+            {activeTab === "itinerary" && (
+              <div className="space-y-6">
+                {/* Itinerary Section */}
+                <div className="mt-6">
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="flex items-center gap-2">
+                      <FaRoute className="text-green-600 text-lg" />
+                      <label className="block text-lg font-bold text-gray-800">
+                        Trip Itinerary
+                      </label>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={addItineraryItem}
+                      className="bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-green-600 hover:to-green-700 transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg"
+                    >
+                      <FaPlus className="text-xs" />
+                      Add Day
+                    </button>
+                  </div>
+
+                  <div className="space-y-6">
+                    {itineraryItems.map((item, index) => (
+                      <div key={index} className="relative">
+                        {/* Timeline connector for multiple items */}
+                        {index < itineraryItems.length - 1 && (
+                          <div className="absolute left-6 top-16 bottom-0 w-0.5 bg-gradient-to-b from-green-200 to-green-300 z-0"></div>
+                        )}
+
+                        <div className="relative bg-white border border-green-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-200 hover:border-green-300">
+                          <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center shadow-lg">
+                                <FaCalendarAlt className="text-white text-sm" />
+                              </div>
+            <div>
+                                <span className="text-sm font-semibold text-green-700">Day #{index + 1}</span>
+                                <div className="flex items-center gap-2 text-green-600">
+                                  <FaMapMarkerAlt className="text-xs" />
+                                  <span className="text-xs font-medium">ITINERARY</span>
+                                </div>
+                              </div>
+                            </div>
+                            {itineraryItems.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => removeItineraryItem(index)}
+                                className="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition-colors"
+                                title="Remove Day"
+                              >
+                                <FaTrash className="text-sm" />
+                              </button>
+                            )}
             </div>
 
-            {/* Min Pax */}
+                          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Minimum Pax
-              </label>
-              <input
-                type="number"
-                min="0"
-                value={min_pax}
-                onChange={(e) => setMinPax(e.target.value)}
-                placeholder="Enter minimum number of people"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
+                              <label className="flex text-sm font-semibold text-gray-700 mb-2 items-center gap-2">
+                                <span className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-xs font-bold">#</span>
+                                Day Number
+                              </label>
+                              <input
+                                type="number"
+                                value={item.day_number}
+                                onChange={(e) => handleItineraryChange(index, "day_number", e.target.value)}
+                                placeholder="1"
+                                className="w-full border border-green-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 bg-white"
+                                min={1}
+                              />
+                            </div>
 
-            {/* Max Pax */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Maximum Pax
-              </label>
-              <input
-                type="number"
-                min="0"
-                value={max_pax}
-                onChange={(e) => setMaxPax(e.target.value)}
-                placeholder="Enter maximum number of people"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-            {/* Status */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Status
-              </label>
-              <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
-            {/* Special Note */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Special Note
+                            <div className="lg:col-span-2">
+                              <label className="flex text-sm font-semibold text-gray-700 mb-2 items-center gap-2">
+                                <span className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xs font-bold">
+                                  <FaEdit className="text-xs" />
+                                </span>
+                                Day Title
               </label>
               <input
                 type="text"
-                value={special_note}
-                onChange={(e) => setSpecialNote(e.target.value)}
-                placeholder="Special Note"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                value={item.title}
+                                onChange={(e) => handleItineraryChange(index, "title", e.target.value)}
+                                placeholder="Enter day title (e.g., Arrival in Paris)"
+                                className="w-full border border-green-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 bg-white"
               />
             </div>
-            {/* Buttons */}
+                          </div>
+
+                          <div className="mt-4">
+                            <label className="flex text-sm font-semibold text-gray-700 mb-2 items-center gap-2">
+                              <span className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 text-xs font-bold">📝</span>
+                              Day Description
+                            </label>
+                            <textarea
+                              value={item.description}
+                              onChange={(e) => handleItineraryChange(index, "description", e.target.value)}
+                              placeholder="Describe the activities, places to visit, meals, and other details for this day..."
+                              rows={4}
+                              className="w-full border border-green-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 bg-white resize-none"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="flex gap-4">
               <button
                 type="submit"
@@ -1071,56 +1181,6 @@ const UpdateTrips = () => {
               </button>
             </div>
           </form>
-
-          {/* Media Upload Preview */}
-          <div className="flex-1 flex flex-col items-center justify-center p-4 border rounded-lg">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleMediaChange}
-              className="mb-4 w-full max-w-md"
-              multiple
-            />
-            <label className="block text-sm font-semibold text-gray-700 mb-3">
-              Media Preview
-            </label>
-            {existingMedia.length > 0 || mediaFiles.length > 0 ? (
-              <div className="w-full max-w-md grid grid-cols-2 gap-4 overflow-auto max-h-96">
-                {/* Existing media */}
-                {existingMedia.map((fileUrl, idx) => (
-                  <img
-                    key={`existing-${idx}`}
-                    src={fileUrl}
-                    alt={`Existing Media ${idx + 1}`}
-                    className="w-full h-48 object-cover rounded-md shadow-md"
-                  />
-                ))}
-                {/* New media */}
-                {mediaFiles.map((file, idx) =>
-                  file.type.startsWith("image/") ? (
-                    <img
-                      key={idx}
-                      src={URL.createObjectURL(file)}
-                      alt={`New Preview ${idx + 1}`}
-                      className="w-full h-48 object-cover rounded-md shadow-md"
-                      onLoad={() => URL.revokeObjectURL(file)}
-                    />
-                  ) : (
-                    <div
-                      key={idx}
-                      className="text-gray-400 border rounded-md p-4 flex items-center justify-center"
-                    >
-                      Unsupported file
-                    </div>
-                  )
-                )}
-              </div>
-            ) : (
-              <div className="w-full max-w-md h-64 bg-gray-100 rounded-md flex items-center justify-center text-gray-400">
-                No media to show
-              </div>
-            )}
-          </div>
         </div>
       </div>
     </>

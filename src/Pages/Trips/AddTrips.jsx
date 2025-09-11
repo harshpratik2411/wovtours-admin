@@ -49,6 +49,7 @@ const AddTrips = () => {
   ]);
   const [min_pax, setMinPax] = useState(0);
   const [max_pax, setMaxPax] = useState(0);
+  const [activeTab, setActiveTab] = useState("general");
 
 
 
@@ -349,640 +350,8 @@ const AddTrips = () => {
         </h2>
 
         <div className="bg-white shadow-xl rounded-xl p-8 flex flex-col lg:flex-row gap-8">
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="flex-1 space-y-6">
-            {/* Title */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Title <span className="text-red-600">*</span>
-              </label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Enter title"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-
-
-            {/* Description */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Description
-              </label>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Enter description"
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                rows={4}
-              />
-            </div>
-            {/* Places covered */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Places covered
-              </label>
-              <textarea
-                value={places_covered}
-                onChange={(e) => setPlacesCovered(e.target.value)}
-                placeholder="Enter the places that will be covered in this trip"
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                rows={4}
-              />
-            </div>
-
-            {/* Meeting Point */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Meeting Point
-              </label>
-              <input
-                type="text"
-                value={meeting_point}
-                onChange={(e) => setMeetingPoint(e.target.value)}
-                placeholder="Meeting Point"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-
-            
-            
-
-            {/* Tag Selection (Multi-Select) */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Tags
-              </label>
-              <select
-                onChange={handleTagSelect}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Select a tag</option>
-                {tagList.map((t) => (
-                  <option key={t.id} value={t.id}>
-                    {t.title}
-                  </option>
-                ))}
-              </select>
-
-              {/* Selected Tags */}
-              <div className="flex flex-wrap mt-3 gap-2">
-                {selectedTags.map((tagId) => {
-                  const tag = tagList.find((t) => t.id === tagId);
-                  return (
-                    <span
-                      key={tagId}
-                      className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full flex items-center gap-2"
-                    >
-                      {tag ? tag.title : "Unknown Tag"}
-                      <button
-                        type="button"
-                        onClick={() => removeTag(tagId)}
-                        className="text-red-500 hover:text-red-700 font-bold ml-1"
-                      >
-                        ×
-                      </button>
-                    </span>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Trip Type Selection (Multi-Select) */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Trip Type
-              </label>
-              <select
-                onChange={handleTripTypeSelect}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Select a trip type</option>
-                {tripTypeList.map((t) => (
-                  <option key={t.id} value={t.id}>
-                    {t.title}
-                  </option>
-                ))}
-              </select>
-
-              {/* Selected Trip Types */}
-              <div className="flex flex-wrap mt-3 gap-2">
-                {selectedTripTypes.map((typeId) => {
-                  const type = tripTypeList.find((t) => t.id === typeId);
-                  return (
-                    <span
-                      key={typeId}
-                      className="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full flex items-center gap-2"
-                    >
-                      {type ? type.title : "Unknown Type"}
-                      <button
-                        type="button"
-                        onClick={() => removeTripType(typeId)}
-                        className="text-red-500 hover:text-red-700 font-bold ml-1"
-                      >
-                        ×
-                      </button>
-                    </span>
-                  );
-                })}
-              </div>
-            </div>
-
-            <select
-              value={selectedCategory || ""}
-              onChange={handleCategorySelect}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">Select a category</option>
-              {category.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.title}
-                </option>
-              ))}
-            </select>
-
-            {/* Destination Selection */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Destination
-              </label>
-              <select
-                value={selectedDestination || ""}
-                onChange={handleDestinationSelect}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Select a destination</option>
-                {destinationList.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.title}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Pricing Category Selection */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Pricing Category
-              </label>
-              <select
-                value={selectedPricingCategory || ""}
-                onChange={handlePricingCategorySelect}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Select a pricing category</option>
-                {pricingCategories.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.title}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Difficulty Selection */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Difficulty
-              </label>
-              <select
-                value={selectedDifficulty || ""}
-                onChange={handleDifficultySelect}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Select a difficulty</option>
-                {difficulties.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.title}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Activities
-              </label>
-              <select
-                onChange={handleActivitySelect}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Select an activity</option>
-                {activityList.map((a) => (
-                  <option key={a.id} value={a.id}>
-                    {a.title}
-                  </option>
-                ))}
-              </select>
-
-              {/* Selected Activities */}
-              <div className="flex flex-wrap mt-3 gap-2">
-                {selectedActivities.map((activityId) => {
-                  const activity = activityList.find(
-                    (a) => a.id === activityId
-                  );
-                  return (
-                    <span
-                      key={activityId}
-                      className="bg-yellow-100 text-yellow-800 text-sm font-medium px-3 py-1 rounded-full flex items-center gap-2"
-                    >
-                      {activity ? activity.title : "Unknown Activity"}
-                      <button
-                        type="button"
-                        onClick={() => removeActivity(activityId)}
-                        className="text-red-500 hover:text-red-700 font-bold ml-1"
-                      >
-                        ×
-                      </button>
-                    </span>
-                  );
-                })}
-              </div>
-            </div>
-            <div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  Highlights
-                </label>
-                {highlights.map((highlight, index) => (
-                  <div key={index} className="flex gap-2 items-center mb-2">
-                    <input
-                      type="text"
-                      value={highlight}
-                      onChange={(e) =>
-                        handleHighlightChange(index, e.target.value)
-                      }
-                      placeholder="Enter highlight point"
-                      className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold"
-                    />
-                    {highlights.length > 1 && highlight.trim() !== "" && (
-                      <button
-                        type="button"
-                        onClick={() => removeHighlight(index)}
-                        className="text-red-600 font-bold px-2"
-                      >
-                        ×
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Includes
-              </label>
-              {includes.map((inc, index) => (
-                <div key={index} className="flex gap-2 items-center mb-2">
-                  <input
-                    type="text"
-                    value={inc}
-                    onChange={(e) => handleIncludeChange(index, e.target.value)}
-                    placeholder="Enter include item"
-                    className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  {includes.length > 1 && inc.trim() !== "" && (
-                    <button
-                      type="button"
-                      onClick={() => removeInclude(index)}
-                      className="text-red-600 font-bold px-2"
-                    >
-                      ×
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-            <div className="mt-4">
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Excludes
-              </label>
-              {excludes.map((exc, index) => (
-                <div key={index} className="flex gap-2 items-center mb-2">
-                  <input
-                    type="text"
-                    value={exc}
-                    onChange={(e) => handleExcludeChange(index, e.target.value)}
-                    placeholder="Enter exclude item"
-                    className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  {excludes.length > 1 && exc.trim() !== "" && (
-                    <button
-                      type="button"
-                      onClick={() => removeExclude(index)}
-                      className="text-red-600 font-bold px-2"
-                    >
-                      ×
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* FAQ Section */}
-            <div className="mt-4">
-              <div className="flex justify-between items-center mb-3">
-                <label className="block text-sm font-semibold text-gray-700">
-                  FAQs
-                </label>
-                <button
-                  type="button"
-                  onClick={addFaq}
-                  className="bg-green-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-green-600 transition-colors"
-                >
-                  + Add FAQ
-                </button>
-              </div>
-
-              {faqs.map((faq, index) => (
-                <div key={index} className="mb-4 border p-4 rounded-md bg-gray-50">
-                  <div className="mb-3">
-                    <label className="block text-sm font-medium text-gray-600 mb-1">
-                      Question
-                    </label>
-                    <input
-                      type="text"
-                      value={faq.q}
-                      onChange={(e) => handleFaqChange(index, "q", e.target.value)}
-                      placeholder="Enter FAQ question"
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-
-                  <div className="mb-2">
-                    <label className="block text-sm font-medium text-gray-600 mb-1">
-                      Answer
-                    </label>
-                    <textarea
-                      value={faq.a}
-                      onChange={(e) => handleFaqChange(index, "a", e.target.value)}
-                      placeholder="Enter FAQ answer"
-                      rows={3}
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-
-                  {faqs.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeFaq(index)}
-                      className="text-red-500 text-sm font-semibold"
-                    >
-                      Remove FAQ
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* Itinerary Section */}
-            <div className="mt-4">
-              <div className="flex justify-between items-center mb-3">
-                <label className="block text-sm font-semibold text-gray-700">
-                  Itinerary
-                </label>
-                <button
-                  type="button"
-                  onClick={addItineraryItem}
-                  className="bg-blue-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-blue-600 transition-colors"
-                >
-                  + Add Itinerary
-                </button>
-              </div>
-
-              {itineraryItems.map((item, index) => (
-                <div key={index} className="mb-4 border p-4 rounded-md bg-gray-50">
-                  <div className="mb-3">
-                    <label className="block text-sm font-medium text-gray-600 mb-1">
-                      Day Number
-                    </label>
-                    <input
-                      type="number"
-                      value={item.day_number}
-                      onChange={(e) => handleItineraryChange(index, "day_number", e.target.value)}
-                      placeholder="1"
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      min={1}
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="block text-sm font-medium text-gray-600 mb-1">
-                      Itinerary Title
-                    </label>
-                    <input
-                      type="text"
-                      value={item.title}
-                      onChange={(e) => handleItineraryChange(index, "title", e.target.value)}
-                      placeholder="Itinerary Title"
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-
-                  <div className="mb-2">
-                    <label className="block text-sm font-medium text-gray-600 mb-1">
-                      Description
-                    </label>
-                    <textarea
-                      value={item.description}
-                      onChange={(e) => handleItineraryChange(index, "description", e.target.value)}
-                      placeholder="Itinerary Description"
-                      rows={3}
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-
-                  {itineraryItems.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeItineraryItem(index)}
-                      className="text-red-500 text-sm font-semibold"
-                    >
-                      Remove
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* Status */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Status
-              </label>
-              <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
-
-            {/* Duration */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Duration
-              </label>
-              <input
-                type="number"
-                min="0"
-                step="0.1"
-                value={duration}
-                onChange={(e) => setDuration(e.target.value)}
-                placeholder="Enter duration"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-
-            {/* Duration Unit */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Duration Unit
-              </label>
-              <select
-                value={durationUnit}
-                onChange={(e) => setDurationUnit(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="Hour">Hour</option>
-                <option value="Hours">Hours</option>
-                <option value="Day">Day</option>
-                <option value="Days">Days</option>
-                <option value="Week">Week</option>
-                <option value="Weeks">Weeks</option>
-              </select>
-            </div>
-
-            {/* Duration Note */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Duration Note
-              </label>
-              <input
-                type="text"
-                value={duration_note}
-                onChange={(e) => setDurationNote(e.target.value)}
-                placeholder="Duration Note"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-
-
-
-            {/* Buttons */}
-            {/* Old Price */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Old Price
-              </label>
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">₹</span>
-                <input
-                  type="number"
-                  step="0.01"
-                  value={oldPrice}
-                  onChange={(e) => setOldPrice(e.target.value)}
-                  placeholder="Enter old price"
-                  className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            </div>
-
-            {/* New Price */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                New Price
-              </label>
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">₹</span>
-                <input
-                  type="number"
-                  step="0.01"
-                  value={newPrice}
-                  onChange={(e) => setNewPrice(e.target.value)}
-                  placeholder="Enter new price"
-                  className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-              </div>
-            </div>
-
-            {/* Special Note */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Special Note
-              </label>
-              <input
-                type="text"
-                value={special_note}
-                onChange={(e) => setSpecialNote(e.target.value)}
-                placeholder="Special Note"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-
-            {/* Min Pax */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Minimum Pax
-              </label>
-              <input
-                type="number"
-                min="0"
-                value={min_pax}
-                onChange={(e) => setMinPax(e.target.value)}
-                placeholder="Enter minimum number of people"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-
-            {/* Max Pax */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Maximum Pax
-              </label>
-              <input
-                type="number"
-                min="0"
-                value={max_pax}
-                onChange={(e) => setMaxPax(e.target.value)}
-                placeholder="Enter maximum number of people"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-
-            <div className="flex gap-4">
-              <button
-                type="submit"
-                disabled={loading}
-                className={`bg-primary text-white lg:px-6 px-3 lg:py-3 py-2 rounded-lg font-semibold transition duration-200 ${loading ? "opacity-60 cursor-not-allowed" : "hover:opacity-90"
-                  }`}
-              >
-                {loading ? "Adding Trip..." : "Add Trip"}
-              </button>
-
-              <button
-                type="button"
-                onClick={() => navigate("/trips")}
-                className="border lg:px-6 px-3 lg:py-3 py-2 rounded-lg font-semibold hover:bg-gray-100 transition"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-          {/* Old Price */}
-
           {/* Media Upload Preview */}
-          <div className="flex-1 flex flex-col items-center justify-center p-4 border rounded-lg">
+          <div className="flex-1 flex flex-col items-center justify-center p-4 border rounded-lg mb-8">
             <input
               type="file"
               accept="image/*"
@@ -1025,7 +394,6 @@ const AddTrips = () => {
                     )}
                   </div>
                 ))}
-
               </div>
             ) : (
               <div className="w-full max-w-md h-64 bg-gray-100 rounded-md flex items-center justify-center text-gray-400">
@@ -1033,6 +401,684 @@ const AddTrips = () => {
               </div>
             )}
           </div>
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="flex-1 space-y-6">
+            {/* Tab Navigation */}
+            <div className="flex border-b border-gray-200 mb-6">
+              <button
+                type="button"
+                onClick={() => setActiveTab("general")}
+                className={`py-3 px-6 text-sm font-medium ${activeTab === "general"
+                  ? "border-b-2 border-blue-500 text-blue-600"
+                  : "text-gray-500 hover:text-gray-700"}
+                `}
+              >
+                General Info
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab("extra")}
+                className={`py-3 px-6 text-sm font-medium ${activeTab === "extra"
+                  ? "border-b-2 border-blue-500 text-blue-600"
+                  : "text-gray-500 hover:text-gray-700"}
+                `}
+              >
+                Extra Info
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab("faqs")}
+                className={`py-3 px-6 text-sm font-medium ${activeTab === "faqs"
+                  ? "border-b-2 border-blue-500 text-blue-600"
+                  : "text-gray-500 hover:text-gray-700"}
+                `}
+              >
+                FAQs
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab("itinerary")}
+                className={`py-3 px-6 text-sm font-medium ${activeTab === "itinerary"
+                  ? "border-b-2 border-blue-500 text-blue-600"
+                  : "text-gray-500 hover:text-gray-700"}
+                `}
+              >
+                Itinerary
+              </button>
+            </div>
+
+            {/* Tab Content */}
+            {activeTab === "general" && (
+              <div className="space-y-6">
+                {/* Title */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Title <span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Enter title"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+
+                {/* Description */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Description
+                  </label>
+                  <textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Enter description"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                    rows={4}
+                  />
+                </div>
+                {/* Places covered */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Places covered
+                  </label>
+                  <textarea
+                    value={places_covered}
+                    onChange={(e) => setPlacesCovered(e.target.value)}
+                    placeholder="Enter the places that will be covered in this trip"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                    rows={4}
+                  />
+                </div>
+
+                {/* Meeting Point */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Meeting Point
+                  </label>
+                  <input
+                    type="text"
+                    value={meeting_point}
+                    onChange={(e) => setMeetingPoint(e.target.value)}
+                    placeholder="Meeting Point"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                
+                
+
+                {/* Tag Selection (Multi-Select) */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Tags
+                  </label>
+                  <select
+                    onChange={handleTagSelect}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Select a tag</option>
+                    {tagList.map((t) => (
+                      <option key={t.id} value={t.id}>
+                        {t.title}
+                      </option>
+                    ))}
+                  </select>
+
+                  {/* Selected Tags */}
+                  <div className="flex flex-wrap mt-3 gap-2">
+                    {selectedTags.map((tagId) => {
+                      const tag = tagList.find((t) => t.id === tagId);
+                      return (
+                        <span
+                          key={tagId}
+                          className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full flex items-center gap-2"
+                        >
+                          {tag ? tag.title : "Unknown Tag"}
+                          <button
+                            type="button"
+                            onClick={() => removeTag(tagId)}
+                            className="text-red-500 hover:text-red-700 font-bold ml-1"
+                          >
+                            ×
+                          </button>
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Trip Type Selection (Multi-Select) */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Trip Type
+                  </label>
+                  <select
+                    onChange={handleTripTypeSelect}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Select a trip type</option>
+                    {tripTypeList.map((t) => (
+                      <option key={t.id} value={t.id}>
+                        {t.title}
+                      </option>
+                    ))}
+                  </select>
+
+                  {/* Selected Trip Types */}
+                  <div className="flex flex-wrap mt-3 gap-2">
+                    {selectedTripTypes.map((typeId) => {
+                      const type = tripTypeList.find((t) => t.id === typeId);
+                      return (
+                        <span
+                          key={typeId}
+                          className="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full flex items-center gap-2"
+                        >
+                          {type ? type.title : "Unknown Type"}
+                          <button
+                            type="button"
+                            onClick={() => removeTripType(typeId)}
+                            className="text-red-500 hover:text-red-700 font-bold ml-1"
+                          >
+                            ×
+                          </button>
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Category
+                  </label>
+                  <select
+                    value={selectedCategory || ""}
+                    onChange={handleCategorySelect}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Select a category</option>
+                    {category.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Destination Selection */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Destination
+                  </label>
+                  <select
+                    value={selectedDestination || ""}
+                    onChange={handleDestinationSelect}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Select a destination</option>
+                    {destinationList.map((d) => (
+                      <option key={d.id} value={d.id}>
+                        {d.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Pricing Category Selection */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Pricing Category
+                  </label>
+                  <select
+                    value={selectedPricingCategory || ""}
+                    onChange={handlePricingCategorySelect}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Select a pricing category</option>
+                    {pricingCategories.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Difficulty Selection */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Difficulty
+                  </label>
+                  <select
+                    value={selectedDifficulty || ""}
+                    onChange={handleDifficultySelect}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Select a difficulty</option>
+                    {difficulties.map((d) => (
+                      <option key={d.id} value={d.id}>
+                        {d.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Activities
+                  </label>
+                  <select
+                    onChange={handleActivitySelect}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Select an activity</option>
+                    {activityList.map((a) => (
+                      <option key={a.id} value={a.id}>
+                        {a.title}
+                      </option>
+                    ))}
+                  </select>
+
+                  {/* Selected Activities */}
+                  <div className="flex flex-wrap mt-3 gap-2">
+                    {selectedActivities.map((activityId) => {
+                      const activity = activityList.find(
+                        (a) => a.id === activityId
+                      );
+                      return (
+                        <span
+                          key={activityId}
+                          className="bg-yellow-100 text-yellow-800 text-sm font-medium px-3 py-1 rounded-full flex items-center gap-2"
+                        >
+                          {activity ? activity.title : "Unknown Activity"}
+                          <button
+                            type="button"
+                            onClick={() => removeActivity(activityId)}
+                            className="text-red-500 hover:text-red-700 font-bold ml-1"
+                          >
+                            ×
+                          </button>
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+                <div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">
+                      Highlights
+                    </label>
+                    {highlights.map((highlight, index) => (
+                      <div key={index} className="flex gap-2 items-center mb-2">
+                        <input
+                          type="text"
+                          value={highlight}
+                          onChange={(e) =>
+                            handleHighlightChange(index, e.target.value)
+                          }
+                          placeholder="Enter highlight point"
+                          className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold"
+                        />
+                        {highlights.length > 1 && highlight.trim() !== "" && (
+                          <button
+                            type="button"
+                            onClick={() => removeHighlight(index)}
+                            className="text-red-600 font-bold px-2"
+                          >
+                            ×
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Includes
+                  </label>
+                  {includes.map((inc, index) => (
+                    <div key={index} className="flex gap-2 items-center mb-2">
+                      <input
+                        type="text"
+                        value={inc}
+                        onChange={(e) => handleIncludeChange(index, e.target.value)}
+                        placeholder="Enter include item"
+                        className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                      {includes.length > 1 && inc.trim() !== "" && (
+                        <button
+                          type="button"
+                          onClick={() => removeInclude(index)}
+                          className="text-red-600 font-bold px-2"
+                        >
+                          ×
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-4">
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Excludes
+                  </label>
+                  {excludes.map((exc, index) => (
+                    <div key={index} className="flex gap-2 items-center mb-2">
+                      <input
+                        type="text"
+                        value={exc}
+                        onChange={(e) => handleExcludeChange(index, e.target.value)}
+                        placeholder="Enter exclude item"
+                        className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                      {excludes.length > 1 && exc.trim() !== "" && (
+                        <button
+                          type="button"
+                          onClick={() => removeExclude(index)}
+                          className="text-red-600 font-bold px-2"
+                        >
+                          ×
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Special Note */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Special Note
+                  </label>
+                  <input
+                    type="text"
+                    value={special_note}
+                    onChange={(e) => setSpecialNote(e.target.value)}
+                    placeholder="Special Note"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                {/* Min Pax */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Minimum Pax
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={min_pax}
+                    onChange={(e) => setMinPax(e.target.value)}
+                    placeholder="Enter minimum number of people"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                {/* Max Pax */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Maximum Pax
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={max_pax}
+                    onChange={(e) => setMaxPax(e.target.value)}
+                    placeholder="Enter maximum number of people"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+              </div>
+            )}
+
+            {activeTab === "extra" && (
+              <div className="space-y-6">
+                {/* Duration */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Duration
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.1"
+                    value={duration}
+                    onChange={(e) => setDuration(e.target.value)}
+                    placeholder="Enter duration"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                {/* Duration Unit */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Duration Unit
+                  </label>
+                  <select
+                    value={durationUnit}
+                    onChange={(e) => setDurationUnit(e.target.value)}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="Hour">Hour</option>
+                    <option value="Hours">Hours</option>
+                    <option value="Day">Day</option>
+                    <option value="Days">Days</option>
+                    <option value="Week">Week</option>
+                    <option value="Weeks">Weeks</option>
+                  </select>
+                </div>
+
+                {/* Duration Note */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Duration Note
+                  </label>
+                  <input
+                    type="text"
+                    value={duration_note}
+                    onChange={(e) => setDurationNote(e.target.value)}
+                    placeholder="Duration Note"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                {/* Old Price */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Old Price
+                  </label>
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">₹</span>
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={oldPrice}
+                      onChange={(e) => setOldPrice(e.target.value)}
+                      placeholder="Enter old price"
+                      className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                </div>
+
+                {/* New Price */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    New Price
+                  </label>
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">₹</span>
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={newPrice}
+                      onChange={(e) => setNewPrice(e.target.value)}
+                      placeholder="Enter new price"
+                      className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "faqs" && (
+              <div className="space-y-6">
+                {/* FAQ Section */}
+                <div className="mt-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <label className="block text-sm font-semibold text-gray-700">
+                      FAQs
+                    </label>
+                    <button
+                      type="button"
+                      onClick={addFaq}
+                      className="bg-green-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-green-600 transition-colors"
+                    >
+                      + Add FAQ
+                    </button>
+                  </div>
+
+                  {faqs.map((faq, index) => (
+                    <div key={index} className="mb-4 border p-4 rounded-md bg-gray-50">
+                      <div className="mb-3">
+                        <label className="block text-sm font-medium text-gray-600 mb-1">
+                          Question
+                        </label>
+                        <input
+                          type="text"
+                          value={faq.q}
+                          onChange={(e) => handleFaqChange(index, "q", e.target.value)}
+                          placeholder="Enter FAQ question"
+                          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+
+                      <div className="mb-2">
+                        <label className="block text-sm font-medium text-gray-600 mb-1">
+                          Answer
+                        </label>
+                        <textarea
+                          value={faq.a}
+                          onChange={(e) => handleFaqChange(index, "a", e.target.value)}
+                          placeholder="Enter FAQ answer"
+                          rows={3}
+                          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+
+                      {faqs.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeFaq(index)}
+                          className="text-red-500 text-sm font-semibold"
+                        >
+                          Remove FAQ
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {activeTab === "itinerary" && (
+              <div className="space-y-6">
+                {/* Itinerary Section */}
+                <div className="mt-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <label className="block text-sm font-semibold text-gray-700">
+                      Itinerary
+                    </label>
+                    <button
+                      type="button"
+                      onClick={addItineraryItem}
+                      className="bg-blue-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-blue-600 transition-colors"
+                    >
+                      + Add Itinerary
+                    </button>
+                  </div>
+
+                  {itineraryItems.map((item, index) => (
+                    <div key={index} className="mb-4 border p-4 rounded-md bg-gray-50">
+                      <div className="mb-3">
+                        <label className="block text-sm font-medium text-gray-600 mb-1">
+                          Day Number
+                        </label>
+                        <input
+                          type="number"
+                          value={item.day_number}
+                          onChange={(e) => handleItineraryChange(index, "day_number", e.target.value)}
+                          placeholder="1"
+                          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          min={1}
+                        />
+                      </div>
+
+                      <div className="mb-3">
+                        <label className="block text-sm font-medium text-gray-600 mb-1">
+                          Itinerary Title
+                        </label>
+                        <input
+                          type="text"
+                          value={item.title}
+                          onChange={(e) => handleItineraryChange(index, "title", e.target.value)}
+                          placeholder="Itinerary Title"
+                          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+
+                      <div className="mb-2">
+                        <label className="block text-sm font-medium text-gray-600 mb-1">
+                          Description
+                        </label>
+                        <textarea
+                          value={item.description}
+                          onChange={(e) => handleItineraryChange(index, "description", e.target.value)}
+                          placeholder="Itinerary Description"
+                          rows={3}
+                          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+
+                      {itineraryItems.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeItineraryItem(index)}
+                          className="text-red-500 text-sm font-semibold"
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="flex gap-4">
+              <button
+                type="submit"
+                disabled={loading}
+                className={`bg-primary text-white lg:px-6 px-3 lg:py-3 py-2 rounded-lg font-semibold transition duration-200 ${loading ? "opacity-60 cursor-not-allowed" : "hover:opacity-90"
+                  }`}
+              >
+                {loading ? "Adding Trip..." : "Add Trip"}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => navigate("/trips")}
+                className="border lg:px-6 px-3 lg:py-3 py-2 rounded-lg font-semibold hover:bg-gray-100 transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </>
