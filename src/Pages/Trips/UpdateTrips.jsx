@@ -26,7 +26,8 @@ const UpdateTrips = () => {
   const [special_note, setSpecialNote] = useState("");
   const [status, setStatus] = useState("Active");
   const [mediaFiles, setMediaFiles] = useState([]); // New media
-  const [existingMedia, setExistingMedia] = useState([]); // Already uploaded media from backend
+  const [existingMedia, setExistingMedia] = useState([]); 
+  const [deleteMediaFiles, setDeleteMediaFiles] = useState([]); // Already uploaded media from backend
   const [loading, setLoading] = useState(false);
   const [tagList, setTagList] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
@@ -187,7 +188,7 @@ const UpdateTrips = () => {
     const files = Array.from(e.target.files);
     setMediaFiles((prev) => [...prev, ...files]);
   };  
-
+   
   const handleTagSelect = (e) => {
     const value = parseInt(e.target.value);
     if (value && !selectedTags.includes(value)) {
@@ -206,7 +207,9 @@ const UpdateTrips = () => {
     if (value && !selectedActivities.includes(value)) {
       setSelectedActivities([...selectedActivities, value]);
     }
-  };
+  }; 
+
+  
 
   const handleCategorySelect = (e) => {
     setSelectedCategory(parseInt(e.target.value));
@@ -220,6 +223,15 @@ const UpdateTrips = () => {
   const handleDifficultySelect = (e) => {
     setSelectedDifficulty(parseInt(e.target.value));
   };
+  
+      const handleRemoveNewMedia = (id) => {
+  setMediaFiles((prev) => prev.filter((_, i) => i !== id));
+};
+
+const handleRemoveExistingMedia = (id) => {
+  setExistingMedia((prev) => prev.filter((_, i) => i !== id));
+
+};
 
   const removeTag = (id) => {
     setSelectedTags(selectedTags.filter((t) => t !== id));
@@ -413,35 +425,50 @@ const UpdateTrips = () => {
             </label>
             {existingMedia.length > 0 || mediaFiles.length > 0 ? (
               <div className="w-full max-w-md grid grid-cols-2 gap-4 overflow-auto max-h-96">
-                {/* Existing media */}
-                {existingMedia.map((fileUrl, idx) => (
-                  <img
-                    key={`existing-${idx}`}
-                    src={fileUrl}
-                    alt={`Existing Media ${idx + 1}`}
-                    className="w-full h-48 object-cover rounded-md shadow-md"
-                  />
-                ))}
-                {/* New media */}
-                {mediaFiles.map((file, idx) =>
-                  file.type.startsWith("image/") ? (
-                    <img
-                      key={idx}
-                      src={URL.createObjectURL(file)}
-                      alt={`New Preview ${idx + 1}`}
-                      className="w-full h-48 object-cover rounded-md shadow-md"
-                      onLoad={() => URL.revokeObjectURL(file)}
-                    />
-                  ) : (
-                    <div
-                      key={idx}
-                      className="text-gray-400 border rounded-md p-4 flex items-center justify-center"
-                    >
-                      Unsupported file
-                    </div>
-                  )
-                )}
-              </div>
+  {/* Existing media */}
+  {existingMedia.map((fileUrl, idx) => (
+    <div key={`existing-${idx}`} className="relative">
+      <img
+        src={fileUrl}
+        alt={`Existing Media ${idx + 1}`}
+        className="w-full h-48 object-cover rounded-md shadow-md"
+      />
+      <button
+        onClick={() => handleRemoveExistingMedia(idx)}
+        className="absolute top-1 right-1 bg-white text-red-500 rounded-full shadow p-1 hover:bg-red-100"
+        title="Remove"
+      >
+        &times;
+      </button>
+    </div>
+  ))}
+
+  {/* New media */}
+  {mediaFiles.map((file, idx) => (
+    <div key={`new-${idx}`} className="relative">
+      {file.type.startsWith("image/") ? (
+        <img
+          src={URL.createObjectURL(file)}
+          alt={`New Preview ${idx + 1}`}
+          className="w-full h-48 object-cover rounded-md shadow-md"
+          onLoad={() => URL.revokeObjectURL(file)}
+        />
+      ) : (
+        <div className="w-full h-48 flex items-center justify-center text-gray-400 border rounded-md shadow-md">
+          Unsupported file
+        </div>
+      )}
+      <button
+        onClick={() => handleRemoveNewMedia(idx)}
+        className="absolute top-1 right-1 bg-white text-red-500 rounded-full shadow p-1 hover:bg-red-100"
+        title="Remove"
+      >
+        &times;
+      </button>
+    </div>
+  ))}
+</div>
+
             ) : (
               <div className="w-full max-w-md h-64 bg-gray-100 rounded-md flex items-center justify-center text-gray-400">
                 No media to show
@@ -551,8 +578,6 @@ const UpdateTrips = () => {
                 className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-
-
 
                 {/* Status */}
                 <div>
