@@ -4,6 +4,7 @@ import 'aos/dist/aos.css';
 import { FiSearch } from 'react-icons/fi'; 
 import { useNavigate  } from 'react-router-dom'; 
 import { IoMdNotificationsOutline } from 'react-icons/io';
+import Kuldeep from '../../assets/logo/Kuldeep-copy.jpeg';
 import {
   MdDashboard,
   MdOutlineCategory,
@@ -47,21 +48,21 @@ export default function TopNav() {
 
         {/* Right: Icons and Profile */}
         <div className="flex items-center gap-5 lg:gap-6">
-          <button className="text-gray-600 hover:text-black">
+          {/* <button className="text-gray-600 hover:text-black">
             <FiSearch className="w-5 h-5" />
-          </button>
-          <div className="relative mt-2">
+          </button> */}
+          {/* <div className="relative mt-2">
             <button className="text-gray-600 hover:text-black">
               <IoMdNotificationsOutline className="w-6 h-6" />
             </button>
             <span className="absolute top-0 right-0 bg-red-500 w-2 h-2 rounded-full"></span>
-          </div>
+          </div> */}
           <div className="flex lg:-mr-0 cursor-pointer -mr-6 items-center gap-2">
             <img  
              onClick={() => navigate('/login')}
-              src="https://randomuser.me/api/portraits/women/44.jpg"
+             src={Kuldeep}
               alt="Profile"
-              className="w-8 h-8 rounded-full object-cover"
+              className="w-10 h-10 rounded-full object-cover"
             />
           </div>
         </div>
@@ -187,3 +188,4 @@ export default function TopNav() {
     </div>
   );
 }
+ 

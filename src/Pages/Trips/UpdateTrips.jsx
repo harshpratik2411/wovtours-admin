@@ -186,7 +186,7 @@ const UpdateTrips = () => {
   const handleMediaChange = (e) => {
     const files = Array.from(e.target.files);
     setMediaFiles((prev) => [...prev, ...files]);
-  };
+  };  
 
   const handleTagSelect = (e) => {
     const value = parseInt(e.target.value);
