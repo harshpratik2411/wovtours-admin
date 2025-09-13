@@ -91,7 +91,7 @@ class TripServices {
       console.log("mediaChanged = ", mediaChanged);
       const formData = new FormData();
         for (const key in data) {
-          if (data[key] !== undefined && data[key] !== null) {
+          if (data[key] !== undefined && data[key] !== null && key !== "delete_media_files") {
             
           if (key === "faqs" || key === "itinerary") {
               // Send complex objects as JSON strings
@@ -101,6 +101,18 @@ class TripServices {
             }
           }
         }
+        for (let pair of formData.entries()) {
+          console.log(pair[0], pair[1]);
+        }
+        if(data.delete_media_files && Array.isArray(data.delete_media_files)){
+          data.delete_media_files.forEach((id, index) => {
+            formData.append(`delete_media_files[${index}]`, id);
+          });
+        }
+        for (let pair of formData.entries()) {
+          console.log(pair[0], pair[1]);
+        }
+        
 
       requestOptions = {
         method: "PUT",

@@ -57,6 +57,7 @@ const UpdateTrips = () => {
   const [min_pax, setMinPax] = useState(0);
   const [max_pax, setMaxPax] = useState(0);
   const [activeTab, setActiveTab] = useState("general");
+  const [deletedMediaIds, setDeletedMediaIds] = useState([]);
 
 
 
@@ -131,7 +132,7 @@ const UpdateTrips = () => {
 
           setIncludes(trip.includes?.length ? trip.includes : [""]);
           setExcludes(trip.excludes?.length ? trip.excludes : [""]);
-          setExistingMedia(trip.media_urls?.map((item) => item.media) || []);
+          setExistingMedia(trip.media_urls?.map((item) => ({ id: item.id, media: item.media })) || []);
 
           // Set FAQs
           setFaqs(trip.faqs?.length ? trip.faqs : [{ q: "", a: "" }]);
@@ -228,9 +229,11 @@ const UpdateTrips = () => {
   setMediaFiles((prev) => prev.filter((_, i) => i !== id));
 };
 
-const handleRemoveExistingMedia = (id) => {
-  setExistingMedia((prev) => prev.filter((_, i) => i !== id));
-
+const handleRemoveExistingMedia = (idToDelete) => {
+  setExistingMedia((prev) =>
+    prev.filter((media) => media.id !== idToDelete)
+  );
+  setDeletedMediaIds((prev) => [...prev, idToDelete]);
 };
 
   const removeTag = (id) => {
@@ -381,7 +384,11 @@ const handleRemoveExistingMedia = (id) => {
 
     // Only add media if files were selected
     if (mediaFiles.length > 0) {
-      mediaFiles.forEach((file, i) => data[`media`] = file);
+      mediaFiles.forEach((file, i) => data[`media[${i}]`] = file);
+    }
+    
+    if(deletedMediaIds.length > 0){
+      data['delete_media_files'] = deletedMediaIds;
     }
 
     try {
@@ -429,12 +436,12 @@ const handleRemoveExistingMedia = (id) => {
   {existingMedia.map((fileUrl, idx) => (
     <div key={`existing-${idx}`} className="relative">
       <img
-        src={fileUrl}
+        src={fileUrl.media}
         alt={`Existing Media ${idx + 1}`}
         className="w-full h-48 object-cover rounded-md shadow-md"
       />
       <button
-        onClick={() => handleRemoveExistingMedia(idx)}
+        onClick={() => handleRemoveExistingMedia(fileUrl.id)}
         className="absolute top-1 right-1 bg-white text-red-500 rounded-full shadow p-1 hover:bg-red-100"
         title="Remove"
       >
