@@ -59,58 +59,47 @@ class SettingsServices {
       return null;
     }
   }
+static async update(id = 1, data) {
+  const url = APIService.baseUrl + `api/admin/settings/${id}/`;
 
-  static async update(id = 1, data) {
+  try {
+    const formData = new FormData();
 
-
-    const url = APIService.baseUrl + `api/admin/settings/${id}/`;
-
-    try {
-      let requestOptions;
-
-      const formData = new FormData();
-      for (const key in data) {
-        if (data[key] !== undefined && data[key] !== null) {
-          formData.append(key, data[key]);
-        }
+    for (const key in data) {
+      if (key === "social_media") {
+        formData.append(key, JSON.stringify(data[key]));
+      } else if (key === "logo" && data[key] instanceof File) {
+        formData.append("logo", data[key]);
+      } else if (key === "logoPreview") {
+        continue; // Skip preview field
+      } else if (data[key] !== undefined && data[key] !== null) {
+        formData.append(key, data[key]);
       }
-      formData.append('country_id', 102);
-      // formData.append('country', null);
-      formData.forEach((val,key ) => {
-        console.log(key, " --> ", val);
-      });
-
-
-      requestOptions = {
-        method: "PUT",
-        headers: {
-          Authorization: LocalStorage.getAccesToken(),
-        },
-        body: formData,
-      };
-      let response = await fetch(url, requestOptions);
-      // let response = await fetch(url, {
-      //   method: "PUT",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     Authorization: LocalStorage.getAccesToken(),
-      //   },
-      //   body: JSON.stringify(data),
-      // });
-
-      console.log("Response = ", response.status);
-
-      if (APIService.isUnauthenticated(response.status)) {
-        await APIService.refreshToken();
-        return this.update(id, data);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error(`Failed to update setting with id ${id}:`, error);
-      return null;
     }
+
+    formData.append('country_id', 102); // Ensure it's appended
+
+    const requestOptions = {
+      method: "PUT",
+      headers: {
+        Authorization: LocalStorage.getAccesToken(),
+      },
+      body: formData,
+    };
+
+    const response = await fetch(url, requestOptions);
+
+    if (APIService.isUnauthenticated(response.status)) {
+      await APIService.refreshToken();
+      return this.update(id, data);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error(`Failed to update setting with id ${id}:`, error);
+    return null;
   }
+}
 
   static async add(data) {
     const url = APIService.baseUrl + "api/admin/settings/";
