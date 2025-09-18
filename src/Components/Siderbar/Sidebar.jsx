@@ -69,7 +69,7 @@ const Sidebar = () => {
           <div className="flex flex-col justify-between h-full">
             {/* Scrollable content */}
             <div className="overflow-y-auto h-[calc(100vh-4rem)] pr-1">
-              <h1 className="text-2xl font-bold mb-10">Wov Tours</h1>
+              <h1 className="text-2xl lg:mt-0 mt-10 font-bol mb-10">Wov Tours</h1>
               <ul className="space-y-6">
                 <li className="flex items-center justify-between">
                   <a
