@@ -80,62 +80,72 @@ class MediaCoverageServices {
   }
 
   static async update(id, data, mediaChanged = false) {
-    console.log("Update API called");
+  console.log("Update API called");
 
-    const url = APIService.baseUrl + `api/admin/media-coverage/${id}/`;
+  const url = APIService.baseUrl + `api/admin/media-coverage/${id}/`;
 
-    try {
-      let requestOptions;
+  try {
+    let requestOptions;
 
-      if (mediaChanged) {
-        const formData = new FormData();
-        for (const key in data) {
-          if (data[key] !== undefined && data[key] !== null) {
-            formData.append(key, data[key]);
-          }
-        }
+    if (mediaChanged) {
+      const formData = new FormData();
 
-        requestOptions = {
-          method: "PUT",
-          headers: {
-            Authorization: LocalStorage.getAccesToken(),
-          },
-          body: formData,
-        };
-      } else {
-        const filteredData = { ...data };
-        delete filteredData.media;
-
-        requestOptions = {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: LocalStorage.getAccesToken(),
-          },
-          body: JSON.stringify(filteredData),
-        };
-      }
-
-      let response = await fetch(url, requestOptions);
-
-      if (APIService.isUnauthenticated(response.status)) {
-        const hasRefreshed = await APIService.refreshToken();
-        if (hasRefreshed === true) {
-          return this.update(id, data, mediaChanged);
+      // Append non-file fields
+      for (const key in data) {
+        if (key !== 'mediaFile' && data[key] !== undefined && data[key] !== null) {
+          formData.append(key, data[key]);
         }
       }
 
-      if (!response.ok) {
-        console.error("Failed to update media coverage:", await response.text());
-        return false;
+      // ✅ Append the file with the correct key name
+      if (data.mediaFile) {
+        formData.append("media", data.mediaFile); // <- adjust "media" if backend uses another field name
       }
 
-      return await response.json();
-    } catch (error) {
-      console.error("Error updating media coverage:", error);
+      requestOptions = {
+        method: "PUT",
+        headers: {
+          Authorization: LocalStorage.getAccesToken(), // ✅ Use your token
+          // ❌ Do not set Content-Type for FormData
+        },
+        body: formData,
+      };
+    } else {
+      const filteredData = { ...data };
+      delete filteredData.mediaFile; // ✅ Ensure mediaFile is not sent in JSON
+
+      requestOptions = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: LocalStorage.getAccesToken(),
+        },
+        body: JSON.stringify(filteredData),
+      };
+    }
+
+    let response = await fetch(url, requestOptions);
+
+   
+    if (APIService.isUnauthenticated(response.status)) {
+      const hasRefreshed = await APIService.refreshToken();
+      if (hasRefreshed === true) {
+        return this.update(id, data, mediaChanged); 
+      }
+    }
+
+    if (!response.ok) {
+      console.error("Failed to update media coverage:", await response.text());
       return false;
     }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error updating media coverage:", error);
+    return false;
   }
+}
+
 
   static async add(data) {
     const url = APIService.baseUrl + "api/admin/media-coverage/";

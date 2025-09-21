@@ -60,6 +60,7 @@ import MediaCoverageServices from "./Pages/MediaCoverage/MediaCoverageServices";
 import MediaCoverage from "./Pages/MediaCoverage/MediaCoverage";
 import AddMediaCoverage from "./Pages/MediaCoverage/AddMediaCoverage";
 import ViewMediaCoverage from "./Pages/MediaCoverage/ViewMediaCoverage";
+import UpdateMediaCoverage from "./Pages/MediaCoverage/UpdateMediaCoverage";
 
 function App() {
   return (
@@ -157,7 +158,7 @@ function App() {
            <Route path="/media-coverage" element={<PrivateRoute>< MediaCoverage /></PrivateRoute>} />
            <Route path="/media-coverage/add" element={<PrivateRoute><AddMediaCoverage /></PrivateRoute>} />
            <Route path="/media-coverage/view/:id" element={<PrivateRoute><ViewMediaCoverage /></PrivateRoute>} />
-           <Route path="/media-coverage/update/:id" element={<PrivateRoute><UpdateFeaturedCategory /></PrivateRoute>} /> 
+           <Route path="/media-coverage/update/:id" element={<PrivateRoute><UpdateMediaCoverage /></PrivateRoute>} /> 
         </Routes>
       
     </div>
