@@ -18,7 +18,8 @@ import { BsBookmarkCheckFill } from "react-icons/bs";
 import { LuFullscreen } from "react-icons/lu";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; 
+import { Link } from "react-router-dom";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -269,19 +270,35 @@ const Sidebar = () => {
                     <span>Bookings</span>
                   </a>
                 </li>
-                <li>
-                  <a
-                    href="/users"
-                    className={`flex items-center gap-3 ${
-                      isActive("/users")
-                        ? "text-white"
-                        : "text-white/50 hover:text-white transition"
-                    }`}
-                  >
-                    <MdPeople className="text-xl" />
-                    <span>Users</span>
-                  </a>
-                </li>
+               
+               <li>
+  <Link
+    to="/users"
+    className={`flex items-center gap-3 ${
+      isActive("/users")
+        ? "text-white"
+        : "text-white/50 hover:text-white transition"
+    }`}
+  >
+    <MdPeople className="text-xl" />
+    <span>Users</span>
+  </Link>
+</li>
+
+<li>
+  <Link
+    to="/media-coverage"
+    className={`flex items-center gap-3 ${
+      isActive("/media-coverage")
+        ? "text-white"
+        : "text-white/50 hover:text-white transition"
+    }`}
+  >
+    <BsBookmarkCheckFill className="text-xl" />
+    <span>Media Coverage</span>
+  </Link>
+</li>
+
               </ul>
               <hr className="my-8 border-white/20" />
 
