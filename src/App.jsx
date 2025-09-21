@@ -55,8 +55,11 @@ import UpdateFeaturedDestination from "./Pages/FeaturedDestination/UpdateFeature
 import FeaturedCategory from "./Pages/FeaturedCategory/FeaturedCategory";
 import AddFeaturedCategory from "./Pages/FeaturedCategory/AddFeaturedCategory";
 import ViewFeaturedCategory from "./Pages/FeaturedCategory/ViewFeaturedCategory";
-import UpdateFeaturedCategory from "./Pages/FeaturedCategory/UpdateFeaturedCategory";
-
+import UpdateFeaturedCategory from "./Pages/FeaturedCategory/UpdateFeaturedCategory"; 
+import MediaCoverageServices from "./Pages/MediaCoverage/MediaCoverageServices"; 
+import MediaCoverage from "./Pages/MediaCoverage/MediaCoverage";
+import AddMediaCoverage from "./Pages/MediaCoverage/AddMediaCoverage";
+import ViewMediaCoverage from "./Pages/MediaCoverage/ViewMediaCoverage";
 
 function App() {
   return (
@@ -148,7 +151,13 @@ function App() {
            <Route path="/featured-categories" element={<PrivateRoute>< FeaturedCategory /></PrivateRoute>} />
            <Route path="/featured-categories/add" element={<PrivateRoute><AddFeaturedCategory /></PrivateRoute>} />
            <Route path="/featured-categories/view/:id" element={<PrivateRoute><ViewFeaturedCategory /></PrivateRoute>} />
-           <Route path="/featured-categories/update/:id" element={<PrivateRoute><UpdateFeaturedCategory /></PrivateRoute>} />
+           <Route path="/featured-categories/update/:id" element={<PrivateRoute><UpdateFeaturedCategory /></PrivateRoute>} /> 
+           {/* Media Coverage */}
+
+           <Route path="/media-coverage" element={<PrivateRoute>< MediaCoverage /></PrivateRoute>} />
+           <Route path="/media-coverage/add" element={<PrivateRoute><AddMediaCoverage /></PrivateRoute>} />
+           <Route path="/media-coverage/view/:id" element={<PrivateRoute><ViewMediaCoverage /></PrivateRoute>} />
+           <Route path="/media-coverage/update/:id" element={<PrivateRoute><UpdateFeaturedCategory /></PrivateRoute>} /> 
         </Routes>
       
     </div>
