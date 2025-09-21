@@ -89,6 +89,7 @@ const AddBanner = () => {
                 <option value="OUR_TEAM">OUR_TEAM</option>
                 <option value="OUR_FAQ">OUR_FAQ</option>
                 <option value="OUR_CONTACT">OUR_CONTACT</option>
+                <option value="MARKETING">MARKETING</option>
               </select>
             </div>
 
