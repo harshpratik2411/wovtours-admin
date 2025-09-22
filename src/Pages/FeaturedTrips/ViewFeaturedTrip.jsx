@@ -38,6 +38,47 @@ const ViewFeaturedTrip = () => {
 
     const getStatusClass = (status) => StatusClassMap.getClass(status);
 
+    const renderMedia = () => {
+        const mediaUrls = featuredTrip?.trip?.media_urls;
+        if (!mediaUrls || mediaUrls.length === 0) {
+            return (
+                <img
+                    src="/placeholder.jpg"
+                    alt="No media"
+                    className="w-full h-64 object-cover rounded-md border"
+                />
+            );
+        }
+
+        const mediaUrl = mediaUrls[0].media;
+
+        if (/\.(jpeg|jpg|gif|png|webp)$/i.test(mediaUrl)) {
+            return (
+                <img
+                    src={mediaUrl}
+                    alt={featuredTrip.trip.title}
+                    className="w-full h-96 object-cover rounded-md border"
+                />
+            );
+        } else if (/\.(mp4|webm|ogg)$/i.test(mediaUrl)) {
+            return (
+                <video
+                    src={mediaUrl}
+                    controls
+                    className="w-full aspect-video rounded-md border"
+                />
+            );
+        } else {
+            return (
+                <img
+                    src="/placeholder.jpg"
+                    alt="Unsupported media"
+                    className="w-full h-64 object-cover rounded-md border"
+                />
+            );
+        }
+    };
+
     if (loading) {
         return (
             <>
@@ -53,9 +94,7 @@ const ViewFeaturedTrip = () => {
         );
     }
 
-    if (!featuredTrip) {
-        return null; // Should ideally redirect or show an error
-    }
+    if (!featuredTrip) return null;
 
     return (
         <>
@@ -65,15 +104,26 @@ const ViewFeaturedTrip = () => {
                 View Featured Trip
             </h1>
             <div className="bg-white p-4 sm:p-6 lg:ml-72 rounded-xl shadow-md font-rubik w-full max-w-6xl mx-auto -mt-2 mb-12">
-                <div className="space-y-4">
+                <div className="space-y-6">
+                    {/* Media */}
+                    <div>
+                        <p className="text-sm font-medium text-gray-700 mb-2">Media:</p>
+                        <div className="flex w-full justify-center">{renderMedia()}</div>
+                    </div>
+
+                    {/* Trip Title */}
                     <div>
                         <p className="text-sm font-medium text-gray-700">Trip Title:</p>
                         <p className="mt-1 text-sm text-gray-900">{featuredTrip.trip.title}</p>
                     </div>
+
+                    {/* Order */}
                     <div>
                         <p className="text-sm font-medium text-gray-700">Order:</p>
                         <p className="mt-1 text-sm text-gray-900">{featuredTrip.order}</p>
                     </div>
+
+                    {/* Status */}
                     <div>
                         <p className="text-sm font-medium text-gray-700">Status:</p>
                         <span
@@ -84,24 +134,32 @@ const ViewFeaturedTrip = () => {
                             {featuredTrip.status}
                         </span>
                     </div>
+
+                    {/* Dates */}
                     <div>
                         <p className="text-sm font-medium text-gray-700">Created At:</p>
-                        <p className="mt-1 text-sm text-gray-900">{DateFormatter.formatDate(featuredTrip.created_at)}</p>
+                        <p className="mt-1 text-sm text-gray-900">
+                            {DateFormatter.formatDate(featuredTrip.created_at)}
+                        </p>
                     </div>
                     <div>
                         <p className="text-sm font-medium text-gray-700">Updated At:</p>
-                        <p className="mt-1 text-sm text-gray-900">{DateFormatter.formatDate(featuredTrip.updated_at)}</p>
+                        <p className="mt-1 text-sm text-gray-900">
+                            {DateFormatter.formatDate(featuredTrip.updated_at)}
+                        </p>
                     </div>
+
+                    {/* Action Buttons */}
                     <div className="flex space-x-2">
                         <button
                             onClick={() => navigate(`/featured-trips/update/${featuredTrip.id}`)}
-                            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
                         >
                             Edit
                         </button>
                         <button
                             onClick={() => navigate(`/featured-trips`)}
-                            className="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            className="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none"
                         >
                             Back to List
                         </button>

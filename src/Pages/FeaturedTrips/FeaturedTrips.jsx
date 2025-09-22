@@ -218,7 +218,7 @@ const FeaturedTrips = () => {
                             ) : FeaturedTripList.length > 0 ? (
                                 FeaturedTripList.map((featuredTrip) => (
                                     <tr key={featuredTrip.trip.id} className="border-b hover:bg-gray-50">
-                                        <td className="py-4">
+                                       <td className="py-4">
                                             {featuredTrip.trip.media_urls && featuredTrip.trip.media_urls.length > 0 ? (
                                                 /\.(jpeg|jpg|gif|png|webp)$/i.test(
                                                     featuredTrip.trip.media_urls[0].media
@@ -239,7 +239,7 @@ const FeaturedTrips = () => {
                                                 ) : (
                                                     <img
                                                         src="/placeholder.jpg"
-                                                        alt="Unsupported file"
+                                                         alt="Unsupported file"
                                                         className="h-14 w-20 object-cover rounded-md"
                                                     />
                                                 )
@@ -322,42 +322,38 @@ const FeaturedTrips = () => {
                     </table>
                 </div>
 
-                {/* Mobile View */}
+                {/* Mobile View */} 
                 <div className="block sm:hidden space-y-5 flex-col items-center justify-center">
                     {!loading && FeaturedTripList && FeaturedTripList.length > 0 ? (
-                        FeaturedTripList.map((trip) => (
-                            <div
-                                key={trip.id}
-                                className="bg-white px-4 py-5 rounded-xl shadow-md border w-full"
-                                data-aos="fade-up"
-                            >
-                                {trip.media_urls && trip.media_urls.length > 0 ? (
-                                    /\.(jpeg|jpg|gif|png|webp)$/i.test(trip.media_urls[0].media) ? (
-                                        <img
-                                            src={trip.media_urls[0].media}
-                                            alt={trip.title}
-                                            className="w-full h-48 object-cover rounded-md mb-4"
-                                        />
-                                    ) : /\.(mp4|webm|ogg)$/i.test(trip.media_urls[0].media) ? (
-                                        <video
-                                            src={trip.media_urls[0].media}
-                                            controls
-                                            className="w-full h-48 object-cover rounded-md mb-4"
-                                        />
-                                    ) : (
-                                        <img
-                                            src="/placeholder.jpg"
-                                            alt="Unsupported file"
-                                            className="w-full h-48 object-cover rounded-md mb-4"
-                                        />
-                                    )
-                                ) : (
-                                    <img
-                                        src="/placeholder.jpg"
-                                        alt="No media"
-                                        className="w-full h-48 object-cover rounded-md mb-4"
-                                    />
-                                )}
+                       FeaturedTripList.map((featuredTrip) => (
+    <div key={featuredTrip.id} >
+        {featuredTrip.trip.media_urls && featuredTrip.trip.media_urls.length > 0 ? (
+            /\.(jpeg|jpg|gif|png|webp)$/i.test(featuredTrip.trip.media_urls[0].media) ? (
+                <img
+                    src={featuredTrip.trip.media_urls[0].media}
+                    alt={featuredTrip.trip.title}
+                    className="w-full h-48 object-cover rounded-md mb-4"
+                />
+            ) : /\.(mp4|webm|ogg)$/i.test(featuredTrip.trip.media_urls[0].media) ? (
+                <video
+                    src={featuredTrip.trip.media_urls[0].media}
+                    controls
+                    className="w-full h-48 object-cover rounded-md mb-4"
+                />
+            ) : (
+                <img
+                    src="/placeholder.jpg"
+                    alt="Unsupported file"
+                    className="w-full h-48 object-cover rounded-md mb-4"
+                />
+            )
+        ) : (
+            <img
+                src="/placeholder.jpg"
+                alt="No media"
+                className="w-full h-48 object-cover rounded-md mb-4"
+            />
+        )}
 
 
                                 <div className="flex justify-between items-start mb-2">
@@ -367,7 +363,7 @@ const FeaturedTrips = () => {
                                                 Title:
                                             </strong>
                                             <p className="text-sm text-gray-800">
-                                                {trip.title}
+                                                {featuredTrip.title}
                                             </p>
                                         </div>
 
@@ -377,7 +373,7 @@ const FeaturedTrips = () => {
                                                 Description:
                                             </strong>
                                             <p className="text-sm text-gray-800">
-                                                {trip.description}
+                                                {featuredTrip.description}
                                             </p>
                                         </div>
 
@@ -388,16 +384,16 @@ const FeaturedTrips = () => {
                                             </strong>
                                             <p
                                                 className={`text-xs inline-block px-2 py-1 rounded-full font-medium ml-2 ${getStatusClass(
-                                                    trip.status
+                                                    featuredTrip.status
                                                 )}`}
                                             >
-                                                {trip.status}
+                                                {featuredTrip.status}
                                             </p>
                                         </div>
                                     </div>
 
                                     <button
-                                        onClick={() => toggleMenu(trip.id)}
+                                        onClick={() => toggleMenu(featuredTrip.id)}
                                         className="text-gray-600 menu-toggle"
                                     >
                                         <BsThreeDotsVertical size={20} />
@@ -407,24 +403,24 @@ const FeaturedTrips = () => {
                                 <div className="text-sm text-gray-700 space-y-2 mt-2">
                                     <p>
                                         <span className="font-bold">Created At:</span>{" "}
-                                        {DateFormatter.formatDate(trip.created_at)}
+                                        {DateFormatter.formatDate(featuredTrip.created_at)}
                                     </p>
                                     <p>
                                         <span className="font-bold">Updated At:</span>{" "}
-                                        {DateFormatter.formatDate(trip.updated_at)}
+                                        {DateFormatter.formatDate(featuredTrip.updated_at)}
                                     </p>
                                 </div>
 
-                                {activeMenu === trip.id && (
+                                {activeMenu === featuredTrip.id && (
                                     <div className="mt-3 dropdown-menu bg-white border rounded shadow w-full z-10">
                                         <button
-                                            onClick={() => navigate(`/featured-trips/view/${trip.id}`)}
+                                            onClick={() => navigate(`/featured-trips/view/${featuredTrip.id}`)}
                                             className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                                         >
                                             <FaEye size={14} /> View
                                         </button>
                                         <button
-                                            onClick={() => navigate(`/featured-trips/update/${trip.id}`)}
+                                            onClick={() => navigate(`/featured-trips/update/${featuredTrip.id}`)}
                                             className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                                         >
                                             <FaEdit size={14} /> Update
