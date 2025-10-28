@@ -106,6 +106,10 @@ const ViewTripType = () => {
                 <span className="font-semibold w-40">Description:</span>
                 <span>{tripType.description || "N/A"}</span>
               </div>
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Slug:</span>
+                <span>{tripType.slug || "N/A"}</span>
+              </div>
 
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Parent:</span>

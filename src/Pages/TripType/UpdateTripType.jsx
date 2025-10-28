@@ -16,6 +16,7 @@ const UpdateTripType = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
+    slug: '',
     parent_id: '',
     status: 'Active',
     media_url: '',
@@ -42,6 +43,7 @@ const UpdateTripType = () => {
       setFormData({
         title: tripType.title || '',
         description: tripType.description || '',
+        slug: tripType.slug || '',
         parent_id: tripType.parent_id || '',
         status: tripType.status || 'Inactive',
         media_url: tripType.media_url || '',
@@ -144,6 +146,20 @@ const UpdateTripType = () => {
                   placeholder="Enter description"
                   className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                   rows={4}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  Trip Type Slug
+                </label>
+                <input
+                  type="text"
+                  name="slug"
+                  maxLength={100}
+                  value={formData.slug}
+                  onChange={handleChange}
+                  required
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
