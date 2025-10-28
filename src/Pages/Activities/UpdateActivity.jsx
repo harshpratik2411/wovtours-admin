@@ -18,6 +18,7 @@ const UpdateActivity = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
+    slug: '',
     status: 'Active',
     media_url: '',
     media_id: '',
@@ -42,6 +43,7 @@ const UpdateActivity = () => {
       setFormData({
         title: activity.title || '',
         description: activity.description || '',
+        slug: activity.slug || '',
         status: activity.status || 'Inactive',
         media_url: activity.media_url || '',
         media_id: activity.media_id || '',
@@ -136,6 +138,20 @@ const UpdateActivity = () => {
                   onChange={handleChange}
                   required
                   className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  Activity Slug
+                </label>
+                <input
+                  type="text"
+                  name="slug"
+                  maxLength={100}
+                  value={formData.slug}
+                  onChange={handleChange}
+                  required
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 

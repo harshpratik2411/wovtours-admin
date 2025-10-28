@@ -89,6 +89,10 @@ const ViewActivity = () => {
                 <span className="font-semibold w-40">Description:</span>
                 <span>{activity.description || "N/A"}</span>
               </div>
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Slug:</span>
+                <span>{activity.slug || "N/A"}</span>
+              </div>
 
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Media ID:</span>
