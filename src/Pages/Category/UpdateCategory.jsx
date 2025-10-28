@@ -16,6 +16,7 @@ const UpdateCategory = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
+    slug: '',
     parent_id: '',
     status: 'Active',
     media_url: '',
@@ -43,6 +44,7 @@ const UpdateCategory = () => {
     setFormData({
       title: category.title || '',
       description: category.description || '',
+      slug: category.slug || '',
       parent_id: category.parent_id || '',
       status: category.status || 'Inactive',
       media_url: category.media_url || '',
@@ -140,7 +142,8 @@ const UpdateCategory = () => {
               Description
             </label>
             <input 
-            type="text"
+            type="text" 
+            name="description"
               value={formData.description}
               onChange={handleChange}
               placeholder="Enter description"
@@ -148,6 +151,20 @@ const UpdateCategory = () => {
               rows={4}
             />
           </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                 Category Slug
+                </label> 
+                <input 
+                 type="text" 
+                 name="slug"
+                 maxLength={100}
+                  value={formData.slug}
+                  onChange={handleChange}
+                 required
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div> 
 
               {/* Category Type */}
              <div>

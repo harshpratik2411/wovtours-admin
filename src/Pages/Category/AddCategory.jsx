@@ -9,6 +9,7 @@ const AddCategory = () => {
   const [title, setTitle] = useState("");
   const [parentId, setParentId] = useState("");
   const [description, setDescription] = useState("");
+  const [slug, setSlug] = useState("");
   const [status, setStatus] = useState("Active");
   const [mediaFile, setMediaFile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -47,6 +48,7 @@ const AddCategory = () => {
       description,
       parent_id: parentId || null,
       status,
+      slug,
       media: mediaFile,
     };
 
@@ -82,6 +84,20 @@ const AddCategory = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Enter title"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Slug <span className="text-red-600">*</span>
+              </label>
+              <input
+                type="text"
+                value={slug}
+                onChange={(e) => setSlug(e.target.value)}
+                placeholder="Enter slug"
                 className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
