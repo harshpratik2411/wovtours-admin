@@ -106,6 +106,10 @@ const ViewDestination = () => {
                 <span className="font-semibold w-40">Description:</span>
                 <span>{destination.description || "N/A"}</span>
               </div>
+              <div className="flex gap-3">
+                <span className="font-semibold w-40">Slug:</span>
+                <span>{destination.slug || "N/A"}</span>
+              </div>
 
               <div className="flex gap-3">
                 <span className="font-semibold w-40">Parent :</span>

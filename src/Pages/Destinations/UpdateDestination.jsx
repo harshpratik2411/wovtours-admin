@@ -15,6 +15,7 @@ const UpdateDestination = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
+    slug: '',
     parent_id: '',
     status: 'Active',
     media_url: '',
@@ -41,6 +42,7 @@ const UpdateDestination = () => {
       setFormData({
         title: destination.title || '',
         description: destination.description || '',
+        slug: destination.slug || '',
         parent_id: destination.parent_id || '',
         status: destination.status || 'Inactive',
         media_url: destination.media_url || '',
@@ -146,6 +148,20 @@ const UpdateDestination = () => {
                 />
               </div>
 
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  Destination Slug
+                </label>
+                <input
+                  type="text"
+                  name="slug"
+                  maxLength={100}
+                  value={formData.slug}
+                  onChange={handleChange}
+                  required
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
               {/* Parent Destination */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
