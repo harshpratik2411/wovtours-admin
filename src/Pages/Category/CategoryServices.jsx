@@ -45,8 +45,8 @@ class CategoryServices {
     }
   }
 
-  static async get(id) {
-    const url = APIService.baseUrl + `api/admin/category/${id}/`;
+  static async get(slug) {
+    const url = APIService.baseUrl + `api/admin/category/${slug}/`;
     console.log("URL called", url);
 
     try {
@@ -60,7 +60,7 @@ class CategoryServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.get(id);
+          return this.get(slug);
         }
       }
 
@@ -79,10 +79,10 @@ class CategoryServices {
     }
   }
 
-  static async update(id, data, mediaChanged = false) {
+  static async update(slug, data, mediaChanged = false) {
     console.log("Update API called");
 
-    const url = APIService.baseUrl + `api/admin/category/${id}/`;
+    const url = APIService.baseUrl + `api/admin/category/${slug}/`;
 
     try {
       let requestOptions;
@@ -121,7 +121,7 @@ class CategoryServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.update(id, data, mediaChanged);
+          return this.update(slug, data, mediaChanged);
         }
       }
 
@@ -160,7 +160,7 @@ class CategoryServices {
       if (APIService.isUnauthenticated(response.status)) {
   const hasRefreshed = await APIService.refreshToken();
   if (hasRefreshed === true) {
-    return this.delete(id);
+    return this.delete(slug);
   }
   return false;
 } else if (APIService.isDeleted(response.status)) {
@@ -180,8 +180,8 @@ class CategoryServices {
     }
   }
 
-  static async delete(id) {
-    const url = APIService.baseUrl + `api/admin/category/${id}/`;
+  static async delete(slug) {
+    const url = APIService.baseUrl + `api/admin/category/${slug}/`;
 
     try {
       let response = await fetch(url, {
@@ -195,12 +195,12 @@ class CategoryServices {
         if (APIService.isUnauthenticated(response.status)) {
   const hasRefreshed = await APIService.refreshToken();
   if (hasRefreshed === true) {
-    return this.delete(id);
+    return this.delete(slug);
   } }
 
       return false;
     } catch (error) {
-      console.error(`Failed to delete category with id ${id}:`, error);
+      console.error(`Failed to delete category with slug ${slug}:`, error);
       return false;
     }
   }

@@ -179,7 +179,7 @@ const UpdateCategory = () => {
 >
   <option value="">None</option>
   {categories.map((cat) => (
-    <option key={cat.id} value={cat.id.toString()}>
+    <option key={id } value={id .toString()}>
       {cat.title}
     </option>
   ))}
