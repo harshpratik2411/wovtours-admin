@@ -179,6 +179,10 @@ const ViewTrips = () => {
               </div>
 
               <div className="flex gap-3">
+                <span className="font-semibold w-40">Slug:</span>
+                <span>{renderField(trip.slug)}</span>
+              </div>
+              <div className="flex gap-3">
                 <span className="font-semibold w-40">Description:</span>
                 <span>{renderField(trip.description)}</span>
               </div>

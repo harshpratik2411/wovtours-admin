@@ -20,6 +20,7 @@ const UpdateTrips = () => {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [slug, setSlug] = useState("");
   const [places_covered, setPlacesCovered] = useState("");
   const [meeting_point, setMeetingPoint] = useState("");
   const [duration_note, setDurationNote] = useState("");
@@ -72,12 +73,12 @@ const UpdateTrips = () => {
         if (trip) {
           setTitle(trip.title || "");
           setDescription(trip.description || "");
+          setSlug(trip.slug || "");
           setPlacesCovered(trip.places_covered || "");
           setMeetingPoint(trip.meeting_point || "");
           setDurationNote(trip.duration_note || "");
           setSpecialNote(trip.special_note || "");
           setStatus(trip.status || "Active");
-
           setOldPrice(trip.old_price || "");
           setNewPrice(trip.new_price || "");
           setHighlights(trip.highlights?.length ? trip.highlights : [""]);
@@ -334,6 +335,7 @@ const handleRemoveExistingMedia = (idToDelete) => {
     const data = {
       title,
       description,
+      slug,
       places_covered,
       meeting_point,
       duration_note,
@@ -557,6 +559,18 @@ const handleRemoveExistingMedia = (idToDelete) => {
                 placeholder="Enter description"
                 className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                 rows={4}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Slug <span className="text-red-600">*</span>
+              </label>
+              <input
+                type="text"
+                value={slug}
+                onChange={(e) => setSlug(e.target.value)}
+                placeholder="Enter slug"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div>

@@ -14,6 +14,7 @@ import ActivityServices from "../../Pages/Activities/ActivityServices";
 
 const AddTrips = () => {
   const [title, setTitle] = useState("");
+  const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
   const [places_covered, setPlacesCovered] = useState("");
   const [duration_note, setDurationNote] = useState("");
@@ -289,6 +290,7 @@ const AddTrips = () => {
     const data = {
       title,
       description,
+      slug,
       places_covered,
       duration_note,
       special_note,
@@ -478,6 +480,19 @@ const AddTrips = () => {
                     className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                     rows={4}
                   />
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Slug <span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={slug}
+                    onChange={(e) => setSlug(e.target.value)}
+                    placeholder="Enter slug"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
                 </div>
                 {/* Places covered */}
                 <div>
