@@ -78,7 +78,7 @@ const Activity = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const toggleMenu = (id) => setActiveMenu(activeMenu === id ? null : id);
+  const toggleMenu = (slug) => setActiveMenu(activeMenu === slug ? null : slug);
   const toggleSort = () => setSortMenuOpen(!sortMenuOpen);
 
   const handleSort = (option) => {
@@ -222,7 +222,7 @@ const Activity = () => {
       </tr>
     ) : ActivityList.length > 0 ? (
       ActivityList.map((activity) => (
-        <tr key={activity.id} className="border-b hover:bg-gray-50">
+        <tr key={activity.slug} className="border-b hover:bg-gray-50">
           <td className="py-4">
             <img
               src={activity.media_url || "/placeholder.jpg"}
@@ -255,16 +255,16 @@ const Activity = () => {
           <td className="py-4 text-right">
             <div className="relative inline-block">
               <button
-                onClick={() => toggleMenu(activity.id)}
+                onClick={() => toggleMenu(activity.slug)}
                 className="text-gray-600 hover:text-black menu-toggle"
               >
                 <BsThreeDotsVertical size={18} />
               </button>
-              {activeMenu === activity.id && (
+              {activeMenu === activity.slug && (
                 <div className="dropdown-menu absolute right-0 -top-[4rem] z-10 bg-white border rounded shadow w-32">
                   <button
                     onClick={() =>
-                      navigate(`/activities/view/${activity.id}`)
+                      navigate(`/activities/view/${activity.slug}`)
                     }
                     className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                   >
@@ -272,7 +272,7 @@ const Activity = () => {
                   </button>
                   <button
                     onClick={() =>
-                      navigate(`/activities/update/${activity.id}`)
+                      navigate(`/activities/update/${activity.slug}`)
                     }
                     className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                   >
@@ -306,7 +306,7 @@ const Activity = () => {
   {!loading && ActivityList && ActivityList.length > 0 ? (
     ActivityList.map((activity) => (
       <div
-        key={activity.id}
+        key={activity.slug}
         className="bg-white px-4 py-5 rounded-xl shadow-md border w-full"
         data-aos="fade-up"
       >
@@ -332,7 +332,7 @@ const Activity = () => {
             </p>
           </div>
           <button
-            onClick={() => toggleMenu(activity.id)}
+            onClick={() => toggleMenu(activity.slug)}
             className="text-gray-600 menu-toggle"
           >
             <BsThreeDotsVertical size={20} />
@@ -355,16 +355,16 @@ const Activity = () => {
           </p>
         </div>
 
-        {activeMenu === activity.id && (
+        {activeMenu === activity.slug && (
           <div className="mt-3 dropdown-menu bg-white border rounded shadow w-full z-10">
             <button
-              onClick={() => navigate(`/activities/view/${activity.id}`)}
+              onClick={() => navigate(`/activities/view/${activity.slug}`)}
               className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
             >
               <FaEye size={14} /> View
             </button>
             <button
-              onClick={() => navigate(`/activities/update/${activity.id}`)}
+              onClick={() => navigate(`/activities/update/${activity.slug}`)}
               className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
             >
               <FaEdit size={14} /> Update

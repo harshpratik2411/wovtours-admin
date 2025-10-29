@@ -47,8 +47,8 @@ class ActivityServices {
     }
   }
 
-  static async get(id) {
-    const url = APIService.baseUrl + `api/admin/activity/${id}/`;
+  static async get(slug) {
+    const url = APIService.baseUrl + `api/admin/activity/${slug}/`;
     console.log("URL called", url);
 
     try {
@@ -61,7 +61,7 @@ class ActivityServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.get(id);
+          return this.get(slug);
         }
       }
 
@@ -76,10 +76,10 @@ class ActivityServices {
     }
   }
 
-  static async update(id, data, mediaChanged = false) {
+  static async update(slug, data, mediaChanged = false) {
     console.log("Update API called");
 
-    const url = APIService.baseUrl + `api/admin/activity/${id}/`;
+    const url = APIService.baseUrl + `api/admin/activity/${slug}/`;
 
     try {
       let requestOptions;
@@ -118,7 +118,7 @@ class ActivityServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.update(id, data, (mediaChanged = false));
+          return this.update(slug, data, (mediaChanged = false));
         }
       }
 
@@ -168,8 +168,8 @@ class ActivityServices {
     }
   }
 
-  static async delete(id) {
-    const url = APIService.baseUrl + `api/admin/activity/${id}/`;
+  static async delete(slug) {
+    const url = APIService.baseUrl + `api/admin/activity/${slug}/`;
 
     try {
       let response = await fetch(url, {
@@ -183,13 +183,13 @@ class ActivityServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.delete(id);
+          return this.delete(slug);
         }
       }
 
       return false;
     } catch (error) {
-      console.error(`Failed to delete activity with id ${id}:`, error);
+      console.error(`Failed to delete activity with slug ${slug}:`, error);
       return false;
     }
   }
