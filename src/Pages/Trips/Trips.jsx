@@ -290,14 +290,14 @@ const Trips = () => {
                         {activeMenu === trip.id && (
                           <div className="dropdown-menu absolute right-0 -top-[4rem] z-10 bg-white border rounded shadow w-32">
                             <button
-                              onClick={() => navigate(`/trips/view/${trip.id}`)}
+                              onClick={() => navigate(`/trips/view/${trip.slug}`)}
                               className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                             >
                               <FaEye size={14} /> View
                             </button>
                             <button
                               onClick={() =>
-                                navigate(`/trips/update/${trip.id}`)
+                                navigate(`/trips/update/${trip.slug}`)
                               }
                               className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                             >

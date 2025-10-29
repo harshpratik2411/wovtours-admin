@@ -18,7 +18,7 @@ const renderField = (field) => {
 };
 
 const ViewTrips = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [trip, setTrip] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("general");
@@ -27,7 +27,7 @@ const ViewTrips = () => {
     const fetchTrip = async () => {
       try {
         setLoading(true);
-        const data = await TripServices.get(id);
+        const data = await TripServices.get(slug);
         setTrip(data);
         setLoading(false);
       } catch (error) {
@@ -37,7 +37,7 @@ const ViewTrips = () => {
     };
 
     fetchTrip();
-  }, [id]);
+  }, [slug]);
 
   if (loading) {
     return (

@@ -134,8 +134,8 @@ function App() {
 
               {/* Trips */}
            <Route path="/trips" element={<PrivateRoute>< Trips /></PrivateRoute>} />
-          <Route path="/trips/view/:id" element={<PrivateRoute><ViewTrips /></PrivateRoute>} />
-          <Route path="/trips/update/:id" element={<PrivateRoute><UpdateTrips /></PrivateRoute>} />
+          <Route path="/trips/view/:slug" element={<PrivateRoute><ViewTrips /></PrivateRoute>} />
+          <Route path="/trips/update/:slug" element={<PrivateRoute><UpdateTrips /></PrivateRoute>} />
           <Route path="/trips/add" element={<PrivateRoute><AddTrips/></PrivateRoute>} />  
 
            <Route path="/featured-trips" element={<PrivateRoute>< FeaturedTrips /></PrivateRoute>} />

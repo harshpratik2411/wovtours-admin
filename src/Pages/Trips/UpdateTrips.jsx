@@ -14,13 +14,12 @@ import PricingCatServices from "../PricingCategory/PricingCatServices";
 import ActivityServices from "../Activities/ActivityServices";
 
 const UpdateTrips = () => {
-  const { id } = useParams(); // Get trip ID from URL
+  const { slug } = useParams(); // Get trip ID from URL
   const navigate = useNavigate();
   const { showAlert } = useAlert();
-
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [slug, setSlug] = useState("");
+  const [slugStore, setSlugStore] = useState("");
   const [places_covered, setPlacesCovered] = useState("");
   const [meeting_point, setMeetingPoint] = useState("");
   const [duration_note, setDurationNote] = useState("");
@@ -66,14 +65,14 @@ const UpdateTrips = () => {
   useEffect(() => {
     const fetchTrip = async () => {
       try {
-        const trip = await TripServices.get(parseInt(id));
+        const trip = await TripServices.get(slug);
 
         console.log("Fetched Trip:", trip);
 
         if (trip) {
           setTitle(trip.title || "");
           setDescription(trip.description || "");
-          setSlug(trip.slug || "");
+          setSlugStore(trip.slug || "");
           setPlacesCovered(trip.places_covered || "");
           setMeetingPoint(trip.meeting_point || "");
           setDurationNote(trip.duration_note || "");
@@ -183,7 +182,7 @@ const UpdateTrips = () => {
 
     fetchTrip();
     fetchMeta();
-  }, [id, showAlert]);
+  }, [slug, showAlert]);
 
 
   const handleMediaChange = (e) => {
@@ -335,7 +334,7 @@ const handleRemoveExistingMedia = (idToDelete) => {
     const data = {
       title,
       description,
-      slug,
+     slug: slugStore,
       places_covered,
       meeting_point,
       duration_note,
@@ -394,7 +393,7 @@ const handleRemoveExistingMedia = (idToDelete) => {
     }
 
     try {
-      const result = await TripServices.update(id, data, mediaFiles.length > 0);
+      const result = await TripServices.update(slug, data, mediaFiles.length > 0);
       setLoading(false);
 
       if (result) {
@@ -564,14 +563,16 @@ const handleRemoveExistingMedia = (idToDelete) => {
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Slug <span className="text-red-600">*</span>
-              </label>
+              </label> 
               <input
-                type="text"
-                value={slug}
-                onChange={(e) => setSlug(e.target.value)}
-                placeholder="Enter slug"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+  type="text"
+  value={slugStore}        
+  onChange={(e) => setSlugStore(e.target.value)}
+  placeholder="Enter slug"
+  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+/>
+
+
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
