@@ -290,14 +290,14 @@ const TripType = () => {
               {activeMenu === tripType.id && (
                 <div className="dropdown-menu absolute right-0 -top-[4rem] z-10 bg-white border rounded shadow w-32">
                   <button
-                    onClick={() => navigate(`/trip-type/view/${tripType.id}`)}
+                    onClick={() => navigate(`/trip-type/view/${tripType.slug}`)}
                     className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                   >
                     <FaEye size={14} /> View
                   </button>
                   <button
                     onClick={() =>
-                      navigate(`/trip-type/update/${tripType.id}`)
+                      navigate(`/trip-type/update/${tripType.slug}`)
                     }
                     className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                   >
@@ -410,13 +410,13 @@ const TripType = () => {
         {activeMenu === tripType.id && (
           <div className="mt-3 dropdown-menu bg-white border rounded shadow w-full z-10">
             <button
-              onClick={() => navigate(`/tripTypes/view/${tripType.id}`)}
+              onClick={() => navigate(`/tripTypes/view/${tripType.slug}`)}
               className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
             >
               <FaEye size={14} /> View
             </button>
             <button
-              onClick={() => navigate(`/tripTypes/update/${tripType.id}`)}
+              onClick={() => navigate(`/tripTypes/update/${tripType.slug}`)}
               className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
             >
               <FaEdit size={14} /> Update
