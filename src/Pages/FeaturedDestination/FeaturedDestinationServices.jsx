@@ -46,8 +46,8 @@ class FeaturedDestinationServices {
     }
   }
 
-  static async get(id) {
-    const url = APIService.baseUrl + `api/admin/featured-destination/${id}/`;
+  static async get(slug) {
+    const url = APIService.baseUrl + `api/admin/featured-destination/${slug}/`;
 
     try {
       const response = await fetch(url, {
@@ -60,7 +60,7 @@ class FeaturedDestinationServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.get(id);
+          return this.get(slug);
         }
       }
 
@@ -112,8 +112,8 @@ class FeaturedDestinationServices {
     }
   }
 
-  static async update(id, data) {
-    const url = APIService.baseUrl + `api/admin/featured-destination/${id}/`;
+  static async update(slug, data) {
+    const url = APIService.baseUrl + `api/admin/featured-destination/${slug}/`;
 
     try {
       let response = await fetch(url, {
@@ -128,7 +128,7 @@ class FeaturedDestinationServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.update(id, data);
+          return this.update(slug, data);
         }
       }
 

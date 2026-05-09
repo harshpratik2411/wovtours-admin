@@ -71,39 +71,39 @@ function App() {
 
           {/* Categories */}
           <Route path="/categories" element={<PrivateRoute><Categories /></PrivateRoute>} />
-          <Route path="/categories/view/:id" element={<PrivateRoute><ViewCategory /></PrivateRoute>} />
-          <Route path="/categories/update/:id" element={<PrivateRoute><UpdateCategory /></PrivateRoute>} />
+          <Route path="/categories/view/:slug" element={<PrivateRoute><ViewCategory /></PrivateRoute>} />
+          <Route path="/categories/update/:slug" element={<PrivateRoute><UpdateCategory /></PrivateRoute>} />
           <Route path="/categories/add" element={<PrivateRoute><AddCategory /></PrivateRoute>} />
 
           {/* Tags */}
           <Route path="/tags" element={<PrivateRoute><Tags /></PrivateRoute>} />
-          <Route path="/tags/view/:id" element={<PrivateRoute><ViewTag /></PrivateRoute>} />
-          <Route path="/tags/update/:id" element={<PrivateRoute><UpdateTag /></PrivateRoute>} />
+          <Route path="/tags/view/:slug" element={<PrivateRoute><ViewTag /></PrivateRoute>} />
+          <Route path="/tags/update/:slug" element={<PrivateRoute><UpdateTag /></PrivateRoute>} />
           <Route path="/tags/add-tag" element={<PrivateRoute><AddTag /></PrivateRoute>} />
 
           {/* Difficulties */}
           <Route path="/difficulties" element={<PrivateRoute><Difficulty /></PrivateRoute>} />
-          <Route path="/difficulties/view/:id" element={<PrivateRoute><Viewdifficulty /></PrivateRoute>} />
-          <Route path="/difficulties/update/:id" element={<PrivateRoute><UpdateDifficulty /></PrivateRoute>} />
+          <Route path="/difficulties/view/:slug" element={<PrivateRoute><Viewdifficulty /></PrivateRoute>} />
+          <Route path="/difficulties/update/:slug" element={<PrivateRoute><UpdateDifficulty /></PrivateRoute>} />
           <Route path="/difficulties/add-difficulties" element={<PrivateRoute><AddDifficulty /></PrivateRoute>} />
 
           {/* Activities */}
           <Route path="/activities" element={<PrivateRoute><Activities /></PrivateRoute>} />
-          <Route path="/activities/view/:id" element={<PrivateRoute><ViewActivity /></PrivateRoute>} />
-          <Route path="/activities/update/:id" element={<PrivateRoute><UpdateActivity /></PrivateRoute>} />
+          <Route path="/activities/view/:slug" element={<PrivateRoute><ViewActivity /></PrivateRoute>} />
+          <Route path="/activities/update/:slug" element={<PrivateRoute><UpdateActivity /></PrivateRoute>} />
           <Route path="/activities/add" element={<PrivateRoute><AddActivity /></PrivateRoute>} />  
 
             {/* Destinations */}
           <Route path="/destinations" element={<PrivateRoute><Destination /></PrivateRoute>} />
-          <Route path="/destinations/view/:id" element={<PrivateRoute><ViewDestination /></PrivateRoute>} />
-          <Route path="/destinations/update/:id" element={<PrivateRoute><UpdateDestination /></PrivateRoute>} />
+          <Route path="/destinations/view/:slug" element={<PrivateRoute><ViewDestination /></PrivateRoute>} />
+          <Route path="/destinations/update/:slug" element={<PrivateRoute><UpdateDestination /></PrivateRoute>} />
           <Route path="/destinations/add" element={<PrivateRoute><AddDestination /></PrivateRoute>} />
        
             {/* TripTypes */} 
 
           <Route path="/trip-type" element={<PrivateRoute>< TripType /></PrivateRoute>} />
-          <Route path="/trip-type/view/:id" element={<PrivateRoute><ViewTripType /></PrivateRoute>} />
-          <Route path="/trip-type/update/:id" element={<PrivateRoute><UpdateTripType /></PrivateRoute>} />
+          <Route path="/trip-type/view/:slug" element={<PrivateRoute><ViewTripType /></PrivateRoute>} />
+          <Route path="/trip-type/update/:slug" element={<PrivateRoute><UpdateTripType /></PrivateRoute>} />
           <Route path="/trip-type/add" element={<PrivateRoute><AddTripType/></PrivateRoute>} />  
 
           {/* Users */}
@@ -118,37 +118,37 @@ function App() {
  
     
            <Route path="/pricing-category" element={<PrivateRoute>< PricingCat /></PrivateRoute>} />
-          <Route path="/pricing-category/view/:id" element={<PrivateRoute><ViewPricingCat /></PrivateRoute>} />
-          <Route path="/pricing-category/update/:id" element={<PrivateRoute><UpdatePricingCat /></PrivateRoute>} />
+          <Route path="/pricing-category/view/:slug" element={<PrivateRoute><ViewPricingCat /></PrivateRoute>} />
+          <Route path="/pricing-category/update/:slug" element={<PrivateRoute><UpdatePricingCat /></PrivateRoute>} />
           <Route path="/pricing-category/add" element={<PrivateRoute><AddPricingCat/></PrivateRoute>} />  
           {/* Banners */}
 
            <Route path="/banners" element={<PrivateRoute>< Banner /></PrivateRoute>} />
-          <Route path="/banners/view/:id" element={<PrivateRoute><ViewBanner /></PrivateRoute>} />
-          <Route path="/banners/update/:id" element={<PrivateRoute><UpdateBanner /></PrivateRoute>} />
+          <Route path="/banners/view/:slug" element={<PrivateRoute><ViewBanner /></PrivateRoute>} />
+          <Route path="/banners/update/:slug" element={<PrivateRoute><UpdateBanner /></PrivateRoute>} />
           <Route path="/banners/add" element={<PrivateRoute><AddBanner/></PrivateRoute>} />   
 
               {/* Trips */}
            <Route path="/trips" element={<PrivateRoute>< Trips /></PrivateRoute>} />
-          <Route path="/trips/view/:id" element={<PrivateRoute><ViewTrips /></PrivateRoute>} />
-          <Route path="/trips/update/:id" element={<PrivateRoute><UpdateTrips /></PrivateRoute>} />
+          <Route path="/trips/view/:slug" element={<PrivateRoute><ViewTrips /></PrivateRoute>} />
+          <Route path="/trips/update/:slug" element={<PrivateRoute><UpdateTrips /></PrivateRoute>} />
           <Route path="/trips/add" element={<PrivateRoute><AddTrips/></PrivateRoute>} />  
 
            <Route path="/featured-trips" element={<PrivateRoute>< FeaturedTrips /></PrivateRoute>} />
            <Route path="/featured-trips/add" element={<PrivateRoute><AddFeaturedTrip /></PrivateRoute>} />
-           <Route path="/featured-trips/view/:id" element={<PrivateRoute><ViewFeaturedTrip /></PrivateRoute>} />
-           <Route path="/featured-trips/update/:id" element={<PrivateRoute><UpdateFeaturedTrip /></PrivateRoute>} />
+           <Route path="/featured-trips/view/:slug" element={<PrivateRoute><ViewFeaturedTrip /></PrivateRoute>} />
+           <Route path="/featured-trips/update/:slug" element={<PrivateRoute><UpdateFeaturedTrip /></PrivateRoute>} />
 
           {/* Featured Destinations */}
            <Route path="/featured-destinations" element={<PrivateRoute>< FeaturedDestination /></PrivateRoute>} />
            <Route path="/featured-destinations/add" element={<PrivateRoute><AddFeaturedDestination /></PrivateRoute>} />
-           <Route path="/featured-destinations/view/:id" element={<PrivateRoute><ViewFeaturedDestination /></PrivateRoute>} />
-           <Route path="/featured-destinations/update/:id" element={<PrivateRoute><UpdateFeaturedDestination /></PrivateRoute>} />
+           <Route path="/featured-destinations/view/:slug" element={<PrivateRoute><ViewFeaturedDestination /></PrivateRoute>} />
+           <Route path="/featured-destinations/update/:slug" element={<PrivateRoute><UpdateFeaturedDestination /></PrivateRoute>} />
           {/* Featured Categories */}
            <Route path="/featured-categories" element={<PrivateRoute>< FeaturedCategory /></PrivateRoute>} />
            <Route path="/featured-categories/add" element={<PrivateRoute><AddFeaturedCategory /></PrivateRoute>} />
-           <Route path="/featured-categories/view/:id" element={<PrivateRoute><ViewFeaturedCategory /></PrivateRoute>} />
-           <Route path="/featured-categories/update/:id" element={<PrivateRoute><UpdateFeaturedCategory /></PrivateRoute>} />
+           <Route path="/featured-categories/view/:slug" element={<PrivateRoute><ViewFeaturedCategory /></PrivateRoute>} />
+           <Route path="/featured-categories/update/:slug" element={<PrivateRoute><UpdateFeaturedCategory /></PrivateRoute>} />
         </Routes>
       
     </div>

@@ -48,8 +48,8 @@ class PricingCatServices {
     }
   }
 
-  static async get(id) {
-    const url = APIService.baseUrl + `api/admin/pricing-category/${id}/`;
+  static async get(slug) {
+    const url = APIService.baseUrl + `api/admin/pricing-category/${slug}/`;
     console.log("URL called", url);
 
     try {
@@ -62,7 +62,7 @@ class PricingCatServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.get(id);
+          return this.get(slug);
         }
       }
       if (APIService.isError(response.status)) {
@@ -78,10 +78,10 @@ class PricingCatServices {
       return null;
     }
   }
-  static async update(id, data) {
+  static async update(slug, data) {
     console.log("Update API called");
 
-    const url = APIService.baseUrl + `api/admin/pricing-category/${id}/`;
+    const url = APIService.baseUrl + `api/admin/pricing-category/${slug}/`;
 
     try {
       let response = await fetch(url, {
@@ -98,13 +98,13 @@ class PricingCatServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.update(id, data);
+          return this.update(slug, data);
         }
       }
 
       return await response.json();
     } catch (error) {
-      console.error(`Failed to update pricing category with id ${id}:`, error);
+      console.error(`Failed to update pricing category with slug ${slug}:`, error);
       return null;
     }
   }
@@ -141,8 +141,8 @@ class PricingCatServices {
       return null;
     }
   }
-  static async delete(id) {
-    const url = APIService.baseUrl + `api/admin/pricing-category/${id}/`;
+  static async delete(slug) {
+    const url = APIService.baseUrl + `api/admin/pricing-category/${slug}/`;
 
     try {
       let response = await fetch(url, {
@@ -159,12 +159,12 @@ class PricingCatServices {
         if (APIService.isUnauthenticated(response.status)) {
   const hasRefreshed = await APIService.refreshToken();
   if (hasRefreshed === true) {
-    return this.delete(id);
+    return this.delete(slug);
   } }
 
       return false;
     } catch (error) {
-      console.error(`Failed to delete pricing category with id ${id}:`, error);
+      console.error(`Failed to delete pricing category with slug ${slug}:`, error);
       return false;
     }
   }

@@ -13,20 +13,20 @@ const getStatusClass = (status) => {
 };
 
 const ViewPricingCat = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [PricingCat, setPricingCat] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPricingCat = async () => {
       setLoading(true);
-      const data = await PricingCatServices.get(id);
+      const data = await PricingCatServices.get(slug);
       setPricingCat(data);
       setLoading(false);
     };
 
     fetchPricingCat();
-  }, [id]);
+  }, [slug]);
 
   if (loading) {
     return (

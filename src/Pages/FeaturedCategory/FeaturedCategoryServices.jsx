@@ -46,8 +46,8 @@ class FeaturedCategoryServices {
     }
   }
 
-  static async get(id) {
-    const url = APIService.baseUrl + `api/admin/featured-category/${id}/`;
+  static async get(slug) {
+    const url = APIService.baseUrl + `api/admin/featured-category/${slug}/`;
 
     try {
       const response = await fetch(url, {
@@ -60,7 +60,7 @@ class FeaturedCategoryServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.get(id);
+          return this.get(slug);
         }
       }
 
@@ -112,8 +112,8 @@ class FeaturedCategoryServices {
     }
   }
 
-  static async update(id, data) {
-    const url = APIService.baseUrl + `api/admin/featured-category/${id}/`;
+  static async update(slug, data) {
+    const url = APIService.baseUrl + `api/admin/featured-category/${slug}/`;
 
     try {
       let response = await fetch(url, {
@@ -128,7 +128,7 @@ class FeaturedCategoryServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.update(id, data);
+          return this.update(slug, data);
         }
       }
 

@@ -10,7 +10,7 @@ import { MdDescription } from 'react-icons/md'
 
 const UpdateTripType = () => {
   const { showAlert } = useAlert()
-  const { id } = useParams()
+  const { slug } = useParams()
   const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
@@ -32,7 +32,7 @@ const UpdateTripType = () => {
     AOS.init({ duration: 800, once: true })
 
     const fetchCategoryDetails = async () => {
-      const tripType = await TripTypeServices.get(id)
+      const tripType = await TripTypeServices.get(slug)
       if (!tripType) {
         setNotFound(true)
         setLoading(false)
@@ -62,7 +62,7 @@ const UpdateTripType = () => {
 
     fetchCategoryDetails()
     fetchAllCategories()
-  }, [id])
+  }, [slug]);
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -78,7 +78,7 @@ const UpdateTripType = () => {
       dataToUpdate.media = selectedImage
     }
 
-    const updated = await TripTypeServices.update(id, dataToUpdate, !!selectedImage)
+    const updated = await TripTypeServices.update(slug, dataToUpdate, !!selectedImage)
 
     if (updated) {
       showAlert('Trip Type updated successfully.', 'success')
@@ -92,7 +92,7 @@ const UpdateTripType = () => {
     const confirmed = window.confirm('Are you sure you want to delete this Trip type?')
     if (!confirmed) return
 
-    const success = await TripTypeServices.delete(id)
+    const success = await TripTypeServices.delete(slug)
     if (success) {
       showAlert('Trip Type deleted successfully.', 'success')
       navigate('/trip-type')

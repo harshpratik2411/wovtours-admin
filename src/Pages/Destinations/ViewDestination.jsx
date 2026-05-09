@@ -8,7 +8,7 @@ import StatusClassMap from "../../Services/StatusClassMap";
 import DestinationServices from "./DestinationServices";
 
 const ViewDestination = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [destination, setDestination] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -16,7 +16,7 @@ const ViewDestination = () => {
     const fetchDestination = async () => {
       try {
         setLoading(true);
-        const data = await DestinationServices.get(id);
+        const data = await DestinationServices.get(slug);
         setDestination(data);
         setLoading(false);
       } catch (error) {
@@ -26,7 +26,7 @@ const ViewDestination = () => {
     };
 
     fetchDestination();
-  }, [id]);
+  }, [slug]);
 
   if (loading) {
     return (

@@ -10,7 +10,7 @@ import BannerServices from "./BannerServices";
   
 
 const ViewBanner = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [banner, setBanner] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -18,7 +18,7 @@ const ViewBanner = () => {
     const fetchBanner = async () => {
       try {
         setLoading(true);
-        const data = await BannerServices.get(id);
+        const data = await BannerServices.get(slug);
         setBanner(data);
         setLoading(false);
       } catch (error) {
@@ -28,7 +28,7 @@ const ViewBanner = () => {
     };
 
     fetchBanner();
-  }, [id]);
+  }, [slug]);
 
   if (loading) {
     return (

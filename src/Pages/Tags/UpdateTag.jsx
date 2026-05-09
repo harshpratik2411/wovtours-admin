@@ -12,7 +12,7 @@ import { useAlert } from '../../Context/AlertContext/AlertContext';
  }
 
 const UpdateTag = () => {
-  const { id } = useParams()
+  const { slug } = useParams()
   const navigate = useNavigate() 
    const { showAlert } = useAlert();
 
@@ -29,7 +29,7 @@ const UpdateTag = () => {
     AOS.init({ duration: 800, once: true })
 
     const fetchTag = async () => {
-      const tag = await TagServices.get(id)
+      const tag = await TagServices.get(slug)
       if (!tag) {
         setNotFound(true)
         setLoading(false)
@@ -45,7 +45,7 @@ const UpdateTag = () => {
     }
 
     fetchTag()
-  }, [id])
+  }, [slug]);
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -61,7 +61,7 @@ const UpdateTag = () => {
     status: formData.status,
   }
 
-  const updated = await TagServices.update(id, updateData)
+  const updated = await TagServices.update(slug, updateData)
   if (updated) {
     showAlert('Tag updated successfully.','success')
     navigate('/tags') 
@@ -76,7 +76,7 @@ const UpdateTag = () => {
     const confirmed = window.confirm('Are you sure you want to delete this tag?')
     if (!confirmed) return
 
-    const success = await TagServices.delete(id)
+    const success = await TagServices.delete(slug)
     if (success) { 
       showAlert('Tag deleted successfully.')
       navigate('/tags')

@@ -46,8 +46,8 @@ class FeaturedTripServices {
     }
   }
 
-  static async get(id) {
-    const url = APIService.baseUrl + `api/admin/featured-trip/${id}/`;
+  static async get(slug) {
+    const url = APIService.baseUrl + `api/admin/featured-trip/${slug}/`;
     console.log("URL called", url);
 
     try {
@@ -61,7 +61,7 @@ class FeaturedTripServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.get(id);
+          return this.get(slug);
         }
       }
 
@@ -80,10 +80,10 @@ class FeaturedTripServices {
     }
   }
 
-  static async update(id, data) {
+  static async update(slug, data) {
     console.log("Update API called");
 
-    const url = APIService.baseUrl + `api/admin/featured-trip/${id}/`;
+    const url = APIService.baseUrl + `api/admin/featured-trip/${slug}/`;
 
     try {
       let response = await fetch(url, {
@@ -98,7 +98,7 @@ class FeaturedTripServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.update(id, data);
+          return this.update(slug, data);
         }
       }
 

@@ -8,7 +8,7 @@ import DateFormatter from "../../Services/DateFormatter";
 import StatusClassMap from "../../Services/StatusClassMap";
 
 const ViewActivity = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [activity, setActivity] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -16,7 +16,7 @@ const ViewActivity = () => {
     const fetchActivity = async () => {
       try {
         setLoading(true);
-        const data = await ActivityServices.get(id);
+        const data = await ActivityServices.get(slug);
         setActivity(data);
         setLoading(false);
       } catch (error) {
@@ -26,7 +26,7 @@ const ViewActivity = () => {
     };
 
     fetchActivity();
-  }, [id]);
+  }, [slug]);
 
   if (loading) {
     return (

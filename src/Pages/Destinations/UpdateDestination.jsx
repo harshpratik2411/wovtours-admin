@@ -9,7 +9,7 @@ import { useAlert } from '../../Context/AlertContext/AlertContext';
 
 const UpdateDestination = () => {
   const { showAlert } = useAlert();
-  const { id } = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -31,7 +31,7 @@ const UpdateDestination = () => {
     AOS.init({ duration: 800, once: true });
 
     const fetchDestinationDetails = async () => {
-      const destination = await DestinationServices.get(id);
+      const destination = await DestinationServices.get(slug);
       if (!destination) {
         setNotFound(true);
         setLoading(false);
@@ -61,7 +61,7 @@ const UpdateDestination = () => {
 
     fetchDestinationDetails();
     fetchAllDestinations();
-  }, [id]);
+  }, [slug]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -76,7 +76,7 @@ const UpdateDestination = () => {
       dataToUpdate.media = selectedImage;
     }
 
-    const updated = await DestinationServices.update(id, dataToUpdate, !!selectedImage);
+    const updated = await DestinationServices.update(slug, dataToUpdate, !!selectedImage);
 
     if (updated) {
       showAlert('Destination updated successfully.', 'success');
@@ -90,7 +90,7 @@ const UpdateDestination = () => {
     const confirmed = window.confirm('Are you sure you want to delete this destination?');
     if (!confirmed) return;
 
-    const success = await DestinationServices.delete(id);
+    const success = await DestinationServices.delete(slug);
     if (success) {
       showAlert('Destination deleted successfully.', 'success');
       navigate('/destinations');

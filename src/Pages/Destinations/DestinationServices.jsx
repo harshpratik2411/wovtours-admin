@@ -46,8 +46,8 @@ class DestinationServices {
     }
   }
 
-  static async get(id) {
-    const url = APIService.baseUrl + `api/admin/destination/${id}/`;
+  static async get(slug) {
+    const url = APIService.baseUrl + `api/admin/destination/${slug}/`;
     console.log("URL called", url);
 
     try {
@@ -60,7 +60,7 @@ class DestinationServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.get(id);
+          return this.get(slug);
         }
       }
 
@@ -79,10 +79,10 @@ class DestinationServices {
     }
   }
 
-  static async update(id, data, mediaChanged = false) {
+  static async update(slug, data, mediaChanged = false) {
     console.log("Update API called");
 
-    const url = APIService.baseUrl + `api/admin/destination/${id}/`;
+    const url = APIService.baseUrl + `api/admin/destination/${slug}/`;
 
     try {
       let requestOptions;
@@ -121,7 +121,7 @@ class DestinationServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.update(id, data, mediaChanged);
+          return this.update(slug, data, mediaChanged);
         }
       }
 
@@ -176,8 +176,8 @@ class DestinationServices {
     }
   }
 
-  static async delete(id) {
-    const url = APIService.baseUrl + `api/admin/destination/${id}/`;
+  static async delete(slug) {
+    const url = APIService.baseUrl + `api/admin/destination/${slug}/`;
 
     try {
       let response = await fetch(url, {
@@ -191,13 +191,13 @@ class DestinationServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.delete(id);
+          return this.delete(slug);
         }
       }
 
       return false;
     } catch (error) {
-      console.error(`Failed to delete destination with id ${id}:`, error);
+      console.error(`Failed to delete destination with slug ${slug}:`, error);
       return false;
     }
   }

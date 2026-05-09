@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const UpdateFeaturedTrip = () => {
-    const { id } = useParams();
+    const { slug } = useParams();
     const navigate = useNavigate();
     const [tripId, setTripId] = useState("");
     const [order, setOrder] = useState("");
@@ -27,7 +27,7 @@ const UpdateFeaturedTrip = () => {
                 }
 
                 // Fetch the specific featured trip to update
-                const featuredTripResponse = await FeaturedTripServices.get(id);
+                const featuredTripResponse = await FeaturedTripServices.get(slug);
                 if (featuredTripResponse) {
                     setTripId(featuredTripResponse.trip.id);
                     setOrder(featuredTripResponse.order);
@@ -46,7 +46,7 @@ const UpdateFeaturedTrip = () => {
         };
 
         fetchData();
-    }, [id, navigate]);
+    }, [slug, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -59,7 +59,7 @@ const UpdateFeaturedTrip = () => {
         };
 
         try {
-            const response = await FeaturedTripServices.update(id, data);
+            const response = await FeaturedTripServices.update(slug, data);
             if (response) {
                 toast.success("Featured Trip updated successfully!");
                 navigate("/featured-trips");

@@ -8,7 +8,7 @@ import StatusClassMap from "../../Services/StatusClassMap";
 import TripTypeServices from "./TripTypeServices";
 
 const ViewTripType = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [tripType, setTripType] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -16,7 +16,7 @@ const ViewTripType = () => {
     const fetchTripType = async () => {
       try {
         setLoading(true);
-        const data = await TripTypeServices.get(id);
+        const data = await TripTypeServices.get(slug);
         setTripType(data);
         setLoading(false);
       } catch (error) {
@@ -26,7 +26,7 @@ const ViewTripType = () => {
     };
 
     fetchTripType();
-  }, [id]);
+  }, [slug]);
 
   if (loading) {
     return (

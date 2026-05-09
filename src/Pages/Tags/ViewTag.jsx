@@ -13,20 +13,20 @@ const getStatusClass = (status) => {
 };
 
 const ViewTag = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [tag, setTag] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTag = async () => {
       setLoading(true);
-      const data = await TagServices.get(id);
+      const data = await TagServices.get(slug);
       setTag(data);
       setLoading(false);
     };
 
     fetchTag();
-  }, [id]);
+  }, [slug]);
 
   if (loading) {
     return (

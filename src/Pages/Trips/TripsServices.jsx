@@ -46,8 +46,8 @@ class TripServices {
     }
   }
 
-  static async get(id) {
-    const url = APIService.baseUrl + `api/admin/trip/${id}/`;
+  static async get(slug) {
+    const url = APIService.baseUrl + `api/admin/trip/${slug}/`;
     console.log("URL called", url);
 
     try {
@@ -61,7 +61,7 @@ class TripServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.get(id);
+          return this.get(slug);
         }
       }
 
@@ -80,11 +80,11 @@ class TripServices {
     }
   }
 
-  static async update(id, data, mediaChanged = false,) {
+  static async update(slug, data, mediaChanged = false,) {
     console.log("Update API called");
     console.log("Data = ", data);
 
-    const url = APIService.baseUrl + `api/admin/trip/${id}/`;
+    const url = APIService.baseUrl + `api/admin/trip/${slug}/`;
 
     try {
       let requestOptions;
@@ -144,7 +144,7 @@ class TripServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.update(id, data, mediaChanged);
+          return this.update(slug, data, mediaChanged);
         }
       }
 

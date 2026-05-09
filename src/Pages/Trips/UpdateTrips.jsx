@@ -14,7 +14,7 @@ import PricingCatServices from "../PricingCategory/PricingCatServices";
 import ActivityServices from "../Activities/ActivityServices";
 
 const UpdateTrips = () => {
-  const { id } = useParams(); // Get trip ID from URL
+  const { slug } = useParams(); // Get trip slug from URL
   const navigate = useNavigate();
   const { showAlert } = useAlert();
 
@@ -63,7 +63,7 @@ const UpdateTrips = () => {
   useEffect(() => {
     const fetchTrip = async () => {
       try {
-        const trip = await TripServices.get(parseInt(id));
+        const trip = await TripServices.get(slug);
 
         console.log("Fetched Trip:", trip);
 
@@ -180,7 +180,7 @@ const UpdateTrips = () => {
 
     fetchTrip();
     fetchMeta();
-  }, [id, showAlert]);
+  }, [slug, showAlert]);
 
 
   const handleMediaChange = (e) => {
@@ -373,7 +373,7 @@ const UpdateTrips = () => {
     }
 
     try {
-      const result = await TripServices.update(id, data, mediaFiles.length > 0);
+      const result = await TripServices.update(slug, data, mediaFiles.length > 0);
       setLoading(false);
 
       if (result) {

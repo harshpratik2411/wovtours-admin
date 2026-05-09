@@ -44,8 +44,8 @@ class BannerServices {
     }
   }
 
-  static async get(id) {
-    const url = APIService.baseUrl + `api/admin/banner/${id}/`;
+  static async get(slug) {
+    const url = APIService.baseUrl + `api/admin/banner/${slug}/`;
     console.log("URL called", url);
 
     try {
@@ -58,7 +58,7 @@ class BannerServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.get(id);
+          return this.get(slug);
         }
       }
 
@@ -77,10 +77,10 @@ class BannerServices {
     }
   }
 
-  static async update(id, data, mediaChanged = false) {
+  static async update(slug, data, mediaChanged = false) {
     console.log("Update API called");
 
-    const url = APIService.baseUrl + `api/admin/banner/${id}/`;
+    const url = APIService.baseUrl + `api/admin/banner/${slug}/`;
 
     try {
       let requestOptions;
@@ -119,7 +119,7 @@ class BannerServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.update(id, data, mediaChanged);
+          return this.update(slug, data, mediaChanged);
         }
       }
 
@@ -175,8 +175,8 @@ class BannerServices {
     }
   }
 
-  static async delete(id) {
-    const url = APIService.baseUrl + `api/admin/banner/${id}/`;
+  static async delete(slug) {
+    const url = APIService.baseUrl + `api/admin/banner/${slug}/`;
 
     try {
       let response = await fetch(url, {
@@ -190,13 +190,13 @@ class BannerServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.delete(id);
+          return this.delete(slug);
         }
       }
 
       return false;
     } catch (error) {
-      console.error(`Failed to delete banner with id ${id}:`, error);
+      console.error(`Failed to delete banner with slug ${slug}:`, error);
       return false;
     }
   }

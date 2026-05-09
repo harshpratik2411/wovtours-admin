@@ -10,7 +10,7 @@ import { MdDescription } from 'react-icons/md'
 
 const UpdateCategory = () => { 
    const { showAlert } = useAlert();
-  const { id } = useParams()
+  const { slug } = useParams()
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -33,7 +33,7 @@ const UpdateCategory = () => {
   AOS.init({ duration: 800, once: true });
 
   const fetchCategoryDetails = async () => {
-    const category = await CategoryServices.get(id);
+    const category = await CategoryServices.get(slug);
     if (!category) {
       setNotFound(true);
       setLoading(false);
@@ -63,7 +63,7 @@ const UpdateCategory = () => {
 
   fetchCategoryDetails();
   fetchAllCategories();
-}, [id]);
+}, [slug]);
 
 
   const handleChange = (e) => {
@@ -81,7 +81,7 @@ const UpdateCategory = () => {
       dataToUpdate.media = selectedImage
     }
 
-    const updated = await CategoryServices.update(id, dataToUpdate, !!selectedImage)
+    const updated = await CategoryServices.update(slug, dataToUpdate, !!selectedImage)
 
     if (updated) {
       showAlert('Category updated successfully.', 'success')
@@ -95,7 +95,7 @@ const UpdateCategory = () => {
     const confirmed = window.confirm('Are you sure you want to delete this Category?')
     if (!confirmed) return
 
-    const success = await CategoryServices.delete(id)
+    const success = await CategoryServices.delete(slug)
     if (success) {
       showAlert('Category deleted successfully.', 'success')
       navigate('/categories')

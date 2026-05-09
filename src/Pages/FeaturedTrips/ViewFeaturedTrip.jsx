@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ViewFeaturedTrip = () => {
-    const { id } = useParams();
+    const { slug } = useParams();
     const navigate = useNavigate();
     const [featuredTrip, setFeaturedTrip] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -17,7 +17,7 @@ const ViewFeaturedTrip = () => {
     useEffect(() => {
         const fetchFeaturedTrip = async () => {
             try {
-                const response = await FeaturedTripServices.get(id);
+                const response = await FeaturedTripServices.get(slug);
                 if (response) {
                     setFeaturedTrip(response);
                 } else {
@@ -34,7 +34,7 @@ const ViewFeaturedTrip = () => {
         };
 
         fetchFeaturedTrip();
-    }, [id, navigate]);
+    }, [slug, navigate]);
 
     const getStatusClass = (status) => StatusClassMap.getClass(status);
 

@@ -45,8 +45,8 @@ class DifficultiesServices {
     }
   }
 
-  static async get(id) {
-    const url = APIService.baseUrl + `api/admin/difficulty/${id}/`;
+  static async get(slug) {
+    const url = APIService.baseUrl + `api/admin/difficulty/${slug}/`;
     console.log("URL called", url);
 
     try {
@@ -60,7 +60,7 @@ class DifficultiesServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.get(id);
+          return this.get(slug);
         }
       }
 
@@ -114,11 +114,11 @@ class DifficultiesServices {
     }
   }
 
-  // Update difficulty by ID
-  static async update(id, data) {
+  // Update difficulty by slug
+  static async update(slug, data) {
     console.log("Update API called");
 
-    const url = APIService.baseUrl + `api/admin/difficulty/${id}/`;
+    const url = APIService.baseUrl + `api/admin/difficulty/${slug}/`;
 
     try {
       let response = await fetch(url, {
@@ -135,20 +135,20 @@ class DifficultiesServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.update(id, data);
+          return this.update(slug, data);
         }
       }
 
       return await response.json();
     } catch (error) {
-      console.error(`Failed to update difficulty with id ${id}:`, error);
+      console.error(`Failed to update difficulty with slug ${slug}:`, error);
       return null;
     }
   }
 
-  // Delete difficulty by ID
-  static async delete(id) {
-    const url = APIService.baseUrl + `api/admin/difficulty/${id}/`;
+  // Delete difficulty by slug
+  static async delete(slug) {
+    const url = APIService.baseUrl + `api/admin/difficulty/${slug}/`;
 
     try {
       let response = await fetch(url, {
@@ -164,12 +164,12 @@ class DifficultiesServices {
         if (APIService.isUnauthenticated(response.status)) {
   const hasRefreshed = await APIService.refreshToken();
   if (hasRefreshed === true) {
-    return this.delete(id);
+    return this.delete(slug);
   } }
 
       return false;
     } catch (error) {
-      console.error(`Failed to delete difficulty with id ${id}:`, error);
+      console.error(`Failed to delete difficulty with slug ${slug}:`, error);
       return false;
     }
   }

@@ -12,7 +12,7 @@ import { useAlert } from '../../Context/AlertContext/AlertContext';
  }
 
 const UpdatePricingCat = () => {
-  const { id } = useParams()
+  const { slug } = useParams()
   const navigate = useNavigate() 
    const { showAlert } = useAlert();
 
@@ -30,7 +30,7 @@ const UpdatePricingCat = () => {
     AOS.init({ duration: 800, once: true })
 
     const fetchPricingCat = async () => {
-      const PricingCat = await PricingCatServices.get(id)
+      const PricingCat = await PricingCatServices.get(slug)
       if (!PricingCat) {
         setNotFound(true)
         setLoading(false)
@@ -48,7 +48,7 @@ const UpdatePricingCat = () => {
     }
 
     fetchPricingCat()
-  }, [id])
+  }, [slug]);
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -67,7 +67,7 @@ const UpdatePricingCat = () => {
   end_age: formData.end_age,
 }
 
-  const updated = await PricingCatServices.update(id, updateData)
+  const updated = await PricingCatServices.update(slug, updateData)
   if (updated) {
     showAlert(' Pricing-Category updated successfully.','success')
     navigate('/pricing-category') 
@@ -81,7 +81,7 @@ const UpdatePricingCat = () => {
     const confirmed = window.confirm('Are you sure you want to delete this Difficulties?')
     if (!confirmed) return
 
-    const success = await PricingCatServices.delete(id)
+    const success = await PricingCatServices.delete(slug)
     if (success) { 
       showAlert('Pricing-Category deleted successfully.')
       navigate('/pricing-category')

@@ -13,20 +13,20 @@ const getStatusClass = (status) => {
 };
 
 const Viewdifficulty = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [Difficulty, setDifficulty] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchDifficulty = async () => {
       setLoading(true);
-      const data = await DifficultiesServices.get(id);
+      const data = await DifficultiesServices.get(slug);
       setDifficulty(data);
       setLoading(false);
     };
 
     fetchDifficulty();
-  }, [id]);
+  }, [slug]);
 
   if (loading) {
     return (

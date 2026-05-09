@@ -12,7 +12,7 @@ import { useAlert } from '../../Context/AlertContext/AlertContext'
 
 const UpdateActivity = () => { 
    const { showAlert } = useAlert();
-  const { id } = useParams()
+  const { slug } = useParams()
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -32,7 +32,7 @@ const UpdateActivity = () => {
     AOS.init({ duration: 800, once: true })
 
     const fetchActivity = async () => {
-      const activity = await ActivityServices.get(id)
+      const activity = await ActivityServices.get(slug)
       if (!activity) {
         setNotFound(true)
         setLoading(false)
@@ -51,7 +51,7 @@ const UpdateActivity = () => {
     }
 
     fetchActivity()
-  }, [id])
+  }, [slug]);
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -68,7 +68,7 @@ const UpdateActivity = () => {
       dataToUpdate.media = selectedImage
     }
 
-    const updated = await ActivityServices.update(id, dataToUpdate, !!selectedImage)
+    const updated = await ActivityServices.update(slug, dataToUpdate, !!selectedImage)
 
     if (updated) {
       showAlert('Activity updated successfully.', 'success')
@@ -82,7 +82,7 @@ const UpdateActivity = () => {
     const confirmed = window.confirm('Are you sure you want to delete this activity?')
     if (!confirmed) return
 
-    const success = await ActivityServices.delete(id)
+    const success = await ActivityServices.delete(slug)
     if (success) {
       showAlert('Activity deleted successfully.', 'success')
       navigate('/activities')

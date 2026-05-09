@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ViewFeaturedDestination = () => {
-    const { id } = useParams();
+    const { slug } = useParams();
     const navigate = useNavigate();
     const [featuredDestination, setFeaturedDestination] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -17,7 +17,7 @@ const ViewFeaturedDestination = () => {
     useEffect(() => {
         const fetchFeaturedDestination = async () => {
             try {
-                const response = await FeaturedDestinationServices.get(id);
+                const response = await FeaturedDestinationServices.get(slug);
                 if (response) {
                     setFeaturedDestination(response);
                 }
@@ -31,7 +31,7 @@ const ViewFeaturedDestination = () => {
         };
 
         fetchFeaturedDestination();
-    }, [id, navigate]);
+    }, [slug, navigate]);
 
     const getStatusClass = (status) => StatusClassMap.getClass(status);
 

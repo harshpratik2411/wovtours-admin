@@ -291,7 +291,7 @@ const Categories = () => {
                 <div className="dropdown-menu absolute right-0 -top-[4rem] z-10 bg-white border rounded shadow w-32">
                   <button
                     onClick={() =>
-                      navigate(`/categories/view/${category.id}`)
+                      navigate(`/categories/view/${category.slug}`)
                     }
                     className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                   >
@@ -299,7 +299,7 @@ const Categories = () => {
                   </button>
                   <button
                     onClick={() =>
-                      navigate(`/categories/update/${category.id}`)
+                      navigate(`/categories/update/${category.slug}`)
                     }
                     className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                   >
@@ -413,13 +413,13 @@ const Categories = () => {
 {activeMenu === category.id && (
   <div className="mt-3 dropdown-menu bg-white border rounded shadow w-full z-10">
     <button
-      onClick={() => navigate(`/categories/view/${category.id}`)}
+      onClick={() => navigate(`/categories/view/${category.slug}`)}
       className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
     >
       <FaEye size={14} /> View
     </button>
     <button
-      onClick={() => navigate(`/categories/update/${category.id}`)}
+      onClick={() => navigate(`/categories/update/${category.slug}`)}
       className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
     >
       <FaEdit size={14} /> Update

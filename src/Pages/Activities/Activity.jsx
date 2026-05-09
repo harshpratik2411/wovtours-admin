@@ -260,11 +260,11 @@ const Activity = () => {
               >
                 <BsThreeDotsVertical size={18} />
               </button>
-              {activeMenu === activity.id && (
+                {activeMenu === activity.id && (
                 <div className="dropdown-menu absolute right-0 -top-[4rem] z-10 bg-white border rounded shadow w-32">
                   <button
                     onClick={() =>
-                      navigate(`/activities/view/${activity.id}`)
+                      navigate(`/activities/view/${activity.slug}`)
                     }
                     className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                   >
@@ -272,7 +272,7 @@ const Activity = () => {
                   </button>
                   <button
                     onClick={() =>
-                      navigate(`/activities/update/${activity.id}`)
+                      navigate(`/activities/update/${activity.slug}`)
                     }
                     className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                   >

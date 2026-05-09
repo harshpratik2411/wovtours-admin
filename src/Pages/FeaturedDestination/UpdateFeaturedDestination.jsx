@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const UpdateFeaturedDestination = () => {
-    const { id } = useParams();
+    const { slug } = useParams();
     const navigate = useNavigate();
     const [destinationId, setDestinationId] = useState("");
     const [order, setOrder] = useState("");
@@ -27,7 +27,7 @@ const UpdateFeaturedDestination = () => {
                 }
 
                 // Fetch the specific featured destination to update
-                const featuredDestinationResponse = await FeaturedDestinationServices.get(id);
+                const featuredDestinationResponse = await FeaturedDestinationServices.get(slug);
                 if (featuredDestinationResponse) {
                     setDestinationId(featuredDestinationResponse.destination.id);
                     setOrder(featuredDestinationResponse.order);
@@ -46,7 +46,7 @@ const UpdateFeaturedDestination = () => {
         };
 
         fetchData();
-    }, [id, navigate]);
+    }, [slug, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -59,7 +59,7 @@ const UpdateFeaturedDestination = () => {
         };
 
         try {
-            const response = await FeaturedDestinationServices.update(id, data);
+            const response = await FeaturedDestinationServices.update(slug, data);
             if (response) {
                 toast.success("Featured Destination updated successfully!");
                 navigate("/featured-destinations");

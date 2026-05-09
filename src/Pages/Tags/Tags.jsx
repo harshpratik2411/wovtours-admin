@@ -250,13 +250,13 @@ const Tags = () => {
                         {activeMenu === tag.id && (
                           <div className="dropdown-menu absolute right-0 -top-[4rem] z-10 bg-white border rounded shadow w-32">
                             <button
-                              onClick={() => navigate(`/tags/view/${tag.id}`)}
+                              onClick={() => navigate(`/tags/view/${tag.slug}`)}
                               className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                             >
                               <FaEye size={14} /> View
                             </button>
                             <button
-                              onClick={() => navigate(`/tags/update/${tag.id}`)}
+                              onClick={() => navigate(`/tags/update/${tag.slug}`)}
                               className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                             >
                               <FaEdit size={14} /> Update
@@ -326,13 +326,13 @@ const Tags = () => {
                 {activeMenu === tag.id && (
                   <div className="mt-3 dropdown-menu bg-white border rounded shadow w-full z-10">
                     <button
-                      onClick={() => navigate(`/tags/view/${tag.id}`)}
+                      onClick={() => navigate(`/tags/view/${tag.slug}`)}
                       className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                     >
                       <FaEye size={14} /> View
                     </button>
                     <button
-                      onClick={() => navigate(`/tags/update/${tag.id}`)}
+                      onClick={() => navigate(`/tags/update/${tag.slug}`)}
                       className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-100 text-sm text-gray-700"
                     >
                       <FaEdit size={14} /> Update

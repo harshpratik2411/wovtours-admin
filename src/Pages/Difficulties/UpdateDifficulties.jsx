@@ -12,7 +12,7 @@ import { useAlert } from '../../Context/AlertContext/AlertContext';
  }
 
 const UpdateDifficulties = () => {
-  const { id } = useParams()
+  const { slug } = useParams()
   const navigate = useNavigate() 
    const { showAlert } = useAlert();
 
@@ -30,7 +30,7 @@ const UpdateDifficulties = () => {
     AOS.init({ duration: 800, once: true })
 
     const fetchdifficulties = async () => {
-      const difficulty = await DifficultiesServices.get(id)
+      const difficulty = await DifficultiesServices.get(slug)
       if (!difficulty) {
         setNotFound(true)
         setLoading(false)
@@ -47,7 +47,7 @@ const UpdateDifficulties = () => {
     }
 
     fetchdifficulties()
-  }, [id])
+  }, [slug]);
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -64,7 +64,7 @@ const UpdateDifficulties = () => {
     level: formData.level,
   }
 
-  const updated = await DifficultiesServices.update(id, updateData)
+  const updated = await DifficultiesServices.update(slug, updateData)
   if (updated) {
     showAlert('Difficulties updated successfully.','success')
     navigate('/difficulties') 
@@ -78,7 +78,7 @@ const UpdateDifficulties = () => {
     const confirmed = window.confirm('Are you sure you want to delete this Difficulties?')
     if (!confirmed) return
 
-    const success = await DifficultiesServices.delete(id)
+    const success = await DifficultiesServices.delete(slug)
     if (success) { 
       showAlert('Difficulties deleted successfully.')
       navigate('/difficulties')

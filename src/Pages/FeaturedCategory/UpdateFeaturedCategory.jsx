@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const UpdateFeaturedCategory = () => {
-    const { id } = useParams();
+    const { slug } = useParams();
     const navigate = useNavigate();
     const [categoryId, setCategoryId] = useState("");
     const [order, setOrder] = useState("");
@@ -27,7 +27,7 @@ const UpdateFeaturedCategory = () => {
                 }
 
                 // Fetch the specific featured category to update
-                const featuredCategoryResponse = await FeaturedCategoryServices.get(id);
+                const featuredCategoryResponse = await FeaturedCategoryServices.get(slug);
                 if (featuredCategoryResponse) {
                     setCategoryId(featuredCategoryResponse.category.id);
                     setOrder(featuredCategoryResponse.order);
@@ -46,7 +46,7 @@ const UpdateFeaturedCategory = () => {
         };
 
         fetchData();
-    }, [id, navigate]);
+    }, [slug, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -59,7 +59,7 @@ const UpdateFeaturedCategory = () => {
         };
 
         try {
-            const response = await FeaturedCategoryServices.update(id, data);
+            const response = await FeaturedCategoryServices.update(slug, data);
             if (response) {
                 toast.success("Featured Category updated successfully!");
                 navigate("/featured-categories");

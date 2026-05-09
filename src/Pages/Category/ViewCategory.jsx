@@ -10,7 +10,7 @@ import CategoryServices from "./CategoryServices";
   
 
 const ViewCategory = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [category, setCategory] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -18,7 +18,7 @@ const ViewCategory = () => {
     const fetchCategories = async () => {
       try {
         setLoading(true);
-        const data = await CategoryServices.get(id);
+        const data = await CategoryServices.get(slug);
         setCategory(data);
         setLoading(false);
       } catch (error) {
@@ -28,7 +28,7 @@ const ViewCategory = () => {
     };
 
     fetchCategories();
-  }, [id]);
+  }, [slug]);
 
   if (loading) {
     return (

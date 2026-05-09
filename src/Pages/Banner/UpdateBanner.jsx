@@ -10,7 +10,7 @@ import Banner from './Banner'
 
 const UpdateBanner = () => { 
    const { showAlert } = useAlert();
-  const { id } = useParams()
+  const { slug } = useParams();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -30,7 +30,7 @@ const UpdateBanner = () => {
     AOS.init({ duration: 800, once: true })
 
     const fetchBanner = async () => {
-      const banner = await BannerServices.get(id)
+      const banner = await BannerServices.get(slug)
       if (!banner) {
         setNotFound(true)
         setLoading(false)
@@ -49,7 +49,7 @@ const UpdateBanner = () => {
     }
 
     fetchBanner()
-  }, [id])
+  }, [slug]);
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -66,7 +66,7 @@ const UpdateBanner = () => {
       dataToUpdate.media = selectedImage
     }
 
-    const updated = await BannerServices.update(id, dataToUpdate, !!selectedImage)
+    const updated = await BannerServices.update(slug, dataToUpdate, !!selectedImage)
 
     if (updated) {
       showAlert('Banner updated successfully.', 'success')
@@ -80,7 +80,7 @@ const UpdateBanner = () => {
     const confirmed = window.confirm('Are you sure you want to delete this Banner?')
     if (!confirmed) return
 
-    const success = await BannerServices.delete(id)
+    const success = await BannerServices.delete(slug)
     if (success) {
       showAlert('Banner deleted successfully.', 'success')
       navigate('/banners')

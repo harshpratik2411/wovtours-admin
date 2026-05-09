@@ -48,8 +48,8 @@ class TagServices {
     }
   }
 
-  static async get(id) {
-    const url = APIService.baseUrl + `api/admin/tags/${id}/`;
+  static async get(slug) {
+    const url = APIService.baseUrl + `api/admin/tags/${slug}/`;
     console.log("URL called", url);
 
     try {
@@ -62,7 +62,7 @@ class TagServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.get(id);
+          return this.get(slug);
         }
       }
 
@@ -102,7 +102,7 @@ class TagServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.add(search, orderBy, page, status);
+          return this.add(data);
         }
       }
 
@@ -120,9 +120,9 @@ class TagServices {
     }
   }
 
-  static async update(id, data) {
+  static async update(slug, data) {
     console.log("Update API called");
-    const url = APIService.baseUrl + `api/admin/tags/${id}/`;
+    const url = APIService.baseUrl + `api/admin/tags/${slug}/`;
     try {
       let response = await fetch(url, {
         method: "PUT",
@@ -137,19 +137,19 @@ class TagServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          this.update(id, data);
+          this.update(slug, data);
         }
       }
 
       return await response.json();
     } catch (error) {
-      console.error(`Failed to update tag with id ${id}:`, error);
+      console.error(`Failed to update tag with slug ${slug}:`, error);
       return null;
     }
   }
 
-  static async delete(id) {
-    const url = APIService.baseUrl + `api/admin/tags/${id}/`;
+  static async delete(slug) {
+    const url = APIService.baseUrl + `api/admin/tags/${slug}/`;
     try {
       let response = await fetch(url, {
         method: "DELETE",
@@ -163,11 +163,11 @@ class TagServices {
       if (APIService.isUnauthenticated(response.status)) {
         const hasRefreshed = await APIService.refreshToken();
         if (hasRefreshed === true) {
-          return this.delete(id);
+          return this.delete(slug);
         }
       }
     } catch (error) {
-      console.error(`Failed to delete tag with id ${id}:`, error);
+      console.error(`Failed to delete tag with slug ${slug}:`, error);
       return false;
     }
   }

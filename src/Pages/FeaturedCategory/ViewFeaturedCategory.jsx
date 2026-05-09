@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ViewFeaturedCategory = () => {
-    const { id } = useParams();
+    const { slug } = useParams();
     const navigate = useNavigate();
     const [featuredCategory, setFeaturedCategory] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -17,7 +17,7 @@ const ViewFeaturedCategory = () => {
     useEffect(() => {
         const fetchFeaturedCategory = async () => {
             try {
-                const response = await FeaturedCategoryServices.get(id);
+                const response = await FeaturedCategoryServices.get(slug);
                 if (response) {
                     setFeaturedCategory(response);
                 } else {
@@ -34,7 +34,7 @@ const ViewFeaturedCategory = () => {
         };
 
         fetchFeaturedCategory();
-    }, [id, navigate]);
+    }, [slug, navigate]);
 
     const getStatusClass = (status) => StatusClassMap.getClass(status);
 
